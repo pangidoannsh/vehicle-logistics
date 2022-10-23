@@ -1,38 +1,72 @@
-.App {
-  text-align: center;
+* {
+  font-family: 'Poppins', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.mid-burger {
+  height: 2px;
+  margin: 4px 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.mid-burger,
+.top-burger,
+.bottom-burger {
+  border-radius: 1px;
+  display: block;
+  height: 2px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.circle-list {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 100%;
 }
 
-.App-link {
-  color: #61dafb;
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+::-webkit-scrollbar-track {
+  background: #F1F1F1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2C4D45;
+  border-radius: 2px;
+}
+
+#navbar-menu::-webkit-scrollbar {
+  display: none;
+}
+
+/* #content::-webkit-scrollbar {
+  display: none;
+}
+ */
+
+.divider-top {
+  border-top: 1px solid rgba(0, 0, 0, .2);
+}
+
+.divider-bottom {
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+}
+
+.card {
+  background-color: #fefefe;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.075);
+  border-radius: 4px;
+}
+
+.border-template {
+  width: 30%;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  transition: .5s;
+}
+
+.border-template:focus {
+  border-color: #01964C;
+  outline: none;
+  box-shadow: none;
 }
