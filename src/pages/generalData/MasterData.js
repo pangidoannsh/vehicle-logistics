@@ -1,10 +1,11 @@
 import { Icon } from '@iconify/react'
+import { data } from 'autoprefixer';
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import SearchTable from '../../components/tables/SearchTable';
-import TableMasterData from '../../components/tables/TableMasterData'
+import Table from '../../components/tables/Table';
 
 export default function MasterData() {
     const [loading, setLoading] = useState(true);
@@ -27,6 +28,18 @@ export default function MasterData() {
     const handleClick = e => {
         console.log(e.target.name);
     }
+    const customSearch = (e) => {
+        setDataShow(
+            dataBody.filter(dataRow => {
+                return Object.values(dataRow).findIndex((dataCell, index) => {
+                    if (index < 6) return dataCell.toLowerCase().includes(e.target.value.toLowerCase())
+                    else if (index === 6) return dataCell.props.children.toLowerCase().includes(e.target.value.toLowerCase())
+                    else if (index === 7) return dataCell.props.children[1].props.children.toLowerCase().includes(e.target.value.toLowerCase())
+                }) !== -1
+            }
+            ).map(filter => { return filter })
+        )
+    }
 
     // use effect untuk menjalankan function consume API
     useEffect(() => {
@@ -35,8 +48,43 @@ export default function MasterData() {
 
     // pemberian isi dari data show
     useEffect(() => {
+        // Perubahan isi dari Type dan Status karena Type dan Status memiliki Style nya sendiri
+        dataBody.forEach(data => {
+            if (data.status === 'ready') {
+                data.status = (
+                    <div className='flex gap-x-1 py-1 px-2 items-center bg-light-green rounded-sm text-white justify-center'>
+                        <Icon icon="akar-icons:check" className='text-base' />
+                        <span className='text-sm capitalize'>{data.status}</span>
+                    </div>
+                )
+            } else if (data.status === 'repair') {
+                data.status = (
+                    <div className='flex gap-x-1 py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center'>
+                        <Icon icon="fa6-solid:gears" className='text-base' />
+                        <span className='text-sm capitalize'>{data.status}</span>
+                    </div>
+                )
+            }
+
+            if (data.type === 'asset') {
+                data.type = (
+                    <span className='text-light-green capitalize'>
+                        {data.type}
+                    </span>
+                )
+            }
+            else if (data.type === 'vendor') {
+                data.type = (
+                    <span className='text-[#015796] capitalize'>
+                        {data.type}
+                    </span>
+                )
+            }
+        })
+        // End Function
+
         setDataShow(dataBody)
-    }, [dataBody])
+    }, [dataBody]);
 
     return (
         <div className='container'>
@@ -61,10 +109,10 @@ export default function MasterData() {
                                 <Icon icon="bxs:folder-open" className={`text-2xl text-gold `} />
                                 <span className='text-lg text-dark-green font-medium'>Master Data</span>
                             </div>
-                            {/* Search */}
-                            <SearchTable setData={setDataShow} dataBody={dataBody} />
+                            {/* Search searchFunct={customSearch} */}
+                            <SearchTable setData={setDataShow} dataBody={dataBody} searchFunct={customSearch} />
                             {/* Table */}
-                            <TableMasterData dataBody={dataShow} dataHead={headTable} id={data_id} loading={loading} />
+                            <Table dataBody={dataShow} dataHead={headTable} id={data_id} loading={loading} handleClick={handleClick} />
                         </div>
                     </div>
                 </div>

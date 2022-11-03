@@ -1,4 +1,3 @@
-import React from 'react'
 /*
     SearchTable berguna untuk mencari data table dengan cara memfilter isi dari 1 row table, contohnya seperti
     mencari nama dari salah satu data pada kolom table
@@ -9,16 +8,20 @@ import React from 'react'
     - dataBody (merupakan sumber data asli yang berasal dari consume API)
 */
 export default function SearchTable(props) {
-    const { setData, dataBody } = props
+    const { setData, dataBody, searchFunct } = props
     const handleSearch = e => {
-        setData(
-            dataBody.filter(dataRow => {
-                return Object.values(dataRow).findIndex(dataCell => {
-                    return dataCell.toLowerCase().includes(e.target.value.toLowerCase())
-                }) !== -1
-            }
-            ).map(filter => { return filter })
-        )
+        if (searchFunct) {
+            searchFunct(e)
+        } else {
+            setData(
+                dataBody.filter(dataRow => {
+                    return Object.values(dataRow).findIndex(dataCell => {
+                        return dataCell.toLowerCase().includes(e.target.value.toLowerCase())
+                    }) !== -1
+                }
+                ).map(filter => { return filter })
+            )
+        }
     }
     return (
         <>
