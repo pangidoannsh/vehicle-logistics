@@ -44,7 +44,7 @@ function TableMasterData(props) {
                                         </td>
                                         <td className="p-4 text-sm text-slate-700 text-center w-14">{index + 1}</td>
                                         {Object.values(dataRow).map((dataCell, indexData) => (
-                                            <td key={indexData} className="p-4 text-sm ">
+                                            <td key={indexData} className={`p-4 text-sm ${indexData === 7 ? 'max-w-[130px]' : ''}`}>
                                                 <TableCell data={dataCell} indexData={indexData} />
                                             </td>
                                         ))}
