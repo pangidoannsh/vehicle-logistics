@@ -35,39 +35,6 @@ export default function MasterData() {
 
     // pemberian isi dari data show
     useEffect(() => {
-        // const dataTemp = dataBody;
-        // dataTemp.forEach(data => {
-        //     if (data.status === 'ready') {
-        //         data.status = (
-        //             <div className='flex gap-x-1 py-1 px-2 items-center bg-light-green rounded-sm text-white justify-center'>
-        //                 <Icon icon="akar-icons:check" className='text-base' />
-        //                 <span className='text-sm capitalize'>{data.status}</span>
-        //             </div>
-        //         )
-        //     } else if (data.status === 'repair') {
-        //         data.status = (
-        //             <div className='flex gap-x-1 py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center'>
-        //                 <Icon icon="fa6-solid:gears" className='text-base' />
-        //                 <span className='text-sm capitalize'>{data.status}</span>
-        //             </div>
-        //         )
-        //     }
-
-        //     if (data.type === 'asset') {
-        //         data.type = (
-        //             <span className='text-light-green capitalize'>
-        //                 {data.type}
-        //             </span>
-        //         )
-        //     }
-        //     else if (data.type === 'vendor') {
-        //         data.type = (
-        //             <span className='text-[#015796] capitalize'>
-        //                 {data.type}
-        //             </span>
-        //         )
-        //     }
-        // })
         setDataShow(dataBody)
     }, [dataBody])
 

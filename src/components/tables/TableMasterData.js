@@ -71,7 +71,7 @@ const TableCell = ({ data, indexData }) => {
     if (indexData < 6) {
         return data
     } else if (indexData === 6 && data === 'asset') {
-        return <span className="text-green-light capitalize">{data}</span>
+        return <span className="text-light-green capitalize">{data}</span>
     } else if (indexData === 6 && data === 'vendor') {
         return <span className="text-[#015796] capitalize">{data}</span>
     } else {
