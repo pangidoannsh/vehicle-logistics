@@ -1,0 +1,72 @@
+{
+    "pocustomer": [
+        {
+            "branch": "30000",
+            "po_number": "PO090912",
+            "customer": "PT. Hadji Kalla",
+            "contractno": "00001/MKS-CT/04/2020123",
+            "contractname": "Shipment HK 2020",
+            "contracttype": "transporter",
+            "povalue": "1200000"
+        },
+        {
+            "branch": "30000",
+            "po_number": "PO1233353",
+            "customer": "PT. BOSOWA BERLIAN MOTOR",
+            "contractno": "00002/MKS-CT/04/202012",
+            "contractname": "PENGANTARAN SPARE PART",
+            "contracttype": "transporter",
+            "povalue": "1000000"
+        },
+        {
+            "branch": "30100",
+            "po_number": "PO123123",
+            "customer": "Bogatama Marinusa",
+            "contractno": "001/BOMAR/12/2020",
+            "contractname": "Pengiriman Udang",
+            "contracttype": "transporter",
+            "povalue": "2000000"
+        },
+        {
+            "branch": "30200",
+            "po_number": "PO87611",
+            "customer": "PT. ABC",
+            "contractno": "002/car/abx/2020",
+            "contractname": "PENGIRIMAN MOBIL",
+            "contracttype": "transporter",
+            "povalue": "200000"
+        }
+    ],
+    "masterdata": [
+        {
+            "branch": "30000",
+            "model_name": "BOX",
+            "unit_type": "BOX FVR 34 S",
+            "hull_number": "",
+            "frame_number": "MHCF34SL002345113",
+            "plat_number": "DD 8422 SG",
+            "type": "asset",
+            "status": "ready"
+        },
+        {
+            "branch": "30100",
+            "model_name": "BOX",
+            "unit_type": "BOX FVR 22 S",
+            "hull_number": "",
+            "frame_number": "LHCF34SL002322113",
+            "plat_number": "DD 7122 SG",
+            "type": "asset",
+            "status": "repair"
+        },
+        {
+            "branch": "30100",
+            "model_name": "BOX",
+            "unit_type": "BOX FVR 22 S",
+            "hull_number": "",
+            "frame_number": "UKJX34SL002322113",
+            "plat_number": "DD 7122 SG",
+            "type": "vendor",
+            "status": "ready"
+        }
+    ]
+}

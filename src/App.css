@@ -39,11 +39,6 @@
   display: none;
 }
 
-/* #content::-webkit-scrollbar {
-  display: none;
-}
- */
-
 .divider-top {
   border-top: 1px solid rgba(0, 0, 0, .2);
 }
@@ -69,4 +64,16 @@
   border-color: #01964C;
   outline: none;
   box-shadow: none;
+}
+
+.container {
+  display: flex;
+  background-color: #F2F3F8;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.content {
+  max-height: 90vh;
+  overflow-y: scroll;
 }

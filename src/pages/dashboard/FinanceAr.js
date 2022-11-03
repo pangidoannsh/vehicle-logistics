@@ -4,13 +4,16 @@ import Navbar from '../../components/Navbar'
 
 const FinanceAr = () => {
     return (
-        <div className='flex bg-white'>
+        <div className='container'>
             <Navbar />
             <div className="flex-1">
                 <Header />
-                <div id="content">Test</div>
+                <div className="content">
+                    <div className='h-screen bg-light-green'></div>
+                    <div className='h-screen bg-blue-300'></div>
+                </div>
             </div>
-        </div>
+        </div >
     )
 }
 

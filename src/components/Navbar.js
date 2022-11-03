@@ -54,74 +54,65 @@ function Navbar() {
             setShow(!show)
         }
     }
-    const p = [
-        {
-            nim: '2007113697',
-            name: 'edo',
-        }
-    ]
     return (
-        <div className={`${open ? 'w-[230px]' : 'w-16'} bg-dark-green h-screen duration-500`}>
-
-            <div className={` fixed ${open ? 'w-[230px]' : 'w-16'} bg-dark-green h-screen duration-500`}>
-                {/* Head */}
-                <div className="bg-black bg-opacity-20 h-[72px]">
-                    <div className={`fixed top-5 z-10 duration-500 ${open ? 'left-4' : 'left-20'}`}>
-                        <img src={VehicleLogo} className={`w-[100px]`} />
-                    </div>
-                    <SlideButton handleClick={handleSlider} isOpen={open} />
+        <div className={` ${open ? 'w-[230px]' : 'w-16'} bg-dark-green h-screen duration-500`}>
+            {/* Head */}
+            <div className="bg-black bg-opacity-20 h-[72px]">
+                <div className={`fixed top-5 z-10 duration-500 ${open ? 'left-4' : 'left-20'}`}>
+                    <img src={VehicleLogo} className={`w-[100px]`} />
                 </div>
-                {/* Body */}
-                <div id="navbar-menu" className="h-[90%] overflow-y-scroll">
-                    {/* Base */}
-                    <div className="mb-6 grid gap-y-2 mt-3">
-                        <Menu open={open} show={show} menu={BaseMenu} location={location} />
-                    </div>
-                    {/* Group Menu : DASHBOARD */}
-                    <div className={`px-4 mb-3 `}>
-                        <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>Dashboard</h3>
-                    </div>
-                    <div className="mb-6 grid gap-y-2">
-                        {dashboard.map((menu, index) => (
-                            <Menu key={index} open={open} show={show} menu={menu} location={location} />
-                        ))}
-                    </div>
-                    {/* Group Menu : GENERAL DATA */}
-                    <div className={`px-4 mb-3 `}>
-                        <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>General Data</h3>
-                    </div>
-                    <div className="mb-6 grid gap-y-2">
-                        {generalData.map((menu, index) => (
-                            <Menu key={index} open={open} show={show} menu={menu} location={location} />
-                        ))}
-                    </div>
-                    {/* Group Menu : APPLICATION */}
-                    <div className={`px-4 mb-3 `}>
-                        <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>application</h3>
-                    </div>
-                    <div className="mb-6 grid gap-y-2">
-                        {application.map((menu, index) => (
-                            <Menu key={index} open={open} show={show} menu={menu} location={location} />
-                        ))}
-                    </div>
-                    {/* Group Menu : REPORT */}
-                    <div className={`px-4 mb-3 `}>
-                        <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>Report</h3>
-                    </div>
-                    <div className="mb-6 grid gap-y-2">
-                        {report.map((menu, index) => (
-                            <Menu key={index} open={open} show={show} menu={menu} location={location} />
-                        ))}
-                    </div>
-                    {/* Group Menu : ADMINISTRATOR */}
-                    <div className={`px-4 mb-3 `}>
-                        <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>administrator</h3>
-                    </div>
-                    <div className="mb-6 grid gap-y-2">
-                        {administrator.map((menu, index) => (
-                            <Menu key={index} open={open} show={show} menu={menu} location={location} />
-                        ))}
-                    </div>
+                <SlideButton handleClick={handleSlider} isOpen={open} />
+            </div>
+            {/* Body */}
+            <div id="navbar-menu" className="h-[90%] overflow-y-scroll">
+                {/* Base */}
+                <div className="mb-6 grid gap-y-2 mt-3">
+                    <Menu open={open} show={show} menu={BaseMenu} location={location} />
+                </div>
+                {/* Group Menu : DASHBOARD */}
+                <div className={`px-4 mb-3 `}>
+                    <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>Dashboard</h3>
+                </div>
+                <div className="mb-6 grid gap-y-2">
+                    {dashboard.map((menu, index) => (
+                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                    ))}
+                </div>
+                {/* Group Menu : GENERAL DATA */}
+                <div className={`px-4 mb-3 `}>
+                    <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>General Data</h3>
+                </div>
+                <div className="mb-6 grid gap-y-2">
+                    {generalData.map((menu, index) => (
+                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                    ))}
+                </div>
+                {/* Group Menu : APPLICATION */}
+                <div className={`px-4 mb-3 `}>
+                    <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>application</h3>
+                </div>
+                <div className="mb-6 grid gap-y-2">
+                    {application.map((menu, index) => (
+                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                    ))}
+                </div>
+                {/* Group Menu : REPORT */}
+                <div className={`px-4 mb-3 `}>
+                    <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>Report</h3>
+                </div>
+                <div className="mb-6 grid gap-y-2">
+                    {report.map((menu, index) => (
+                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                    ))}
+                </div>
+                {/* Group Menu : ADMINISTRATOR */}
+                <div className={`px-4 mb-3 `}>
+                    <h3 className={`uppercase text-gold text-xs ${!show && 'hidden'}`}>administrator</h3>
+                </div>
+                <div className="mb-6 grid gap-y-2">
+                    {administrator.map((menu, index) => (
+                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                    ))}
                 </div>
             </div>
         </div>
