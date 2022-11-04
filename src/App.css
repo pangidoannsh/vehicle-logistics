@@ -66,6 +66,18 @@
   box-shadow: none;
 }
 
+.form-input {
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  transition: .5s;
+}
+
+.form-input:focus {
+  border-color: #01964C;
+  outline: none;
+}
+
 .container {
   display: flex;
   background-color: #F2F3F8;

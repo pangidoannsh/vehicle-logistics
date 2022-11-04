@@ -1,33 +1,28 @@
 import { Icon } from '@iconify/react'
-import { data } from 'autoprefixer';
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import Header from '../../components/Header'
+import Modal from '../../components/Modal';
 import Navbar from '../../components/Navbar'
 import SearchTable from '../../components/tables/SearchTable';
 import Table from '../../components/tables/Table';
+import { api } from '../../config';
 
 export default function MasterData() {
     const [loading, setLoading] = useState(true);
     const [dataBody, setDataBody] = useState([]);
     const [dataShow, setDataShow] = useState([]);
-
+    const [openModalCreate, setOpenModalCreate] = useState(false);
     const headTable = [
         "Branch", "Model Name", "Unit Type", "HUll Number", "Frame Number", "Plat Number", "Type", "Status"
     ]
 
     const data_id = 'plat_number';
 
-    // / consume API
-    const fetchData = async () => {
-        const res = await axios.get('http://localhost:3001/masterdata')
-        setDataBody(res.data)
-        setLoading(false)
-    }
-
     const handleClick = e => {
         console.log(e.target.name);
     }
+
     const customSearch = (e) => {
         setDataShow(
             dataBody.filter(dataRow => {
@@ -41,9 +36,13 @@ export default function MasterData() {
         )
     }
 
-    // use effect untuk menjalankan function consume API
+    // use effect untuk consume API
     useEffect(() => {
-        fetchData().catch((error) => console.log(error))
+        api.get('/masterdata').then(res => {
+            setDataBody(res.data)
+            setLoading(false)
+        })
+            .catch(error => console.log(error.message))
     }, []);
 
     // pemberian isi dari data show
@@ -95,7 +94,7 @@ export default function MasterData() {
                     {/* After Header */}
                     <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
                         <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `}>
+                                items-center gap-x-1 py-[2px] px-4 `} onClick={() => setOpenModalCreate(true)}>
                             <Icon icon="fluent:add-12-filled" className="text-base" />
                             <span className='text-base'>Create</span>
                         </button>
@@ -115,8 +114,17 @@ export default function MasterData() {
                             <Table dataBody={dataShow} dataHead={headTable} id={data_id} loading={loading} handleClick={handleClick} />
                         </div>
                     </div>
+                    <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} ModalContent={<ModalContent />}
+                        title={"New Vehicle Unit"} size={1000} />
                 </div>
             </div>
         </div>
     )
+}
+
+const ModalContent = () => {
+
+    return <>
+        <div>Testing</div>
+    </>
 }

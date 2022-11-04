@@ -68,5 +68,23 @@
             "type": "vendor",
             "status": "ready"
         }
+    ],
+    "dataunit": [
+        {
+            "enginenumber": "2NR F935507",
+            "framenumber": "MHKE8FA3JKK041193",
+            "type": "Asset",
+            "color": "Black Metalik",
+            "year": "2019",
+            "amount": "amount testing"
+        },
+        {
+            "enginenumber": "DNR123142123",
+            "framenumber": "MKHKASJBAHNAHD",
+            "type": "Asset",
+            "color": "GREEN",
+            "year": "2017",
+            "amount": "amount123"
+        }
     ]
 }
