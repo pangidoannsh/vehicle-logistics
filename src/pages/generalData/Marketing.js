@@ -48,7 +48,7 @@ const Marketing = () => {
     }, [dataBody])
 
     return (
-        <div className='container'>
+        <div id='container'>
             <Navbar />
             <div className="flex-1">
                 <Header />
