@@ -121,7 +121,7 @@ export default function MasterData() {
 }
 
 const ModalContent = (props) => {
-    const { isOpen, setIsOpen } = props
+    const { setIsOpen } = props
 
     function closeModal() {
         setIsOpen(false)
@@ -131,51 +131,51 @@ const ModalContent = (props) => {
             <form action="" className="pt-2 pb-4 px-1">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5 pb-5">
                     <div>
-                        <label htmlFor="">Branch</label>
+                        <label>Branch</label>
                         <Dropdown />
                     </div>
                     <div>
-                        <label htmlFor="">Car Hull Number</label>
+                        <label>Car Hull Number</label>
                         <div className="flex py-1">
                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="">Type</label>
+                        <label>Type</label>
                         <Dropdown />
                     </div>
                     <div>
-                        <label htmlFor="">Plat Number</label>
+                        <label>Plat Number</label>
                         <div className="flex py-1">
                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="">brand</label>
+                        <label>brand</label>
                         <Dropdown />
                     </div>
                     <div>
-                        <label htmlFor="">Chasis/Frame Number</label>
+                        <label>Chasis/Frame Number</label>
                         <div className="flex py-1">
                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="">Vehicle Model</label>
+                        <label>Vehicle Model</label>
                         <Dropdown />
                     </div>
                     <div>
-                        <label htmlFor="">Engine Number</label>
+                        <label>Engine Number</label>
                         <div className="flex py-1">
                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="">Vehicle Type</label>
+                        <label>Vehicle Type</label>
                         <Dropdown />
                     </div>
                     <div>
-                        <label htmlFor="">Color</label>
+                        <label>Color</label>
                         <div className="flex py-1">
                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
                         </div>
@@ -183,19 +183,19 @@ const ModalContent = (props) => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5 pb-5">
                     <div className="row-span-2">
-                        <label htmlFor="">Remarks (Opsional)</label>
+                        <label>Remarks (Opsional)</label>
                         <div className="flex py-1 ">
                             <textarea name="" id="" className="border px-4 py-1 border-template-input h-[140px]"></textarea>
                         </div>
                     </div>
                     <div className="row-span-1">
-                        <label htmlFor="">Released Year</label>
+                        <label>Released Year</label>
                         <div className="flex py-1">
                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
                         </div>
                     </div>
                     <div className="row-span-1">
-                        <label htmlFor="">Status</label>
+                        <label>Status</label>
                         <Dropdown />
                     </div>
                 </div>

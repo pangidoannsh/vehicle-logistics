@@ -11,7 +11,7 @@ export default function Dropdown() {
         <div className="">
             <Listbox value={selected} onChange={setSelected}>
                 <div className="relative mt-1">
-                    <Listbox.Button className="relative w-full cursor-default rounded border border-slate-300 bg-white py-2 pl-4 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                    <Listbox.Button className="relative w-full cursor-default rounded border border-slate-300 bg-white py-2 pl-4 pr-10 text-left sm:text-sm">
                         <span className="block truncate text-base">{selected.name}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                             <Icon icon="akar-icons:chevron-down" className="text-xl"></Icon>
