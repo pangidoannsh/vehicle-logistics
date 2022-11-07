@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
-import axios from 'axios';
 import { useEffect, useState } from 'react'
+import ErrorNetwork from '../../components/ErrorNetwork';
+import Select from '../../components/Select';
 import Header from '../../components/Header'
 import Modal from '../../components/Modal';
 import Navbar from '../../components/Navbar'
@@ -13,15 +14,13 @@ export default function MasterData() {
     const [dataBody, setDataBody] = useState([]);
     const [dataShow, setDataShow] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [isErrorNetwork, setIsErrorNetwork] = useState(false);
+
     const headTable = [
         "Branch", "Model Name", "Unit Type", "HUll Number", "Frame Number", "Plat Number", "Type", "Status"
     ]
 
     const data_id = 'plat_number';
-
-    const handleClick = e => {
-        console.log(e.target.name);
-    }
 
     const customSearch = (e) => {
         setDataShow(
@@ -42,7 +41,11 @@ export default function MasterData() {
             setDataBody(res.data)
             setLoading(false)
         })
-            .catch(error => console.log(error.message))
+            .catch(error => {
+                if (error.code === "ERR_NETWORK") {
+                    setIsErrorNetwork(true)
+                }
+            })
     }, []);
 
     // pemberian isi dari data show
@@ -86,7 +89,7 @@ export default function MasterData() {
     }, [dataBody]);
 
     return (
-        <div className='container'>
+        <div id='container'>
             <Navbar />
             <div className="flex-1">
                 <Header />
@@ -111,20 +114,40 @@ export default function MasterData() {
                             {/* Search searchFunct={customSearch} */}
                             <SearchTable setData={setDataShow} dataBody={dataBody} searchFunct={customSearch} />
                             {/* Table */}
-                            <Table dataBody={dataShow} dataHead={headTable} id={data_id} loading={loading} handleClick={handleClick} />
+                            <Table dataBody={dataShow} dataHead={headTable} id={data_id} loading={loading} />
                         </div>
                     </div>
                     <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} ModalContent={<ModalContent />}
                         title={"New Vehicle Unit"} size={1000} />
+                    <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
                 </div>
             </div>
         </div>
     )
 }
 
-const ModalContent = () => {
+const ModalContent = (props) => {
+    // const [dataBranch, setDataBranch] = useState([]);
+    const [valueBranch, setValueBranch] = useState(null);
+    const [valueType, setValueType] = useState(null);
 
+    useEffect(() => {
+        // console.log(valueBranch);
+    }, [valueBranch]);
+    // function untuk button create
+    const handleCreate = e => {
+        e.preventDefault()
+    }
     return <>
-        <div>Testing</div>
+        <div className='grid grid-cols-2 gap-6'>
+            <Select label={"Branch"} setValue={setValueBranch} keyId={"branchid"} keyName={"branchname"} urlPath={'/branch'} />
+            <Select label={"Type"} setValue={setValueType} keyId={"id"} keyName={"name"} options={[
+                { id: 0, name: 'Asset' },
+                { id: 1, name: 'Vendor' }
+            ]} />
+            {/* <button onClick={handleCreate}>Create</button> */}
+        </div>
     </>
 }
+
+

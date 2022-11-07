@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom"
 import SubMenu from "./SubMenu";
 
 function Menu(props) {
-    const { menu, open, show, location } = props
+    const { menu, open, show, handleMenu, location } = props
 
     //variabel untuk menampung bahwa menu ini memiliki sub sub menu yang aktif (child dari chikl menu ini sedang aktif)
     let subSubMenuActived = false;
@@ -45,6 +45,9 @@ function Menu(props) {
 
     // fungtion untuk toggle dropdown
     const handleDropDown = () => {
+        if (!open && !drop) {
+            handleMenu()
+        }
         setDrop(!drop)
         if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
             if (!subSubMenuActived) {

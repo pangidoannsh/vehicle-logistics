@@ -86,5 +86,31 @@
             "year": "2017",
             "amount": "amount123"
         }
+    ],
+    "branch": [
+        {
+            "branchid": "30000",
+            "branchname": "Head Office"
+        },
+        {
+            "branchid": "30100",
+            "branchname": "Kalla Logistics Sulampua"
+        },
+        {
+            "branchid": "30200",
+            "branchname": "Logistics Jakarta"
+        },
+        {
+            "branchid": "30300",
+            "branchname": "Logistics Surabaya"
+        },
+        {
+            "branchid": "30400",
+            "branchname": "Logistics Yogyakarta"
+        },
+        {
+            "branchid": "30500",
+            "branchname": "Logistics Balikpapan"
+        }
     ]
 }

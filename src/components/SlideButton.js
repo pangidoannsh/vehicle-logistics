@@ -1,6 +1,6 @@
 function SlideButton(props) {
     return (
-        <button className={`fixed duration-500 z-10 top-[22px]  p-2
+        <button className={`fixed duration-500 z-10 top-[22px] p-2
                 ${props.isOpen ? 'left-[196px]' : 'left-[14px]'}`}
             onClick={props.handleClick}>
             < div className="flex" >

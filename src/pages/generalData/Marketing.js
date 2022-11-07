@@ -1,12 +1,12 @@
 import { Icon } from '@iconify/react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import Table from '../../components/tables/Table'
 import SearchTable from '../../components/tables/SearchTable'
 import Modal from '../../components/Modal'
 import { api } from '../../config'
-import axios from 'axios'
+import ErrorNetwork from '../../components/ErrorNetwork'
 
 const Marketing = () => {
     const [loading, setLoading] = useState(true);
@@ -19,6 +19,7 @@ const Marketing = () => {
     const [openModal, setOpenModal] = useState(false)
     // untuk data yang akan ditampilkan Modal -> ModalContent
     const [dataModal, setDataModal] = useState({});
+    const [isErrorNetwork, setIsErrorNetwork] = useState(false);
     // data untuk table head
     const headTable = [
         "Branch", "PO Number", "Customers", "Contract No", "Contract Name", "Contract Type", "Value"
@@ -32,15 +33,19 @@ const Marketing = () => {
         setOpenModal(true)
     }
 
-    // use effect untuk consume API
-    useEffect(() => {
-        api.get('/pocustomer').then(res => {
-            setDataBody(res.data)
-            setLoading(false)
-        }).catch(error => {
-            console.log(error.message);
-        })
-    }, []);
+    const calledOnce =
+        // use effect untuk consume API
+        useEffect(() => {
+            api.get('/pocustomer').then(res => {
+                setDataBody(res.data)
+                setLoading(false)
+            }).catch(error => {
+                // console.log(error);
+                if (error.code === "ERR_NETWORK") {
+                    setIsErrorNetwork(true)
+                }
+            })
+        }, []);
 
     // pemberian isi dari data show
     useEffect(() => {
@@ -48,7 +53,7 @@ const Marketing = () => {
     }, [dataBody])
 
     return (
-        <div className='container'>
+        <div id='container'>
             <Navbar />
             <div className="flex-1">
                 <Header />
@@ -81,6 +86,7 @@ const Marketing = () => {
                     <Modal isOpen={openModal} setIsOpen={setOpenModal} ModalContent={<ModalContent data={dataModal} />}
                         title={"PO Customer Detail"} iconTitle={"ooui:view-details-ltr"}
                     />
+                    <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
                 </div>
             </div>
         </div>
@@ -194,6 +200,7 @@ const ModalContent = (props) => {
             </div>
             <Table dataBody={dataUnit} dataHead={headTable} id={null}
                 loading={false} noAction={true} />
+
         </>
     )
 }

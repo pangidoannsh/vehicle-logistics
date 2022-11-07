@@ -35,6 +35,10 @@
   border-radius: 2px;
 }
 
+.scroll-green::-webkit-scrollbar-thumb {
+  background: #01964C;
+}
+
 #navbar-menu::-webkit-scrollbar {
   display: none;
 }
@@ -78,7 +82,7 @@
   outline: none;
 }
 
-.container {
+#container {
   display: flex;
   background-color: #F2F3F8;
   height: 100vh;
@@ -88,4 +92,9 @@
 .content {
   max-height: 90vh;
   overflow-y: scroll;
+}
+
+.select-template:focus {
+  outline: none;
+  border: 1px salmon solid;
 }
