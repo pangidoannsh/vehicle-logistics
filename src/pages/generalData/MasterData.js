@@ -116,7 +116,7 @@ export default function MasterData() {
                             <Table dataBody={dataShow} dataHead={headTable} id={data_id} loading={loading} />
                         </div>
                     </div>
-                    <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} ModalContent={<ModalContent />}
+                    <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} ModalContent={<ModalContent setIsOpen={setOpenModalCreate} />}
                         title={"New Vehicle Unit"} size={1000} />
                     <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
                 </div>
@@ -126,9 +126,12 @@ export default function MasterData() {
 }
 
 const ModalContent = (props) => {
+    const { setIsOpen } = props
     // const [dataBranch, setDataBranch] = useState([]);
     const [valueBranch, setValueBranch] = useState(null);
     const [valueType, setValueType] = useState(null);
+    const [valueModel, setValueModel] = useState(null);
+    const [valueYear, setValueYear] = useState(null);
 
     useEffect(() => {
         // console.log(valueBranch);
@@ -137,100 +140,71 @@ const ModalContent = (props) => {
     const handleCreate = e => {
         e.preventDefault()
     }
+    function closeModal() {
+        setIsOpen(false)
+    }
     return <>
-        <div className='grid grid-cols-2 gap-6'>
+        <div className='grid grid-cols-2 gap-6 pb-6 text-slate-700'>
             {/* Contoh dengan API */}
             <Select label={"Branch"} setValue={setValueBranch} keyId={"branchid"} keyName={"branchname"} urlPath={'/branch'} />
+            <div>
+                <label htmlFor="">Car Hull Number</label>
+                <div className="flex py-1">
+                    <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
+                </div>
+            </div>
             {/* Contoh tanpa API dengan data dummy */}
             <Select label={"Type"} setValue={setValueType} keyId={"id"} keyName={"name"} options={[
                 { id: 0, name: 'Asset' },
                 { id: 1, name: 'Vendor' }
             ]} />
+            <div>
+                <label htmlFor="">Plat Number</label>
+                <div className="flex py-1">
+                    <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
+                </div>
+            </div>
+            <Select label={"Brand"} setValue={setValueBranch} keyId={"brandid"} keyName={"brandname"} urlPath={'/Brand'} />
+            <div>
+                <label htmlFor="">Chasis/Frame Number</label>
+                <div className="flex py-1">
+                    <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
+                </div>
+            </div>
+            <Select label={"Vehicle Model"} setValue={setValueModel} keyId={"modelid"} keyName={"modelname"} urlPath={'/model'} />
+            <div>
+                <label htmlFor="">Engine Number</label>
+                <div className="flex py-1">
+                    <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
+                </div>
+            </div>
+            <Select label={"Vehicle Type"} setValue={setValueType} keyId={"typeid"} keyName={"typename"} urlPath={'/type'} />
+            <div>
+                <label htmlFor="">Color</label>
+                <div className="flex py-1">
+                    <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
+                </div>
+            </div>
             {/* <button onClick={handleCreate}>Create</button> */}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 text-slate-700">
+            <div className="row-span-2">
+                <label htmlFor="">Remarks (Opsional)</label>
+                <div className="flex py-1 ">
+                    <textarea name="" id="" className="border px-4 py-1 border-template-input h-[140px]"></textarea>
+                </div>
+            </div>
+            <div className="row-span-1">
+                <label htmlFor="">Released Year</label>
+                <div className="flex py-1">
+                    <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
+                </div>
+            </div>
+            <Select label={"Status"} setValue={setValueYear} keyId={"yearid"} keyName={"yearname"} urlPath={'/year'} />
+        </div>
+        <div className="flex justify-end gap-4">
+            <div className="flex text-green-600 my-auto cursor-pointer" onClick={() => closeModal()}>Close</div>
+            <button type="Submit" className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-[8px] px-4 `}>Create New</button>
         </div>
     </>
 }
-
-//     const { isOpen, setIsOpen } = props
-
-//     function closeModal() {
-//         setIsOpen(false)
-//     }
-//     return (
-//         <>
-//             <form action="" className="pt-2 pb-4 px-1">
-//                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5 pb-5">
-//                     <Select label={"Branch"} setValue={setValueBranch} keyId={"branchid"} keyName={"branchname"} urlPath={'/branch'} />
-//                     <div>
-//                         <label htmlFor="">Car Hull Number</label>
-//                         <div className="flex py-1">
-//                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
-//                         </div>
-//                     </div>
-//                     <div>
-//                         <label htmlFor="">Type</label>
-//                         <Dropdown />
-//                     </div>
-//                     <div>
-//                         <label htmlFor="">Plat Number</label>
-//                         <div className="flex py-1">
-//                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
-//                         </div>
-//                     </div>
-//                     <div>
-//                         <label htmlFor="">brand</label>
-//                         <Dropdown />
-//                     </div>
-//                     <div>
-//                         <label htmlFor="">Chasis/Frame Number</label>
-//                         <div className="flex py-1">
-//                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
-//                         </div>
-//                     </div>
-//                     <div>
-//                         <label htmlFor="">Vehicle Model</label>
-//                         <Dropdown />
-//                     </div>
-//                     <div>
-//                         <label htmlFor="">Engine Number</label>
-//                         <div className="flex py-1">
-//                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
-//                         </div>
-//                     </div>
-//                     <div>
-//                         <label htmlFor="">Vehicle Type</label>
-//                         <Dropdown />
-//                     </div>
-//                     <div>
-//                         <label htmlFor="">Color</label>
-//                         <div className="flex py-1">
-//                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
-//                         </div>
-//                     </div>
-//                 </div>
-//                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5 pb-5">
-//                     <div className="row-span-2">
-//                         <label htmlFor="">Remarks (Opsional)</label>
-//                         <div className="flex py-1 ">
-//                             <textarea name="" id="" className="border px-4 py-1 border-template-input h-[140px]"></textarea>
-//                         </div>
-//                     </div>
-//                     <div className="row-span-1">
-//                         <label htmlFor="">Released Year</label>
-//                         <div className="flex py-1">
-//                             <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
-//                         </div>
-//                     </div>
-//                     <div className="row-span-1">
-//                         <label htmlFor="">Status</label>
-//                         <Dropdown />
-//                     </div>
-//                 </div>
-//                 <div className="flex justify-end gap-4">
-//                     <div className="flex text-green-600 my-auto cursor-pointer" onClick={()=> closeModal()}>Close</div>
-//                     <button type="Submit" className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-[8px] px-4 `}>Create New</button>
-//                 </div>
-//             </form>
-//         </>
-//     );
-// };

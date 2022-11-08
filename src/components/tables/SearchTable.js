@@ -8,10 +8,10 @@
     - dataBody (merupakan sumber data asli yang berasal dari consume API)
 */
 export default function SearchTable(props) {
-    const { setData, dataBody, searchFunct } = props
+    const { setData, dataBody, customSearchFunction } = props
     const handleSearch = e => {
-        if (searchFunct) {
-            searchFunct(e)
+        if (customSearchFunction) {
+            customSearchFunction(e)
         } else {
             setData(
                 dataBody.filter(dataRow => {
