@@ -1,10 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Icon } from '@iconify/react'
 import { Fragment } from 'react'
 
-const Modal = (props) => {
-    // yang wajib dibuatkan props nya isOpen, setIsOpen, ModalContent
-    const { isOpen, setIsOpen, title, iconTitle, ModalContent, size } = props
+const ErrorNetwork = props => {
+    const { isOpen, setIsOpen } = props
 
     function closeModal() {
         setIsOpen(false)
@@ -31,7 +29,7 @@ const Modal = (props) => {
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full justify-center p-8 text-center">
+                        <div className="flex min-h-full items-center justify-center p-4 text-center">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -41,20 +39,30 @@ const Modal = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className=" transform overflow-auto rounded
-                                 bg-white p-4 text-left align-middle shadow-xl transition-all"
-                                    style={{ width: size ? `${size}px` : '100%' }}>
-                                    {/* Content */}
-                                    <div className="flex justify-between pb-4 divider-bottom mb-4">
-                                        <div className="flex gap-x-2 items-center">
-                                            {iconTitle && <Icon icon={iconTitle} className={`text-2xl text-gold `} />}
-                                            <span className='text-lg text-dark-green font-medium'>{title}</span>
-                                        </div>
-                                        <button onClick={closeModal}>
-                                            <Icon icon="carbon:close" className='text-[28px]' />
+                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded
+                                 bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                    <Dialog.Title
+                                        as="h3"
+                                        className="text-xl font-medium leading-6 text-gray-900"
+                                    >
+                                        Network Error!
+                                    </Dialog.Title>
+                                    <div className="mt-2">
+                                        <p className="text-base text-gray-500">
+                                            Please check your network
+                                        </p>
+                                    </div>
+
+                                    <div className="mt-4 text-center">
+                                        <button type="button"
+                                            className="inline-flex justify-center rounded-sm border border-transparent
+                                             bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200
+                                              focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                                            onClick={closeModal}
+                                        >
+                                            OK
                                         </button>
                                     </div>
-                                    {ModalContent}
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
@@ -65,4 +73,4 @@ const Modal = (props) => {
     )
 }
 
-export default Modal
+export default ErrorNetwork

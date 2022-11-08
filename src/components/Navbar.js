@@ -54,6 +54,12 @@ function Navbar() {
             setShow(!show)
         }
     }
+    const handleOnClickMenu = () => {
+        setOpen(true)
+        setTimeout(() => {
+            setShow(true)
+        }, 300);
+    }
     return (
         <div className={` ${open ? 'w-[230px]' : 'w-16'} bg-dark-green h-screen duration-500`}>
             {/* Head */}
@@ -67,7 +73,7 @@ function Navbar() {
             <div id="navbar-menu" className="h-[90%] overflow-y-scroll">
                 {/* Base */}
                 <div className="mb-6 grid gap-y-2 mt-3">
-                    <Menu open={open} show={show} menu={BaseMenu} location={location} />
+                    <Menu open={open} show={show} handleMenu={handleOnClickMenu} menu={BaseMenu} location={location} />
                 </div>
                 {/* Group Menu : DASHBOARD */}
                 <div className={`px-4 mb-3 `}>
@@ -75,7 +81,7 @@ function Navbar() {
                 </div>
                 <div className="mb-6 grid gap-y-2">
                     {dashboard.map((menu, index) => (
-                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                        <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
                 </div>
                 {/* Group Menu : GENERAL DATA */}
@@ -84,7 +90,7 @@ function Navbar() {
                 </div>
                 <div className="mb-6 grid gap-y-2">
                     {generalData.map((menu, index) => (
-                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                        <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
                 </div>
                 {/* Group Menu : APPLICATION */}
@@ -93,7 +99,7 @@ function Navbar() {
                 </div>
                 <div className="mb-6 grid gap-y-2">
                     {application.map((menu, index) => (
-                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                        <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
                 </div>
                 {/* Group Menu : REPORT */}
@@ -102,7 +108,7 @@ function Navbar() {
                 </div>
                 <div className="mb-6 grid gap-y-2">
                     {report.map((menu, index) => (
-                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                        <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
                 </div>
                 {/* Group Menu : ADMINISTRATOR */}
@@ -111,7 +117,7 @@ function Navbar() {
                 </div>
                 <div className="mb-6 grid gap-y-2">
                     {administrator.map((menu, index) => (
-                        <Menu key={index} open={open} show={show} menu={menu} location={location} />
+                        <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
                 </div>
             </div>
