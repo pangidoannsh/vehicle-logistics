@@ -7,6 +7,7 @@ import SearchTable from '../../components/tables/SearchTable'
 import Modal from '../../components/Modal'
 import { api } from '../../config'
 import ErrorNetwork from '../../components/ErrorNetwork'
+import Select from '../../components/Select'
 
 const Marketing = () => {
     const [loading, setLoading] = useState(true);
@@ -14,6 +15,8 @@ const Marketing = () => {
     const [dataBody, setDataBody] = useState([]);
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
+
+    const [openModalCreate, setOpenModalCreate] = useState(false);
 
     // untuk membuka dan menutup modal
     const [openModal, setOpenModal] = useState(false)
@@ -61,7 +64,8 @@ const Marketing = () => {
                     {/* After Header */}
                     <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
                         <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `}>
+                                items-center gap-x-1 py-[2px] px-4 `}
+                                onClick={() => setOpenModalCreate(true)}>
                             <Icon icon="fluent:add-12-filled" className="text-base" />
                             <span className='text-base'>Create</span>
                         </button>
@@ -86,11 +90,47 @@ const Marketing = () => {
                     <Modal isOpen={openModal} setIsOpen={setOpenModal} ModalContent={<ModalContent data={dataModal} />}
                         title={"PO Customer Detail"} iconTitle={"ooui:view-details-ltr"}
                     />
+                     <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} ModalContent={<ModalContentCreate setIsOpen={setOpenModalCreate}/>}
+                        title={"New PO Customer"} size={700}
+                    />
                     <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
                 </div>
             </div>
         </div>
     )
+}
+
+const ModalContentCreate = (props) => {
+    const { setIsOpen } = props
+    const [valueBranch, setValueBranch] = useState(null);
+
+    
+    
+    function closeModal() {
+        setIsOpen(false)
+    }
+    return <>
+    <div className="grid gap-6 pb-6">
+         <label htmlFor="">PO Number</label>
+        <div className="flex py-1">
+            <input type="text" className={`text-base py-1 px-4 border-template-input`} placeholder="" />
+        </div>
+        <label htmlFor="">PO Value</label>
+        <div className="flex py-1">
+            <input type="text" className={`text-base py-1 px-4 border-template-input`} placeholder="" />
+        </div>
+        <Select label={"Branch"} setValue={setValueBranch} keyId={"branchid"} keyName={"branchname"} urlPath={'/branch'}/>
+        <Select label={"Contract Name"} setValue={setValueBranch} keyId={"contractid"} keyName={"contractname"} urlPath={'/contract'}/>
+        <label htmlFor="">Remarks (Optional)</label>
+                <div className="flex py-1 ">
+                    <textarea name="" id="" className="border px-4 py-1 border-template-input h-[140px]"></textarea>
+                </div>
+                <div className="flex justify-end gap-4">
+        <div className="flex text-green-600 my-auto cursor-pointer" onClick={()=> closeModal()}>Close</div>
+        <button type="Submit" className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-[8px] px-4 `}>Create New</button>
+        </div>
+    </div>
+    </>
 }
 
 const ModalContent = (props) => {

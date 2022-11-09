@@ -6,6 +6,7 @@ import Marketing from "./generalData/Marketing"
 import Common from "./generalData/Common"
 import FinanceAr from "./dashboard/FinanceAr"
 import PlanArmada from "./application/vehicleLogistics/dataGeneral/PlanArmada"
+import EditMarketing from "./generalData/EditMarketing";
 
 
-export { Dashboard, MasterData, Marketing, Login, FinanceAr, PlanArmada, Common, NotFound }
+export { Dashboard, MasterData, Marketing, Login, FinanceAr, PlanArmada, Common, NotFound , EditMarketing}

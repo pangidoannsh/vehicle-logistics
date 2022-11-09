@@ -112,5 +112,31 @@
             "branchid": "30500",
             "branchname": "Logistics Balikpapan"
         }
+    ],
+    "contract": [
+        {
+            "contractid": "30000",
+            "contractname": "shipmen HK 2022"
+        },
+        {
+            "contractid": "30100",
+            "contractname": "pengiriman spare part"
+        },
+        {
+            "contractid": "30200",
+            "contractname": "Pengantaran spare part"
+        },
+        {
+            "contractid": "30300",
+            "contractname": "GALIB"
+        },
+        {
+            "contractid": "30400",
+            "contractname": "PO KURNIA INDAH SEGAR"
+        },
+        {
+            "contractid": "30500",
+            "contractname": "PENGIRIMAN MOBIL"
+        }
     ]
 }

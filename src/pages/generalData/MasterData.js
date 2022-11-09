@@ -150,7 +150,7 @@ const ModalContent = (props) => {
             <div>
                 <label htmlFor="">Car Hull Number</label>
                 <div className="flex py-1">
-                    <input type="text" className={`text-base py-2 px-4 border-template-input`} placeholder="" />
+                    <input type="text" className={`text-base py-2 px-4 border-template-input `} placeholder="" />
                 </div>
             </div>
             {/* Contoh tanpa API dengan data dummy */}
