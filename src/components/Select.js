@@ -1,12 +1,11 @@
 import { Fragment, useEffect, useState } from 'react'
-import { Listbox, Transition } from '@headlessui/react'
+import { Menu, Listbox, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 import { api } from '../config'
 
 export default function Select(props) {
-    const { label, setValue, keyId, keyName, urlPath, options } = props
+    const { label, setValue, keyId, keyName, urlPath, options, setTop } = props
     const [selected, setSelected] = useState({ [keyId]: null, [keyName]: "nothing selected" })
-
     const [dataOption, setDataOption] = useState(() => {
         if (urlPath) {
             return [];
@@ -14,7 +13,6 @@ export default function Select(props) {
             return options;
         }
     });
-
     useEffect(() => {
         setValue(selected[keyId])
     }, [selected]);
@@ -28,15 +26,17 @@ export default function Select(props) {
         }
     }, []);
     return (
-        <div className='col-span-1' >
-            <div className='text-slate-700 text-base mb-2'>{label}</div>
-            <Listbox value={selected} onChange={setSelected}>
-                <div className="relative mt-1">
-                    <Listbox.Button className="relative w-full rounded bg-white py-2 pl-3 
-                    pr-10 text-left border border-black border-opacity-20 focus:outline-none sm:text-sm">
+        <div className='flex flex-col gap-y-2'>
+            <div className={`text-sm text-slate-600`}>{label}</div>
+            <Listbox value={selected} onChange={setSelected} >
+                <div className="relative">
+                    <Listbox.Button className={`relative w-full rounded bg-white py-2 px-4
+                    ${selected[keyId] === null ? 'text-slate-400' : 'text-slate-600'}
+                     text-left border focus:outline-none sm:text-sm`}>
                         <span className="block truncate">{selected[keyName]}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <Icon icon={`akar-icons:chevron-down`} className="text-base" />
+                            <Icon icon={`${(setTop && setTop < 0) ? 'akar-icons:chevron-up' : 'akar-icons:chevron-down'}`}
+                                className="text-base" />
                         </span>
                     </Listbox.Button>
                     <Transition
@@ -45,8 +45,9 @@ export default function Select(props) {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded scroll-green z-10
-                         bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        <Listbox.Options className={`absolute mt-1 max-h-60 w-full overflow-auto rounded z-10 bg-white 
+                        text-base shadow-lg shadow-slate-400/20 ring-1 ring-slate-400/20 focus:outline-none sm:text-sm`}
+                            style={{ top: setTop && `${setTop}px` }}>
                             {dataOption.map((option, index) => (
                                 <Listbox.Option
                                     key={index}
@@ -61,11 +62,6 @@ export default function Select(props) {
                                             <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
                                                 {option[keyName]}
                                             </span>
-                                            {/* {selected ? (
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                                    <Icon icon="akar-icons:check" className='text-base' />
-                                                </span>
-                                            ) : null} */}
                                         </>
                                     )}
                                 </Listbox.Option>

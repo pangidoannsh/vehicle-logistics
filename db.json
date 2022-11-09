@@ -112,5 +112,59 @@
             "branchid": "30500",
             "branchname": "Logistics Balikpapan"
         }
+    ],
+    "vehiclemodel": [
+        {
+            "oid": "00554A85-016B-4FF6-9E07-DD03CC96637E",
+            "modelname": "PICKUP"
+        },
+        {
+            "oid": "019F1AFD-5C19-4568-9CF2-66FDABAF91DA",
+            "modelname": "BOX"
+        },
+        {
+            "oid": "0260783D-AFFD-07E8-FE72-FFF884FCEFC9",
+            "modelname": "MOBILIO"
+        },
+        {
+            "oid": "057EF4CF-C46C-E521-8D33-4603D59205E6",
+            "modelname": "JAZZ"
+        }
+    ],
+    "vehiclebrand": [
+        {
+            "oid": "0C2E7A2B-6633-6DEF-8604-072697E9FDC6",
+            "brandname": "HYUNDAI"
+        },
+        {
+            "oid": "0D4D3C35-0C3C-47D3-A91E-D0467A80D1BC",
+            "brandname": "TOYOTA"
+        },
+        {
+            "oid": "125C9531-39AB-18AC-17A0-192C26D8F321",
+            "brandname": "AUD"
+        },
+        {
+            "oid": "3593C6CB-93E8-B40C-FC77-28D7B1886171",
+            "brandname": "UD-TRUCKS"
+        }
+    ],
+    "vehicletype": [
+        {
+            "oid": "0162BBAE-729A-D211-AF8B-F3E1B569A7BB",
+            "typename": "DYNA 130 HT HI-GEAR 4X2 M/T"
+        },
+        {
+            "oid": "0353BF4E-B6B3-98D8-F578-88FB53D89638",
+            "typename": "HIACE COMMUTER SOLID [NEW]"
+        },
+        {
+            "oid": "03894DDC-73A1-C43D-6A1F-1EE1CD74BF97",
+            "typename": "NEW YARIS 1.5 G CVT [2019]"
+        },
+        {
+            "oid": "038D4ED4-2484-B4AF-720F-48CB9FFF035F",
+            "typename": "DYNA 130 XT LONG 4X2 M/T"
+        }
     ]
 }

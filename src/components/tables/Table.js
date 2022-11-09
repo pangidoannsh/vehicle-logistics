@@ -1,6 +1,5 @@
 import Action from "./Action";
 import LoadingTable from "./LoadingTable";
-import Skeleton from "./Skeleton";
 
 function Table(props) {
     const { dataBody, dataHead, id, loading, handleClick, actionInData, noAction } = props
