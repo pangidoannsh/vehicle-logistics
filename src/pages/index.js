@@ -7,6 +7,7 @@ import Common from "./generalData/Common"
 import FinanceAr from "./dashboard/FinanceAr"
 import Revenue from "./dashboard/Revenue"
 import PlanArmada from "./application/vehicleLogistics/dataGeneral/PlanArmada"
+import Manifest from "./application/vehicleLogistics/dataGeneral/Manifest"
 
 
-export { Dashboard, MasterData, Marketing, Login, FinanceAr, PlanArmada, Common, NotFound, Revenue }
+export { Dashboard, MasterData, Marketing, Login, FinanceAr, PlanArmada, Common, NotFound, Revenue, Manifest }
