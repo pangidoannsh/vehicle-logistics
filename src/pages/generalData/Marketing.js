@@ -10,6 +10,7 @@ import ErrorNetwork from '../../components/ErrorNetwork'
 import Select from '../../components/Select'
 import FormInput from '../../components/FormInput'
 
+
 const Marketing = () => {
     const [loading, setLoading] = useState(true);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
@@ -105,7 +106,6 @@ const ModalContentCreate = (props) => {
     const [valueBranch, setValueBranch] = useState(null);
     const [valuePoNumber, setValuePoNumber] = useState(null);
     const [valuePoValue, setValuePoValue] = useState(null);
-
     const handleClickCreate = e => {
         e.preventDefault()
     }
