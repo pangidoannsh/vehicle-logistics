@@ -8,6 +8,8 @@ import Modal from '../../components/Modal'
 import { api } from '../../config'
 import ErrorNetwork from '../../components/ErrorNetwork'
 import Select from '../../components/Select'
+import FormInput from '../../components/FormInput'
+
 
 const Marketing = () => {
     const [loading, setLoading] = useState(true);
@@ -16,10 +18,10 @@ const Marketing = () => {
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
 
-    const [openModalCreate, setOpenModalCreate] = useState(false);
-
-    // untuk membuka dan menutup modal
-    const [openModal, setOpenModal] = useState(false)
+    // untuk membuka dan menutup modal detail
+    const [openModalDetail, setOpenModalDetail] = useState(false)
+    // untuk membuka dan menutup modal detail
+    const [openModalCreate, setOpenModalCreate] = useState(false)
     // untuk data yang akan ditampilkan Modal -> ModalContent
     const [dataModal, setDataModal] = useState({});
     const [isErrorNetwork, setIsErrorNetwork] = useState(false);
@@ -31,24 +33,25 @@ const Marketing = () => {
     // penentuan id dari data yang ada di table
     const data_id = 'po_number'
 
-    const handleClick = e => {
+    // untuk handle Open dari Modal PO Customer Detail
+    const handleOpenModalDetail = e => {
+        // console.log(e.target.name);
         setDataModal(dataBody.filter(data => data.po_number === e.target.name).map(filter => filter)[0]);
-        setOpenModal(true)
+        setOpenModalDetail(true)
     }
 
-    const calledOnce =
-        // use effect untuk consume API
-        useEffect(() => {
-            api.get('/pocustomer').then(res => {
-                setDataBody(res.data)
-                setLoading(false)
-            }).catch(error => {
-                // console.log(error);
-                if (error.code === "ERR_NETWORK") {
-                    setIsErrorNetwork(true)
-                }
-            })
-        }, []);
+    // use effect untuk consume API
+    useEffect(() => {
+        api.get('/pocustomer').then(res => {
+            setDataBody(res.data)
+            setLoading(false)
+        }).catch(error => {
+            // console.log(error);
+            if (error.code === "ERR_NETWORK") {
+                setIsErrorNetwork(true)
+            }
+        })
+    }, []);
 
     // pemberian isi dari data show
     useEffect(() => {
@@ -64,8 +67,7 @@ const Marketing = () => {
                     {/* After Header */}
                     <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
                         <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `}
-                                onClick={() => setOpenModalCreate(true)}>
+                                items-center gap-x-1 py-[2px] px-4 `} onClick={() => setOpenModalCreate(true)}>
                             <Icon icon="fluent:add-12-filled" className="text-base" />
                             <span className='text-base'>Create</span>
                         </button>
@@ -73,7 +75,7 @@ const Marketing = () => {
 
                     {/* Content */}
                     <div className="p-4 pb-14">
-                        <div className="card bg-white px-4 pb-4 pt-2">
+                        <div className="card bg-white p-6">
                             {/* Title */}
                             <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
                                 <Icon icon="fluent-mdl2:market" className={`text-2xl text-gold `} />
@@ -83,57 +85,51 @@ const Marketing = () => {
                             <SearchTable setData={setDataShow} dataBody={dataBody} />
                             {/* Table */}
                             <Table dataBody={dataShow} dataHead={headTable} id={data_id}
-                                loading={loading} handleClick={handleClick} actionInData={1}
+                                loading={loading} handleClick={handleOpenModalDetail} actionInData={1}
                             />
                         </div>
                     </div>
-                    <Modal isOpen={openModal} setIsOpen={setOpenModal} ModalContent={<ModalContent data={dataModal} />}
+                    {/* Modal Detail */}
+                    <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} ModalContent={<ModalContentDetail data={dataModal} />}
                         title={"PO Customer Detail"} iconTitle={"ooui:view-details-ltr"}
                     />
-                     <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} ModalContent={<ModalContentCreate setIsOpen={setOpenModalCreate}/>}
-                        title={"New PO Customer"} size={700}
-                    />
+                    {/* Modal Create */}
+                    <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate}
+                        ModalContent={<ModalContentCreate setIsOpen={setOpenModalCreate} />} title={'New PO Customer'} size={700} />
                     <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
                 </div>
             </div>
         </div>
     )
 }
-
 const ModalContentCreate = (props) => {
-    const { setIsOpen } = props
     const [valueBranch, setValueBranch] = useState(null);
-
-    
-    
-    function closeModal() {
-        setIsOpen(false)
+    const [valuePoNumber, setValuePoNumber] = useState(null);
+    const [valuePoValue, setValuePoValue] = useState(null);
+    const handleClickCreate = e => {
+        e.preventDefault()
     }
     return <>
-    <div className="grid gap-6 pb-6">
-         <label htmlFor="">PO Number</label>
-        <div className="flex py-1">
-            <input type="text" className={`text-base py-1 px-4 border-template-input`} placeholder="" />
+        <div className="flex flex-col gap-y-6 pb-2">
+            <FormInput label="PO Number" tagId="ponumber" setValue={setValuePoNumber} />
+            <FormInput label="PO Value" tagId="povalue" setValue={setValuePoValue} />
+            <Select label={"Branch"} setValue={setValueBranch} keyId={"branchid"} keyName={"branchname"} urlPath={'/branch'} />
+            <Select label={"Contract Name"} setValue={setValueBranch} keyId={"contractid"} keyName={"contractname"} urlPath={'/contract'} />
+            <div className="flex flex-col gap-2">
+                <label htmlFor="remarks" className='text-slate-600 text-sm'>Remarks (Optional)</label>
+                <textarea id="remarks" className="border px-4 py-2 border-template-input text-sm text-slate-700" rows="4"></textarea>
+            </div>
         </div>
-        <label htmlFor="">PO Value</label>
-        <div className="flex py-1">
-            <input type="text" className={`text-base py-1 px-4 border-template-input`} placeholder="" />
+        <div className="flex justify-end gap-4 px-4 pt-6">
+            <button className="text-green-600 py-2 px-4" onClick={() => props.setIsOpen(false)}>Close</button>
+            <button type="Submit" onClick={handleClickCreate}
+                className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-2 px-4 `}>
+                Create New
+            </button>
         </div>
-        <Select label={"Branch"} setValue={setValueBranch} keyId={"branchid"} keyName={"branchname"} urlPath={'/branch'}/>
-        <Select label={"Contract Name"} setValue={setValueBranch} keyId={"contractid"} keyName={"contractname"} urlPath={'/contract'}/>
-        <label htmlFor="">Remarks (Optional)</label>
-                <div className="flex py-1 ">
-                    <textarea name="" id="" className="border px-4 py-1 border-template-input h-[140px]"></textarea>
-                </div>
-                <div className="flex justify-end gap-4">
-        <div className="flex text-green-600 my-auto cursor-pointer" onClick={()=> closeModal()}>Close</div>
-        <button type="Submit" className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-[8px] px-4 `}>Create New</button>
-        </div>
-    </div>
     </>
 }
-
-const ModalContent = (props) => {
+const ModalContentDetail = (props) => {
     const [dataUnit, setDataUnit] = useState([]);
     const {
         branch,
@@ -240,7 +236,6 @@ const ModalContent = (props) => {
             </div>
             <Table dataBody={dataUnit} dataHead={headTable} id={null}
                 loading={false} noAction={true} />
-
         </>
     )
 }

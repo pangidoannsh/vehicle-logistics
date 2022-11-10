@@ -31,7 +31,7 @@ const Modal = (props) => {
                     </Transition.Child>
 
                     <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full justify-center p-8 text-center">
+                        <div className="flex justify-center p-8 text-center items-center min-h-full">
                             <Transition.Child
                                 as={Fragment}
                                 enter="ease-out duration-300"
@@ -41,8 +41,8 @@ const Modal = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className=" transform overflow-auto rounded
-                                 bg-white p-4 text-left align-middle shadow-xl transition-all"
+                                <Dialog.Panel className="  overflow-auto rounded
+                                 bg-white p-6 text-left align-middle shadow-xl transition-all"
                                     style={{ width: size ? `${size}px` : '100%' }}>
                                     {/* Content */}
                                     <div className="flex justify-between pb-4 divider-bottom mb-4">
