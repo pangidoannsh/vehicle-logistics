@@ -48,7 +48,6 @@ const generalData = [
 
 const application = [
     {
-        "id": "1",
         "title": "Vehicle Logistics",
         "icon": "fa-solid:truck",
         "sub": [

@@ -74,7 +74,7 @@ const Marketing = () => {
 
                     {/* Content */}
                     <div className="p-4 pb-14">
-                        <div className="card bg-white px-4 pb-4 pt-2">
+                        <div className="card bg-white p-6">
                             {/* Title */}
                             <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
                                 <Icon icon="fluent-mdl2:market" className={`text-2xl text-gold `} />
@@ -116,7 +116,7 @@ const ModalContentCreate = (props) => {
             <Select label={"Branch"} setValue={setValueBranch} keyId={"branchid"} keyName={"branchname"} urlPath={'/branch'} />
             <Select label={"Contract Name"} setValue={setValueBranch} keyId={"contractid"} keyName={"contractname"} urlPath={'/contract'} />
             <div className="flex flex-col gap-2">
-                <label htmlFor="remarks" className='text-slate-700 text-sm'>Remarks (Optional)</label>
+                <label htmlFor="remarks" className='text-slate-600 text-sm'>Remarks (Optional)</label>
                 <textarea id="remarks" className="border px-4 py-2 border-template-input text-sm text-slate-700" rows="4"></textarea>
             </div>
         </div>

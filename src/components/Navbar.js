@@ -9,7 +9,6 @@ import { dashboard, generalData, application, report, administrator } from './me
 
 function Navbar() {
     const storage = window.sessionStorage;
-
     const [open, setOpen] = useState(() => {
         if (storage.getItem('isOpen')) {
             if (storage.getItem('isOpen') === '1') {
@@ -30,7 +29,6 @@ function Navbar() {
         storage.setItem('isOpen', '1');
         return true
     });
-
     let location = useLocation()
 
     // Home
