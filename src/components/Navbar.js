@@ -9,6 +9,7 @@ import { dashboard, generalData, application, report, administrator } from './me
 
 function Navbar() {
     const storage = window.sessionStorage;
+
     const [open, setOpen] = useState(() => {
         if (storage.getItem('isOpen')) {
             if (storage.getItem('isOpen') === '1') {
@@ -29,6 +30,7 @@ function Navbar() {
         storage.setItem('isOpen', '1');
         return true
     });
+
     let location = useLocation()
 
     // Home
@@ -59,7 +61,7 @@ function Navbar() {
         }, 300);
     }
     return (
-        <div className={` ${open ? 'w-[230px]' : 'w-16'} bg-dark-green h-screen duration-500`}>
+        <div className={` ${open ? 'w-60' : 'w-16'} bg-dark-green h-screen duration-500`}>
             {/* Head */}
             <div className="bg-black bg-opacity-20 h-[72px]">
                 <div className={`fixed top-5 z-10 duration-500 ${open ? 'left-4' : 'left-20'}`}>

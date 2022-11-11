@@ -104,7 +104,7 @@ export default function MasterData() {
                     </div>
 
                     {/* Content */}
-                    <div className="p-4 pb-14">
+                    <div className="p-4">
                         <div className="card drop-shadow-lg bg-white px-4 pb-4 pt-2">
                             {/* Title */}
                             <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">

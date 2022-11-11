@@ -1,10 +1,9 @@
 import { Icon } from '@iconify/react';
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 
 function SubMenu(props) {
-    const { menu, open, show, location, setHeightParent } = props
-
+    const { menu, open, show, location } = props
     const [actived, setActived] = useState(() => {
         if (menu.sub) {
             return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1
@@ -21,35 +20,12 @@ function SubMenu(props) {
             return false;
         }
     });
-    const [height, setHeight] = useState(() => {
-        if (menu.sub) {
-            let heightSub = 0
-            menu.sub.forEach(menu => {
-                if (menu.title.length > 18) {
-                    heightSub += 52
-                }
-                else {
-                    heightSub += 38
-                }
-            })
-            // return menu.sub.length * 38
-            return heightSub
-
-        }
-        return 0
-    });
     const handleDropDown = () => {
         setDrop(!drop)
         if (menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) === -1) {
             setActived(!actived)
         }
-        if (drop) {
-            setHeightParent(-height)
-        } else {
-            setHeightParent(height)
-        }
     }
-
     if (menu.sub) {
         return (
             <div className='grid grid-cols-1 px-2'>
@@ -67,10 +43,9 @@ function SubMenu(props) {
                          ${drop && 'rotate-90'} ${actived && 'text-opacity-100'}`} />
                     </div>
                 </button>
-                <div className={` overflow-hidden duration-300`}
-                    style={{ height: drop ? `${height}px` : '0' }}>
+                <div className={`overflow-hidden duration-300 ${drop ? 'h-auto' : 'h-0'}`}>
                     {menu.sub.map((submenu, index) => (
-                        <SubMenu key={index} open={open} show={show} menu={submenu} location={location} setHeightParent={setHeightParent} />
+                        <SubMenu key={index} open={open} show={show} menu={submenu} location={location} />
                     ))}
                 </div>
             </div>

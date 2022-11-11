@@ -74,7 +74,7 @@ const Marketing = () => {
                     </div>
 
                     {/* Content */}
-                    <div className="p-4 pb-14">
+                    <div className="p-4">
                         <div className="card bg-white p-6">
                             {/* Title */}
                             <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">

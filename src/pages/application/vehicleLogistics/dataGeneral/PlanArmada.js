@@ -5,7 +5,7 @@ import Navbar from '../../../../components/Navbar'
 const PlanArmada = () => {
 
     return (
-        <div className="container">
+        <div id="container">
             <Navbar />
             <div className="flex-1">
                 <Header />

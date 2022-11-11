@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react"
-import { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { NavLink } from "react-router-dom"
 import SubMenu from "./SubMenu";
 
@@ -42,13 +42,6 @@ function Menu(props) {
             return false;
         }
     });
-
-    const [height, setHeight] = useState(() => {
-        if (menu.sub) {
-            return menu.sub.length * 38
-        }
-        return 0
-    });
     // fungtion untuk toggle dropdown
     const handleDropDown = () => {
         if (!open && !drop) {
@@ -63,9 +56,6 @@ function Menu(props) {
         else if (menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) === -1) {
             setActived(!actived)
         }
-    }
-    const handleHeightChild = addHeight => {
-        setHeight(height + addHeight)
     }
 
     // VIEW yang akan di-RENDER
@@ -88,10 +78,9 @@ function Menu(props) {
                     </div>
                 </button>
                 {/* Dropdown */}
-                <div className={` ${!show && 'hidden'} overflow-hidden duration-300`}
-                    style={{ height: drop ? `${height}px` : '0' }}>
+                <div className={` ${!show && 'hidden'} overflow-hidden duration-300 ${drop ? 'h-max' : 'h-0'}`}>
                     {menu.sub.map((submenu, index) => (
-                        <SubMenu key={index} open={open} show={show} menu={submenu} location={location} setHeightParent={handleHeightChild} />
+                        <SubMenu key={index} open={open} show={show} menu={submenu} location={location} />
                     ))}
                 </div>
             </div>

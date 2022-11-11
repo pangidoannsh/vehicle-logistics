@@ -165,6 +165,7 @@
         {
             "oid": "038D4ED4-2484-B4AF-720F-48CB9FFF035F",
             "typename": "DYNA 130 XT LONG 4X2 M/T"
+        }
     ],
     "contract": [
         {
@@ -191,5 +192,5 @@
             "contractid": "30500",
             "contractname": "PENGIRIMAN MOBIL"
         }
-        ]
+    ]
 }
