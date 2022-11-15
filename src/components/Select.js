@@ -1,30 +1,19 @@
 import { Fragment, useEffect, useState } from 'react'
-import { Menu, Listbox, Transition } from '@headlessui/react'
+import { Listbox, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
-import { api } from '../config'
 
 export default function Select(props) {
-    const { label, setValue, keyId, keyName, urlPath, options, setTop } = props
+    // const { label, setValue, keyId, keyName, urlPath, options, setTop } = props
+    const { label, setValue, keyId, keyName, options, setTop } = props
     const [selected, setSelected] = useState({ [keyId]: null, [keyName]: "nothing selected" })
-    const [dataOption, setDataOption] = useState(() => {
-        if (urlPath) {
-            return [];
-        } else {
-            return options;
-        }
-    });
+    const [dataOption, setDataOption] = useState(options);
     useEffect(() => {
         setValue(selected[keyId])
     }, [selected]);
 
     useEffect(() => {
-        if (urlPath) {
-            api.get(urlPath).then(res => {
-                setDataOption(res.data)
-            })
-                .catch(error => { })
-        }
-    }, []);
+        setDataOption(options)
+    }, [options]);
     return (
         <div className='flex flex-col gap-y-2'>
             <div className={`text-sm text-slate-600`}>{label}</div>

@@ -49,7 +49,7 @@ const ErrorNetwork = props => {
                                     </Dialog.Title>
                                     <div className="mt-2">
                                         <p className="text-base text-gray-500">
-                                            Please check your network
+                                            Please check your network and Reload your browser
                                         </p>
                                     </div>
 

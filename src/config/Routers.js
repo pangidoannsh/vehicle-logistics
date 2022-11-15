@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { Dashboard, Login, Marketing, FinanceAr, PlanArmada, NotFound, MasterData, Revenue, Manifest } from '../pages'
+import { Dashboard, Login, Marketing, FinanceAr, PlanArmada, NotFound, MasterData, Revenue, Manifest, Cashier } from '../pages'
 
 function Routers() {
     return (
@@ -13,6 +13,7 @@ function Routers() {
                 <Route path='/revenue' element={<Revenue />} />
                 <Route path='/plan-armada' element={<PlanArmada />} />
                 <Route path='/manifest-data' element={<Manifest />} />
+                <Route path='/cashier' element={<Cashier />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

@@ -53,7 +53,6 @@ const application = [
         "sub": [
             {
                 "title": "Data General",
-                "icon": "bi:clipboard-data-fill",
                 "sub": [
                     {
                         "title": "Contact / Price",
@@ -71,7 +70,6 @@ const application = [
             },
             {
                 "title": "Administration",
-                "icon": "dashicons:admin-settings",
                 "sub": [
                     {
                         "title": "Delivery Order",
@@ -82,8 +80,12 @@ const application = [
                         "path": "/receipt-update"
                     },
                     {
-                        "title": "Handover",
-                        "path": "/handover"
+                        "title": "Create Handover",
+                        "path": "/create-handover"
+                    },
+                    {
+                        "title": "Handover List",
+                        "path": "/handover-list"
                     },
                     {
                         "title": "Barcode",
@@ -93,8 +95,15 @@ const application = [
             },
             {
                 "title": "Operational",
-                "icon": "ep:operation",
                 "sub": [
+                    {
+                        "title": "Manifest Create",
+                        "path": "/manifest/create"
+                    },
+                    {
+                        "title": "Manifest List",
+                        "path": "/manifest"
+                    },
                     {
                         "title": "Loading",
                         "path": "/loading"
@@ -103,16 +112,27 @@ const application = [
             },
             {
                 "title": "Cashier",
-                "icon": "mdi:cash-register",
-                "path": "/cashier"
+                "sub": [
+                    {
+                        "title": "Operating Cost Create",
+                        "path": "/operating-cost/create"
+                    },
+                    {
+                        "title": "Operating Cost List",
+                        "path": "/oeprating-cost"
+                    }
+                ]
             },
             {
                 "title": "Billing",
-                "icon": "fa-solid:file-invoice-dollar",
                 "sub": [
                     {
-                        "title": "Invoice",
-                        "path": "/invoice"
+                        "title": "New Invoice",
+                        "path": "/new-invoice"
+                    },
+                    {
+                        "title": "Data Invoicing",
+                        "path": "/data-invoicing"
                     },
                     {
                         "title": "Invoice Verification",
@@ -122,7 +142,6 @@ const application = [
             },
             {
                 "title": "Accounting / RC",
-                "icon": "map:accounting",
                 "sub": [
                     {
                         "title": "Account Receivable",

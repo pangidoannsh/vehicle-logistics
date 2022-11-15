@@ -23,7 +23,7 @@ function Table(props) {
                         <th className={`p-4 bg-dark-green text-white font-semibold 
                             text-sm text-center border border-l-[1px] border-white w-14`}>No</th>
                         {dataHead.map((item, index) => (
-                            <th key={index} className={`p-4 bg-dark-green text-white font-semibold text-sm text-center
+                            <th key={index} className={`p-2 bg-dark-green text-white font-semibold text-sm text-center
                                 border border-l-[1px] border-white`}>
                                 {item}
                             </th>

@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 
 const Modal = (props) => {
     // yang wajib dibuatkan props nya isOpen, setIsOpen, ModalContent
-    const { isOpen, setIsOpen, title, iconTitle, ModalContent, size } = props
+    const { isOpen, setIsOpen, title, iconTitle, size } = props
 
     function closeModal() {
         setIsOpen(false)
@@ -44,7 +44,7 @@ const Modal = (props) => {
                                 <Dialog.Panel className="  overflow-auto rounded
                                  bg-white p-6 text-left align-middle shadow-xl transition-all"
                                     style={{ width: size ? `${size}px` : '100%' }}>
-                                    {/* Content */}
+                                    {/* Title dari Modal */}
                                     <div className="flex justify-between pb-4 divider-bottom mb-4">
                                         <div className="flex gap-x-2 items-center">
                                             {iconTitle && <Icon icon={iconTitle} className={`text-2xl text-gold `} />}
@@ -54,7 +54,8 @@ const Modal = (props) => {
                                             <Icon icon="carbon:close" className='text-[28px]' />
                                         </button>
                                     </div>
-                                    {ModalContent}
+                                    {/* Content dari Modal */}
+                                    {props.children}
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>

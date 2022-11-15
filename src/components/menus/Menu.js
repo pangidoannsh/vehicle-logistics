@@ -12,7 +12,10 @@ function Menu(props) {
     if (menu.sub) {
         if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
             subSubMenuActived = menu.sub.findIndex(subMenu => {
-                return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                if (subMenu.sub) {
+                    return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                }
+                return subMenu.path === location.pathname
             }) !== -1;
         }
     }
@@ -66,12 +69,11 @@ function Menu(props) {
                     <div className={`flex justify-between items-center pr-2 pl-4 py-3  ${open ? 'mr-4' : 'pr-4'} duration-300
                         ${actived && 'rounded-r-full bg-black bg-opacity-20'}`}>
                         <div className="flex items-center gap-x-3">
-                            <Icon icon={menu.icon} className={`duration-300 text-base'}
-                        ${actived && ' text-gold'} ${show ? 'text-base' : 'text-xl'}`} />
-                            <span className={`text-sm text-white' leading-none 
-                        ${!show && 'hidden'} ${actived && 'text-white '}`}>
+                            <Icon icon={menu.icon} className={`duration-300 
+                            ${actived && ' text-gold'} ${show ? 'text-base' : 'text-xl'}`} />
+                            <div className={`text-sm leading-none ${!show ? 'hidden' : ''} ${actived ? 'text-white ' : ''}`}>
                                 {menu.title}
-                            </span>
+                            </div>
                         </div>
                         <Icon icon='akar-icons:chevron-right' className={`duration-300 text-xs 
                     ${!show && 'hidden'} ${drop && 'rotate-90'} ${actived && 'text-white'}`} />
