@@ -29,7 +29,7 @@ const Marketing = () => {
     const headTable = [
         "Branch", "PO Number", "Customers", "Contract No", "Contract Name", "Contract Type", "Value"
     ]
-
+    let apiSubscribe = true
     // penentuan id dari data yang ada di table
     const data_id = 'po_number'
 
@@ -51,6 +51,7 @@ const Marketing = () => {
                 setIsErrorNetwork(true)
             }
         })
+
     }, []);
 
     // pemberian isi dari data show

@@ -46,7 +46,8 @@ function Table(props) {
                                         <td key={indexData} className="p-4 text-sm text-slate-700
                                              selection:bg-light-green selection:text-white">
                                             {actionInData ? indexData != actionInData ? dataCell : (
-                                                <button onClick={handleClick} name={dataRow[id]} className={`text-gold`}>
+                                                <button onClick={handleClick} name={dataRow[id]}
+                                                    className="text-gold hover:underline">
                                                     {dataCell}
                                                 </button>
                                             ) : dataCell}

@@ -1,6 +1,6 @@
 const dashboard = [
     {
-        "title": "VL Dashboard",
+        "title": "Dashboard",
         "icon": "bxs:chart",
         "sub": [
             {
@@ -25,30 +25,36 @@ const dashboard = [
 
 const generalData = [
     {
-        "title": "Common",
-        "path": "/common",
-        "icon": "bi:grid-3x2-gap-fill"
-    },
-    {
-        "title": "Master Data",
-        "path": "/master-data",
-        "icon": "bxs:folder-open"
-    },
-    {
-        "title": "Organization",
-        "path": "/organization",
-        "icon": "clarity:organization-solid"
-    },
-    {
-        "title": "Marketing",
-        "path": "/marketing",
-        "icon": "fluent-mdl2:market"
+        "title": "General Data",
+        "icon": "bxs:folder-open",
+        "sub": [
+            {
+                "title": "Common",
+                "path": "/common",
+                "icon": "bi:grid-3x2-gap-fill"
+            },
+            {
+                "title": "Master Data",
+                "path": "/master-data",
+                "icon": "bxs:folder-open"
+            },
+            {
+                "title": "Organization",
+                "path": "/organization",
+                "icon": "clarity:organization-solid"
+            },
+            {
+                "title": "Marketing",
+                "path": "/marketing",
+                "icon": "fluent-mdl2:market"
+            }
+        ]
     }
 ]
 
 const application = [
     {
-        "title": "VL Application",
+        "title": "Application",
         "icon": "fa-solid:truck",
         "sub": [
             {
@@ -140,7 +146,7 @@ const application = [
 
 const report = [
     {
-        "title": "VL Report",
+        "title": "Report",
         "icon": "fluent:document-bullet-list-24-filled",
         "sub": [
             {

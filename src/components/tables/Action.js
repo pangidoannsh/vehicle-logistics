@@ -17,7 +17,7 @@ const Action = ({ id }) => {
                 leave="transition duration-75 ease-out"
                 leaveFrom="transform scale-100 opacity-100"
                 leaveTo="transform scale-95 opacity-0">
-                <Menu.Items as='div' className={`absolute -top-5 -right-32 bg-white rounded shadow-md p-4 py-4`}>
+                <Menu.Items as='div' className={`absolute -top-7 -right-32 bg-white rounded shadow-md p-4 py-4`}>
                     <Menu.Item as='div' className='flex flex-col gap-y-3'>
                         <NavLink to={`${location.pathname}/${id}/edit`} className={`text-yellow-500 hover:text-yellow-400`}>
                             <div className='flex gap-x-3 items-center' >
