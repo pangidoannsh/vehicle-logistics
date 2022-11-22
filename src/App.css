@@ -49,6 +49,12 @@
   display: none;
 }
 
+/* 
+.modal::-webkit-scrollbar {
+  display: none;
+} */
+
+
 .divider-top {
   border-top: 1px solid rgba(0, 0, 0, .2);
 }

@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 
 const ErrorNetwork = props => {
-    const { isOpen, setIsOpen } = props
+    const { isOpen, setIsOpen, title, message } = props
 
     function closeModal() {
         setIsOpen(false)
@@ -45,11 +45,11 @@ const ErrorNetwork = props => {
                                         as="h3"
                                         className="text-xl font-medium leading-6 text-gray-900"
                                     >
-                                        Network Error!
+                                        {title}
                                     </Dialog.Title>
                                     <div className="mt-2">
                                         <p className="text-base text-gray-500">
-                                            Please check your network and Reload your browser
+                                            {message}
                                         </p>
                                     </div>
 

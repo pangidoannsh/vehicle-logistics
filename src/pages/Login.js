@@ -1,90 +1,35 @@
 import React, { useState } from 'react';
-import Background from '../assets/images/login-bg.jpg'
-import { VehicleLogo, Shape, Logo, TopShape, BottomShape } from '../assets'
-import { Icon } from '@iconify/react';
-
+import PasswordInput from '../components/PasswordInput';
+import Sign from '../layouts/Sign';
 
 const Login = () => {
-    const [isOpen, setIsOpen] = useState(true);
-    const [seePassword, setSeePassword] = useState(false);
-    const [passOnFocus, setPassOnFocus] = useState(false)
-
-    const screenHeight = window.innerHeight
-    const minMediumScreen = window.innerHeight < 680;
-
     const handleSubmit = e => {
         e.preventDefault()
-        console.log('test');
-    }
-    const handleContent = e => {
-
     }
     return (
-        <div className='h-screen bg-no-repeat bg-center bg-cover'
-            style={{ backgroundImage: `url(${Background})` }}>
-            <div className="flex">
-                <div className="w-[600px] h-screen">
-                    <div className={`fixed ${isOpen ? 'w-[600px]' : 'w-16'} duration-300
-                        relative h-screen bg-white rounded-r-2xl overflow-hidden`}>
-                        <div className="fixed z-10 top-[40px] left-16 duration-500">
-                            <img src={VehicleLogo} style={{
-                                width: minMediumScreen ? '120px' : '150px'
-                            }} />
-                        </div>
-                        <div className="absolute -top-[180px] -left-48" style={{
-                            width: minMediumScreen && '400px',
-                            top: minMediumScreen && '-150px',
-                            left: minMediumScreen && '-150px'
-                        }} >
-                            <img src={TopShape} />
-                        </div>
-                        <div className='absolute -bottom-60 -right-44'>
-                            <img src={BottomShape} />
-                        </div>
-                        <div className="px-16 h-full flex flex-col gap-y-6 justify-center">
-                            <div className="flex gap-x-6">
-                                <button className={`text-5xl text-dark-green font-medium`}>Sign In</button>
-                                <button className={`text-3xl text-slate-400 font-medium`} onClick={handleContent}>Sign up</button>
-                            </div>
-                            <form className='py-6' onSubmit={handleSubmit}>
-                                {/* Input Email */}
-                                <div className="relative mb-8 ">
-                                    <input id='email' type="text" className='focus:outline-none bg-transparent p-1 focus:rounded
+        <Sign>
+            <form className='py-6' onSubmit={handleSubmit}>
+                {/* Input Email */}
+                <div className="relative mb-8">
+                    <input id='email' type="text" className='focus:outline-none bg-transparent p-1 focus:rounded
                                     border-b border-b-slate-400 w-full text-slate-400 focus:text-slate-600 peer ' placeholder=" " />
-                                    <div className='absolute bottom-0 duration-300 w-0 peer-focus:w-full h-[2px] bg-light-green'></div>
-                                    <label htmlFor="email" className="floating-label">Email</label>
-                                </div>
-                                {/* Input Password */}
-                                <div className="relative mb-3">
-                                    <input id='password' type={`${seePassword ? 'text' : 'password'}`} className='focus:outline-none
-                                    bg-transparent p-1 focus:rounded border-b border-b-slate-400 w-full text-slate-400 
-                                    focus:text-slate-600 peer' placeholder=" " onFocus={() => setPassOnFocus(true)} />
-                                    <div className='absolute bottom-0 duration-300 w-0 peer-focus:w-full h-[2px] bg-light-green '></div>
-                                    <label htmlFor="password" className="floating-label">Password</label>
-                                    <button id="seepassword" className={`absolute right-0 text-center p-2 pr-4 ${passOnFocus ? 'inline' : 'hidden'}`}
-                                        onClick={e => { e.preventDefault(); setSeePassword(!seePassword) }}>
-                                        <Icon icon={`${seePassword ? 'mdi:eye-off' : 'ic:round-remove-red-eye'}`}
-                                            className='text-lg text-slate-600' />
-                                    </button>
-                                </div>
-                                {/* Forgot Password */}
-                                <button className='text-sm font-medium text-slate-400 block mb-8 hover:text-light-green'>
-                                    forgot password?
-                                </button>
-                                {/* Login Button */}
-                                <button className='bg-light-green rounded py-2 px-4 text-white font-medium tracking-[.25em]'>
-                                    LOGIN
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    <div className='absolute bottom-0 duration-300 w-0 peer-focus:w-full h-[2px] bg-light-green'></div>
+                    <label htmlFor="email" className="floating-label font-medium">Email</label>
                 </div>
-                <div className="flex-1 flex justify-center items-center h-screen">
-                    <img src={Logo} alt="" className='w-[582px]' />
-                </div>
-            </div>
-        </div>
-    );
+                {/* Input Password */}
+                <PasswordInput id="password" className="mb-3">Password</PasswordInput>
+                {/* Forgot Password */}
+                <button className='text-sm font-medium text-slate-400 block mb-8 hover:text-light-green'>
+                    forgot password?
+                </button>
+                {/* Login Button */}
+                <button className='bg-light-green hover:bg-green-600 active:ring-4 active:ring-green-300 focus:ring-4 focus:ring-green-300
+                rounded py-2 px-4 text-white font-medium tracking-[.25em]'>
+                    LOGIN
+                </button>
+            </form>
+        </Sign>
+    )
 }
 
 export default Login;

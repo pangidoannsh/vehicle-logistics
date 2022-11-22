@@ -48,23 +48,6 @@ function Menu(props) {
         }
     });
 
-    const [childHeight, setChildHeight] = useState(() => {
-        if (menu.sub) {
-            if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
-                if (subSubMenuActived) {
-                    return (menu.sub.length * 38) + (menu.sub[menu.sub.findIndex(sub => {
-                        if (sub.sub) return sub.sub.findIndex(subsub => { return subsub.path === location.pathname })
-                        return sub.path === location.pathname
-                    })].length * 38)
-                }
-            }
-            return menu.sub.length * 38
-        }
-        return 0;
-    });
-    const handleChildHeight = addHeight => {
-        setChildHeight(childHeight + addHeight)
-    }
     // fungtion untuk toggle dropdown
     const handleDropDown = () => {
         if (!open && !drop) {
@@ -80,37 +63,32 @@ function Menu(props) {
             setActived(!actived)
         }
     }
-    // useEffect(() => {
-    //     console.log(menu.title + " " + childHeight);
-    // }, [childHeight]);
+
     // VIEW yang akan di-RENDER
     if (menu.sub) {
         return (
-            <MenuContext.Provider value={handleChildHeight}>
-                <div className="grid grid-cols-1">
-                    <button onClick={handleDropDown} className={` text-white text-opacity-60 hover:text-opacity-100`}>
-                        <div className={`flex justify-between items-center pr-2 pl-4 py-3  ${open ? 'mr-4' : 'pr-4'} duration-300
+            <div className="grid grid-cols-1">
+                <button onClick={handleDropDown} className={` text-white text-opacity-60 hover:text-opacity-100`}>
+                    <div className={`flex justify-between items-center pr-2 pl-4 py-3  ${open ? 'mr-4' : 'pr-4'} duration-300
                         ${actived && 'rounded-r-full bg-black bg-opacity-20'}`}>
-                            <div className="flex items-center gap-x-3">
-                                <Icon icon={menu.icon} className={`duration-300 
+                        <div className="flex items-center gap-x-3">
+                            <Icon icon={menu.icon} className={`duration-300 
                             ${actived && ' text-gold'} ${show ? 'text-base' : 'text-xl'}`} />
-                                <div className={`text-sm leading-none ${!show ? 'hidden' : ''} ${actived ? 'text-white ' : ''}`}>
-                                    {menu.title}
-                                </div>
+                            <div className={`text-sm leading-none ${!show ? 'hidden' : ''} ${actived ? 'text-white ' : ''}`}>
+                                {menu.title}
                             </div>
-                            <Icon icon='akar-icons:chevron-right' className={`duration-300 text-xs 
-                    ${!show && 'hidden'} ${drop && 'rotate-90'} ${actived && 'text-white'}`} />
                         </div>
-                    </button>
-                    {/* Dropdown */}
-                    <div className={` ${!show && 'hidden'} overflow-hidden duration-300 `}
-                        style={{ height: drop ? `${childHeight}px` : '0' }}>
-                        {menu.sub.map((submenu, index) => (
-                            <SubMenu key={index} open={open} show={show} menu={submenu} location={location} />
-                        ))}
+                        <Icon icon='akar-icons:chevron-right' className={`duration-300 text-xs 
+                    ${!show && 'hidden'} ${drop && 'rotate-90'} ${actived && 'text-white'}`} />
                     </div>
+                </button>
+                {/* Dropdown */}
+                <div className={` ${!show && 'hidden'} overflow-hidden duration-300 ${drop ? 'h-auto' : 'h-0'}`}>
+                    {menu.sub.map((submenu, index) => (
+                        <SubMenu key={index} open={open} show={show} menu={submenu} location={location} />
+                    ))}
                 </div>
-            </MenuContext.Provider>
+            </div>
         )
     }
     else {

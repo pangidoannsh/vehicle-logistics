@@ -5,5 +5,6 @@ import Vehicle from './images/k-vehicle.svg'
 import Shape from './shape/Shape'
 import TopShape from './shape/top.svg'
 import BottomShape from './shape/bottom.svg'
+import CardBackground from './images/card-bg.jpg'
 
-export { Logo, VehicleLogo, Logos, Vehicle, Shape, TopShape, BottomShape }
+export { Logo, VehicleLogo, Logos, Vehicle, Shape, TopShape, BottomShape, CardBackground }

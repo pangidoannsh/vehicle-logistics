@@ -5,7 +5,6 @@ import { MenuContext } from './Menu';
 
 function SubMenu(props) {
     const { menu, open, show, location } = props
-    const handleHeight = useContext(MenuContext)
     const [actived, setActived] = useState(() => {
         if (menu.sub) {
             return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1
@@ -34,12 +33,6 @@ function SubMenu(props) {
         setDrop(!drop)
         if (menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) === -1) {
             setActived(!actived)
-        }
-        if (drop) {
-            handleHeight(-childHeight)
-        }
-        else {
-            handleHeight(childHeight)
         }
     }
     if (menu.sub) {

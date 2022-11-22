@@ -34,7 +34,7 @@ export default function Select(props) {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Listbox.Options className={`absolute mt-1 max-h-60 w-full overflow-auto rounded z-10 bg-white 
+                        <Listbox.Options className={`absolute mt-1 max-h-60 w-full overflow-auto rounded z-20 bg-white 
                         text-base shadow-lg shadow-slate-400/20 ring-1 ring-slate-400/20 focus:outline-none sm:text-sm`}
                             style={{ top: setTop && `${setTop}px` }}>
                             {dataOption.map((option, index) => (

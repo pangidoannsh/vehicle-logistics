@@ -1,6 +1,6 @@
 const dashboard = [
     {
-        "title": "VL Dashboard",
+        "title": "Vehicle Logistics",
         "icon": "bxs:chart",
         "sub": [
             {
@@ -48,7 +48,7 @@ const generalData = [
 
 const application = [
     {
-        "title": "VL Application",
+        "title": "Vehicle Logistics",
         "icon": "fa-solid:truck",
         "sub": [
             {
@@ -140,7 +140,7 @@ const application = [
 
 const report = [
     {
-        "title": "VL Report",
+        "title": "Vehicle Logistics",
         "icon": "fluent:document-bullet-list-24-filled",
         "sub": [
             {

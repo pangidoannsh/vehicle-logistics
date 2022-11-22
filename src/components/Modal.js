@@ -41,7 +41,7 @@ const Modal = (props) => {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="  overflow-auto rounded
+                                <Dialog.Panel className="rounded 
                                  bg-white p-6 text-left align-middle shadow-xl transition-all"
                                     style={{ width: size ? `${size}px` : '100%' }}>
                                     {/* Title dari Modal */}
