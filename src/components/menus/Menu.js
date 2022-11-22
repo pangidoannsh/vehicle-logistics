@@ -1,7 +1,9 @@
 import { Icon } from "@iconify/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { NavLink } from "react-router-dom"
 import SubMenu from "./SubMenu";
+
+export const MenuContext = React.createContext()
 
 function Menu(props) {
     const { menu, open, show, handleMenu, location } = props
@@ -45,6 +47,7 @@ function Menu(props) {
             return false;
         }
     });
+
     // fungtion untuk toggle dropdown
     const handleDropDown = () => {
         if (!open && !drop) {
@@ -80,7 +83,7 @@ function Menu(props) {
                     </div>
                 </button>
                 {/* Dropdown */}
-                <div className={` ${!show && 'hidden'} overflow-hidden duration-300 ${drop ? 'h-max' : 'h-0'}`}>
+                <div className={` ${!show && 'hidden'} overflow-hidden duration-300 ${drop ? 'h-auto' : 'h-0'}`}>
                     {menu.sub.map((submenu, index) => (
                         <SubMenu key={index} open={open} show={show} menu={submenu} location={location} />
                     ))}

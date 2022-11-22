@@ -72,14 +72,14 @@ function Navbar() {
             {/* Body */}
             <div id="navbar-menu" className="h-[90%] overflow-y-scroll">
                 {/* Base */}
-                <div className="mb-4 grid gap-y-1 mt-3">
+                <div className="mb-6 grid gap-y-1 mt-3">
                     <Menu open={open} show={show} handleMenu={handleOnClickMenu} menu={BaseMenu} location={location} />
                 </div>
                 {/* Group Menu : DASHBOARD */}
                 <div className={`px-4 mb-2 `}>
                     <h3 className={`uppercase text-gold text-xs ${!show ? 'hidden' : ''}`}>Dashboard</h3>
                 </div>
-                <div className="mb-4 grid gap-y-1">
+                <div className="mb-6 grid gap-y-1">
                     {dashboard.map((menu, index) => (
                         <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
@@ -88,7 +88,7 @@ function Navbar() {
                 <div className={`px-4 mb-2 `}>
                     <h3 className={`uppercase text-gold text-xs ${!show ? 'hidden' : ''}`}>General Data</h3>
                 </div>
-                <div className="mb-4 grid gap-y-1">
+                <div className="mb-6 grid gap-y-1">
                     {generalData.map((menu, index) => (
                         <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
@@ -97,7 +97,7 @@ function Navbar() {
                 <div className={`px-4 mb-2 `}>
                     <h3 className={`uppercase text-gold text-xs ${!show ? 'hidden' : ''}`}>application</h3>
                 </div>
-                <div className="mb-4 grid gap-y-1">
+                <div className="mb-6 grid gap-y-1">
                     {application.map((menu, index) => (
                         <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
@@ -106,7 +106,7 @@ function Navbar() {
                 <div className={`px-4 mb-2 `}>
                     <h3 className={`uppercase text-gold text-xs ${!show ? 'hidden' : ''}`}>Report</h3>
                 </div>
-                <div className="mb-4 grid gap-y-1">
+                <div className="mb-6 grid gap-y-1">
                     {report.map((menu, index) => (
                         <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
@@ -115,7 +115,7 @@ function Navbar() {
                 <div className={`px-4 mb-2 `}>
                     <h3 className={`uppercase text-gold text-xs ${!show ? 'hidden' : ''}`}>administrator</h3>
                 </div>
-                <div className="mb-4 grid gap-y-1">
+                <div className="mb-6 grid gap-y-1">
                     {administrator.map((menu, index) => (
                         <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}

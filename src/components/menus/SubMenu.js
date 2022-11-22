@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
+import { MenuContext } from './Menu';
 
 function SubMenu(props) {
     const { menu, open, show, location } = props
@@ -19,6 +20,14 @@ function SubMenu(props) {
         else {
             return false;
         }
+    });
+    const [childHeight, setChildHeight] = useState(() => {
+        if (menu.sub) {
+            const height = menu.sub.length * 38
+            // handleHeight(height)
+            return height;
+        }
+        return 0
     });
     const handleDropDown = () => {
         setDrop(!drop)
@@ -43,7 +52,8 @@ function SubMenu(props) {
                          ${drop && 'rotate-90'}`} />
                     </div>
                 </button>
-                <div className={`overflow-hidden duration-300 ${drop ? 'h-auto' : 'h-0'}`}>
+                <div className={`overflow-hidden duration-300`}
+                    style={{ height: drop ? `${childHeight}px` : '0' }}>
                     {menu.sub.map((submenu, index) => (
                         <SubMenu key={index} open={open} show={show} menu={submenu} location={location} />
                     ))}

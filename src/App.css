@@ -1,3 +1,9 @@
+:root {
+  --gold: #DDA842;
+  --dark-green: #2C4D45;
+  --light-green: #01964C;
+}
+
 * {
   font-family: 'Poppins', sans-serif;
 }
@@ -31,17 +37,23 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2C4D45;
+  background: var(--dark-green);
   border-radius: 2px;
 }
 
 .scroll-green::-webkit-scrollbar-thumb {
-  background: #01964C;
+  background: var(--light-green);
 }
 
 #navbar-menu::-webkit-scrollbar {
   display: none;
 }
+
+/* 
+.modal::-webkit-scrollbar {
+  display: none;
+} */
+
 
 .divider-top {
   border-top: 1px solid rgba(0, 0, 0, .2);
@@ -65,7 +77,7 @@
 }
 
 .border-template-input:focus {
-  border: 1px solid #01964C;
+  border: 1px solid var(--light-green);
   outline: none;
   box-shadow: none;
 }
@@ -78,7 +90,7 @@
 }
 
 .border-template:focus {
-  border-color: #01964C;
+  border-color: var(--light-green);
   outline: none;
   box-shadow: none;
 }
@@ -91,7 +103,7 @@
 }
 
 .form-input:focus {
-  border-color: #01964C;
+  border-color: var(--light-green);
   outline: none;
 }
 
@@ -111,3 +123,41 @@
   outline: none;
   border: 1px salmon solid;
 }
+
+.glass {
+  background: linear-gradient(148.54deg, rgba(0, 128, 65, 0.1) 7.62%, rgba(0, 128, 65, 0) 100%);
+  backdrop-filter: blur(8px);
+}
+
+input:placeholder-shown~.floating-label {
+  color: rgba(0, 0, 0, .4);
+  left: 8px;
+  bottom: 8px;
+  transform: scale(1, 1);
+}
+
+
+.floating-label {
+  position: absolute;
+  z-index: 10;
+  color: rgba(0, 0, 0, .4);
+  left: 4px;
+  bottom: 36px;
+  transition: .2s;
+  font-size: 16px;
+  transform: scale(.8, .8);
+}
+
+.peer:focus~.floating-label {
+  left: 4px;
+  bottom: 36px;
+  color: var(--light-green);
+  transform: scale(.8, .8);
+}
+
+/* .password:focus~.floating-label {
+  left: 4px;
+  bottom: 36px;
+  color: var(--light-green);
+  transform: scale(.8, .8);
+} */

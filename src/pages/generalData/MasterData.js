@@ -112,14 +112,15 @@ export default function MasterData() {
                                 <span className="text-lg text-dark-green font-medium">Master Data</span>
                             </div>
                             {/* Search searchFunct={customSearch} */}
-                            <SearchTable setData={setDataShow} dataBody={dataBody} searchFunct={customSearch} />
+                            <SearchTable setData={setDataShow} dataBody={dataBody} customSearchFunction={customSearch} />
                             {/* Table */}
                             <Table dataBody={dataShow} dataHead={headTable} id={data_id} loading={loading} />
                         </div>
                     </div>
                     <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} ModalContent={<ModalContent setIsOpen={setOpenModalCreate} />}
                         title={"New Vehicle Unit"} size={1000} />
-                    <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
+                    <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork}
+                        title="Network Error!" message="Please check your network and Reload your browser" />
                 </div>
             </div>
         </div>
