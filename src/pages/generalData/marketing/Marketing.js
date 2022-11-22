@@ -30,7 +30,7 @@ const Marketing = () => {
     const [isSuccessCreated, setIsSuccessCreated] = useState(false);
 
     // option branch untuk select pada create po customer
-    const [optionsBranch, setOptionsBranch] = useContext(BranchContext).branch;
+    const [optionsBranch, setOptionsBranch] = useContext(BranchContext);
 
     // data untuk table head
     const headTable = [

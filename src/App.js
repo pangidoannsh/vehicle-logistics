@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
 import { Routers } from './config';
-import { BranchContext } from './Store'
+import { BranchContext, ContractContext } from './Store'
 
 function App() {
   const [branch, setBranch] = useState([]);
   const [contract, setContract] = useState([])
 
   return (
-    <BranchContext.Provider value={{
-      branch: [branch, setBranch],
-      contract: [contract, setContract]
-    }}>
-      <Routers />
-    </BranchContext.Provider>
+    <ContractContext.Provider value={[contract, setContract]}>
+      <BranchContext.Provider value={[branch, setBranch]}>
+        <Routers />
+      </BranchContext.Provider>
+    </ContractContext.Provider>
 
   );
 }
