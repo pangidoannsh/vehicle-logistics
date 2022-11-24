@@ -30,9 +30,9 @@ const generalData = [
         "icon": "bi:grid-3x2-gap-fill"
     },
     {
-        "title": "Master Data",
-        "path": "/master-data",
-        "icon": "bxs:folder-open"
+        "title": "Armada",
+        "path": "/armada",
+        "icon": "fa-solid:truck"
     },
     {
         "title": "Organization",

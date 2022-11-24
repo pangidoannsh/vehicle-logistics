@@ -1,4 +1,4 @@
-import { Dialog, Transition } from '@headlessui/react'
+import { Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react';
 import { Fragment } from 'react'
 
@@ -20,7 +20,7 @@ const Alert = props => {
     return (
         <>
             <Transition appear show={isOpen} as={Fragment}>
-                <div className="fixed inset-0 overflow-y-auto">
+                <div className="fixed inset-0 overflow-y-auto" onClick={closeModal}>
                     <div className="flex justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}

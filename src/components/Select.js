@@ -3,7 +3,7 @@ import { Listbox, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 
 export default function Select(props) {
-    // const { label, setValue, keyId, keyName, urlPath, options, setTop } = props
+
     const { label, setValue, keyId, keyName, options, setTop } = props
     const [selected, setSelected] = useState({ [keyId]: null, [keyName]: "nothing selected" })
     const [dataOption, setDataOption] = useState(options);
@@ -16,7 +16,7 @@ export default function Select(props) {
     }, [options]);
     return (
         <div className='flex flex-col gap-y-2'>
-            <div className={`text-sm text-slate-600`}>{label}</div>
+            <label className={`text-sm text-slate-600`}>{label}</label>
             <Listbox value={selected} onChange={setSelected} >
                 <div className="relative">
                     <Listbox.Button className={`relative w-full rounded bg-white py-2 px-4

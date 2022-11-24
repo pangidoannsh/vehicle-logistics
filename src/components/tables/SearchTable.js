@@ -1,3 +1,5 @@
+import { Icon } from "@iconify/react"
+
 /*
     SearchTable berguna untuk mencari data table dengan cara memfilter isi dari 1 row table, contohnya seperti
     mencari nama dari salah satu data pada kolom table
@@ -16,7 +18,7 @@ export default function SearchTable(props) {
             setData(
                 dataBody.filter(dataRow => {
                     return Object.values(dataRow).findIndex(dataCell => {
-                        return dataCell.toLowerCase().includes(e.target.value.toLowerCase())
+                        return dataCell.toString().toLowerCase().includes(e.target.value.toLowerCase())
                     }) !== -1
                 }
                 ).map(filter => { return filter })
@@ -27,8 +29,14 @@ export default function SearchTable(props) {
         <>
             {/* Filter */}
             <div className="flex pt-6 pb-4">
-                <input type="text" className={`text-base py-2 px-4 border-template text-slate-600`}
-                    placeholder='entry a search...' onChange={handleSearch} />
+                <div className="relative w-[25vw]">
+                    <input id="search-input" type="text" className={`text-base py-2 pr-4 pl-8 text-slate-600 focus:outline-none 
+                    border w-full border-slate-500 focus:border-light-green rounded peer`}
+                        placeholder='entry a search...' onChange={handleSearch} />
+                    <label htmlFor="search-input" className="absolute top-[10px] left-2 text-slate-400 peer-focus:text-light-green">
+                        <Icon icon="ic:round-search" className="text-2xl" />
+                    </label>
+                </div>
             </div>
         </>
     )

@@ -7,7 +7,7 @@ const MarketingDetail = (props) => {
     const [dataUnit, setDataUnit] = useState([]);
     const {
         branch,
-        po_number,
+        ponumber,
         customer,
         contractno,
         contractname,
@@ -40,7 +40,7 @@ const MarketingDetail = (props) => {
                             </tr>
                             <tr >
                                 <td className='py-4'>PO Number</td>
-                                <td className='pr-2 py-4'>{po_number}</td>
+                                <td className='pr-2 py-4'>{ponumber}</td>
                             </tr>
                             <tr >
                                 <td className='py-4'>Customer</td>

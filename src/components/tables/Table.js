@@ -18,7 +18,7 @@ function Table(props) {
                 <thead>
                     <tr className="sticky top-0">
                         {!noAction && <th className={`p-4 bg-dark-green text-white font-semibold 
-                            text-sm text-center border border-l-[1px] border-white w-[78px]`}>#</th>
+                            text-sm text-center border border-l-[1px] border-white w-16`}>#</th>
                         }
                         <th className={`p-4 bg-dark-green text-white font-semibold 
                             text-sm text-center border border-l-[1px] border-white w-14`}>No</th>
@@ -46,7 +46,7 @@ function Table(props) {
                                         <td key={indexData} className="p-4 text-sm text-slate-700
                                              selection:bg-light-green selection:text-white">
                                             {actionInData ? indexData != actionInData ? dataCell : (
-                                                <button onClick={handleClick} name={dataRow[id]}
+                                                <button onClick={() => { handleClick(dataRow[id]) }}
                                                     className="text-gold hover:underline">
                                                     {dataCell}
                                                 </button>
