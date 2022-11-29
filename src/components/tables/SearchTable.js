@@ -10,15 +10,20 @@ import { Icon } from "@iconify/react"
     - dataBody (merupakan sumber data asli yang berasal dari consume API)
 */
 export default function SearchTable(props) {
-    const { setData, dataBody, customSearchFunction } = props
+    const { setData, dataBody, customSearchFunction, dataSkipSearch } = props
+    /* dataSkipSearch dapat diisi atau tidak, jika diisi maka ketika melakukan searching, data yng index nya sama dengan
+        dataSkipSearch, tidak akan menjadi patokan pencarian data
+    */
     const handleSearch = e => {
         if (customSearchFunction) {
             customSearchFunction(e)
         } else {
             setData(
                 dataBody.filter(dataRow => {
-                    return Object.values(dataRow).findIndex(dataCell => {
-                        return dataCell.toString().toLowerCase().includes(e.target.value.toLowerCase())
+                    return Object.values(dataRow).findIndex((dataCell, index) => {
+                        if (index !== dataSkipSearch) {
+                            return dataCell.toString().toLowerCase().includes(e.target.value.toLowerCase())
+                        }
                     }) !== -1
                 }
                 ).map(filter => { return filter })

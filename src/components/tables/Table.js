@@ -1,16 +1,20 @@
+import { Icon } from "@iconify/react";
+import { NavLink, useLocation } from "react-router-dom";
 import Action from "./Action";
 import LoadingTable from "./LoadingTable";
 
 function Table(props) {
-    const { dataBody, dataHead, id, loading, handleClick, actionInData, noAction } = props
+    const { dataBody, dataHead, id, loading, handleClick, actionInData, noAction, handleActionDelete, dataHide } = props
     /* 
         - dataBody => data yang akan ditampilkan pada table body <tbody>
         - dataHead => data yang akan menjadi header dari table <thead>
         - id => merupakan unique key dari data yang ada pada table
         - loading => penanda bahwa prorgam sudah selesai consume API
         - actionInData => ini optional, bisa ada bisa tidak, fungsinya untuk memberikan action seperti show detail yang dapat
-            diberikan pada salah satu kolom data  
+            diberikan pada salah satu kolom data
+        - dataHide => merupakan index dari data yang tidak ingin ditampilkan atau di-ihide  
     */
+    let location = useLocation()
     return (
         <>
             {/* Table */}
@@ -38,22 +42,37 @@ function Table(props) {
                                 <tr key={index} className=" even:bg-dark-green even:bg-opacity-10">
                                     {!noAction &&
                                         <td>
-                                            <Action id={dataRow[id]} />
+                                            <Action>
+                                                <NavLink to={`${location.pathname}/${dataRow[id]}/edit`} className={`text-yellow-500 hover:text-yellow-400`}>
+                                                    <div className='flex gap-x-3 items-center' >
+                                                        <Icon icon={`clarity:note-edit-solid`} className='text-xl' />
+                                                        <span className='text-base'>Edit</span>
+                                                    </div>
+                                                </NavLink>
+                                                {handleActionDelete ? (
+                                                    <button className={`text-[#AF183C] hover:text-red-600`} onClick={() => handleActionDelete(dataRow[id])}>
+                                                        <div className='flex gap-x-3 items-center'>
+                                                            <Icon icon={`bxs:trash-alt`} className='text-xl' />
+                                                            <span className='text-base'>Delete</span>
+                                                        </div>
+                                                    </button>
+                                                ) : ''}
+                                            </Action>
                                         </td>
                                     }
                                     <td className="p-4 text-sm text-slate-700 text-center w-14  selection:bg-light-green selection:text-white">{index + 1}</td>
-                                    {Object.values(dataRow).map((dataCell, indexData) => (
-                                        <td key={indexData} className="p-4 text-sm text-slate-700
+                                    {Object.values(dataRow).map((dataCell, indexData) => indexData !== dataHide ?
+                                        (
+                                            <td key={indexData} className="p-4 text-sm text-slate-700
                                              selection:bg-light-green selection:text-white">
-                                            {actionInData ? indexData != actionInData ? dataCell : (
-                                                <button onClick={() => { handleClick(dataRow[id]) }}
-                                                    className="text-gold hover:underline">
-                                                    {dataCell}
-                                                </button>
-                                            ) : dataCell}
-
-                                        </td>
-                                    ))}
+                                                {actionInData ? indexData != actionInData ? dataCell : (
+                                                    <button onClick={() => { handleClick(dataRow[id]) }}
+                                                        className="text-gold hover:underline">
+                                                        {dataCell}
+                                                    </button>
+                                                ) : dataCell}
+                                            </td>
+                                        ) : '')}
                                 </tr>
                             )) :
                             // if data.length == 0

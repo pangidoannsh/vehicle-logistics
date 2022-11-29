@@ -20,7 +20,7 @@ const Alert = props => {
     return (
         <>
             <Transition appear show={isOpen} as={Fragment}>
-                <div className="fixed inset-0 overflow-y-auto" onClick={closeModal}>
+                <div className="fixed top-0 left-0 z-50 w-full overflow-y-auto">
                     <div className="flex justify-center p-4 text-center">
                         <Transition.Child
                             as={Fragment}

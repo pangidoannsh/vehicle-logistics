@@ -9,27 +9,39 @@ import MarketingDetail from './MarketingDetail'
 import Main from '../../../layouts/Main'
 import Alert from '../../../components/Alert'
 import { CreateDataContext, fetchOption } from '../../../Store'
+import { useRef } from 'react'
+import Loading from '../../../components/Loading'
+import { moneyFormat } from '../../../utils'
 
 
 const Marketing = () => {
-    const [loading, setLoading] = useState(true);
+    const [loadingPage, setLoadingPage] = useState(false)
+    const [loadingTable, setLoadingTable] = useState(true);
     // dataBody merupakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
     const [dataBody, setDataBody] = useState([]);
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
-
+    // dataUnitPo berfungsi sebagai data yang akan ditampilkan ketika masuk ke modal detail pada bagian table vehicle unit
+    const [dataUnitPo, setDataUnitPo] = useState([]);
     // untuk membuka dan menutup modal detail
     const [openModalDetail, setOpenModalDetail] = useState(false)
     // untuk membuka dan menutup modal detail
     const [openModalCreate, setOpenModalCreate] = useState(false)
+    // untuk membuka dan menutup modal delete
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    // const [idToBeDelete, setIdToBeDelete] = useState("")
+    const idToBeDelete = useRef("");
+    const confirmDelete = useRef("");
     // untuk data yang akan ditampilkan Modal -> ModalContent
-    const [dataModal, setDataModal] = useState({});
+    const [dataModalDetail, setDataModalDetail] = useState(null);//object
     // untuk menampung kondisi error network
     const [isErrorNetwork, setIsErrorNetwork] = useState(false);
-    // untuk menampung kondisi berhasil create data
-    const [isSuccessCreated, setIsSuccessCreated] = useState(false);
-    // untuk menampung kondisi gagal create data
-    const [isFailCreated, setIsFailCreated] = useState(false);
+    // untuk menampung kondisi berhasil
+    const [isSuccessAlert, setIsSuccessAlert] = useState(false);
+    // untuk menampung kondisi gagal
+    const [isFailAlert, setIsFailAlert] = useState(false);
+    // message alert
+    const [msgAlert, setMsgAlert] = useState(['title', 'message'])
 
     // option branch untuk select pada create po customer
     const [optionsBranch, setOptionsBranch] = useContext(CreateDataContext).branch;
@@ -37,16 +49,38 @@ const Marketing = () => {
 
     // data untuk table head
     const headTable = [
-        "Branch", "PO Number", "Customer", "Contract No", "Contract Name", "Value"
+        "Branch", "PO Number", "Customer", "Contract No", "Contract Name", "Value (Rp)"
     ]
 
     // penentuan id dari data yang ada di table
-    const data_id = 'ponumber'
+    const data_id = 'oid'
 
     // untuk handle Open dari Modal PO Customer Detail
     const handleOpenModalDetail = id => {
-        setDataModal(dataBody.filter(data => data.ponumber === id).map(filter => filter)[0]);
-        setOpenModalDetail(true)
+        const fetchDataUnit = () => {
+            api.get(`/vehiclepo/${id}`).then(res => {
+                setDataUnitPo(res.data)
+                setLoadingPage(false);
+                setOpenModalDetail(true);
+            }).catch(err => {
+                setLoadingPage(false);
+                setOpenModalDetail(true);
+                console.log(err.message)
+            })
+        }
+        if (dataModalDetail === null) {
+            setDataModalDetail(dataBody.filter(data => data.oid === id).map(filter => filter)[0]);
+            setLoadingPage(true);
+            fetchDataUnit();
+        } else {
+            if (id !== dataModalDetail.oid) {
+                setDataModalDetail(dataBody.filter(data => data.oid === id).map(filter => filter)[0]);
+                setLoadingPage(true);
+                fetchDataUnit();
+            } else {
+                setOpenModalDetail(true)
+            }
+        }
     }
     const handleOpenModalCreate = e => {
         e.preventDefault()
@@ -58,15 +92,49 @@ const Marketing = () => {
         }
         setOpenModalCreate(true)
     }
+
+    // function untuk menampilkan modal konfirmasi delete ketika mengklik action trash/delete pada table
+    const handleOpenModalDelete = oid => {
+        idToBeDelete.current = oid
+        setOpenModalDelete(true)
+    }
+
+    // function untuk meng-handle ketika mengklik button delete pada modal konfirmasi delete
+    const handleDelete = e => {
+        e.preventDefault()
+        setIsFailAlert(false);
+        setLoadingPage(true);
+        api.delete(`/pocustomer/${idToBeDelete.current}`)
+            .then(response => {
+                setMsgAlert(["Success", response.data])
+                setDataBody(dataBody.filter(data => data.oid !== idToBeDelete.current).map(filter => filter))
+                setIsSuccessAlert(true)
+                setOpenModalDelete(false)
+                setLoadingPage(false)
+                setTimeout(() => {
+                    setIsSuccessAlert(false)
+                }, 3000);
+            })
+            .catch(error => {
+                console.log(error.response);
+                setLoadingPage(false)
+                setIsFailAlert(true)
+                setMsgAlert(["Failed", error.response.data])
+            })
+    }
+
+    //function untuk fetch data PO Customer
     const fetchPoCustomer = () => {
         api.get('/pocustomer').then(res => {
+            // .sort((a, b) => (a.oid > b.oid) ? 1 : ((b.oid > a.oid) ? -1 : 0)).
             setDataBody(res.data.map(data => {
-                const { branch, ponumber, customer, contractno, contractname, contracttype, value } = data;
-                return {
-                    branch, ponumber, customer, contractno, contractname, contracttype, value
-                }
+                // const { oid, branch, ponumber, customer, contractno, contracttype, contractname, value } = data;
+                // return {
+                //     oid, branch, ponumber, customer, contractno, contractname, contracttype, value: moneyFormat(value)
+                // }
+                return { ...data, value: moneyFormat(data.value) };
             }))
-            setLoading(false)
+            setLoadingTable(false)
         }).catch(error => {
             console.log(error);
             if (error.code === "ERR_NETWORK") {
@@ -75,27 +143,27 @@ const Marketing = () => {
         })
     }
 
-    let onceEffect = false
     // use effect untuk consume API
     useEffect(() => {
-        if (!onceEffect) {
-            fetchPoCustomer()
-        }
-        return () => {
-            onceEffect = true
-        }
+        fetchPoCustomer()
     }, []);
 
     // pemberian isi dari data show
     useEffect(() => {
         setDataShow(dataBody.map(data => {
-            const { branch, ponumber, customer, contractno, contractname, value } = data;
+            const { oid, branch, ponumber, customer, contractno, contractname, value } = data;
             return {
-                branch, ponumber, customer, contractno, contractname, value
+                oid, branch, ponumber, customer, contractno, contractname, value
             }
-        }))
+        }));
     }, [dataBody])
 
+    // penonaktifan fail alert ketika modal create tertutup
+    useEffect(() => {
+        if (!openModalCreate) {
+            setIsFailAlert(false)
+        }
+    }, [openModalCreate]);
     return (
         <Main>
             {/* After Header */}
@@ -117,42 +185,60 @@ const Marketing = () => {
                     </div>
                     {/* Search */}
                     <SearchTable setData={setDataShow} dataBody={dataBody.map(data => {
-                        const { branch, ponumber, customer, contractno, contractname, value } = data;
-                        return { branch, ponumber, customer, contractno, contractname, value };
-                    })} />
+                        const { oid, branch, ponumber, customer, contractno, contractname, value } = data;
+                        return { oid, branch, ponumber, customer, contractno, contractname, value };
+                    })} dataSkipSearch={0} />
                     {/* Table */}
-                    <Table dataBody={dataShow} dataHead={headTable} id={data_id}
-                        loading={loading} handleClick={handleOpenModalDetail} actionInData={1}
+                    <Table dataBody={dataShow} dataHead={headTable} id={data_id} dataHide={0}
+                        loading={loadingTable} handleClick={handleOpenModalDetail} actionInData={2}
+                        handleActionDelete={handleOpenModalDelete}
                     />
                 </div>
             </div>
+
             {/* Modal Detail */}
-            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail}
-                title={"PO Customer Detail"} iconTitle={"ooui:view-details-ltr"}
-            >
-                <MarketingDetail data={dataModal} />
+            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title={"PO Customer Detail"} iconTitle={"ooui:view-details-ltr"}>
+                <MarketingDetail data={dataModalDetail} dataUnitPo={dataUnitPo} setDataUnitPo={setDataUnitPo}
+                    setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert} setMsgAlert={setMsgAlert}
+                    setLoadingPage={setLoadingPage} />
             </Modal>
+
             {/* Modal Create */}
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={'New PO Customer'} size={700}>
-                <MarketingCreate setIsOpen={setOpenModalCreate} setSuccessCreate={setIsSuccessCreated} setFailCreate={setIsFailCreated}
-                    fetchPoCustomer={fetchPoCustomer} options={{
+                <MarketingCreate setIsOpen={setOpenModalCreate} setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert}
+                    setMsgAlert={setMsgAlert} fetchPoCustomer={fetchPoCustomer} options={{
                         branch: { optionsBranch, setOptionsBranch },
                         contract: { optionsContract, setOptionsContract }
-                    }} />
+                    }} setLoadingPage={setLoadingPage} />
+            </Modal>
+
+            {/* Modal Delete */}
+            <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} size={500}>
+                <div className='text-slate-600 text-xl font-medium'>
+                    Are you sure want to Delete Data with PO Number <span className='text-gold'>{
+                        dataBody.filter(data => data.oid === idToBeDelete.current).map(filter => filter.ponumber)[0]
+                    }</span> ?
+                </div>
+                <div className="flex justify-end mt-4">
+                    <button type="Submit" className={`border border-red-600 text-red-600 rounded flex items-center gap-x-1 py-2 px-4 
+                            focus:ring focus:ring-red-200 active:ring active:ring-red-200`} onClick={handleDelete}>
+                        Delete
+                    </button>
+                </div>
             </Modal>
             {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
             <Alert isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} codeAlert={0} title="Error Network">
                 Please Check Your Connection and Reload the Browser!
             </Alert>
             {/* Notifikasi Ketika Berhasil Create Data */}
-            <Alert isOpen={isSuccessCreated} setIsOpen={setIsSuccessCreated} codeAlert={1} title="Success">
-                New Data Created
+            <Alert isOpen={isSuccessAlert} setIsOpen={setIsSuccessAlert} codeAlert={1} title={msgAlert[0]}>
+                {msgAlert[1]}
             </Alert>
             {/* Notifikasi Ketika Gagal Create Data */}
-            <Alert isOpen={isFailCreated} setIsOpen={setIsFailCreated} codeAlert={0} title="Failed">
-                New Data is Failed to Create
+            <Alert isOpen={isFailAlert} setIsOpen={setIsFailAlert} codeAlert={0} title={msgAlert[0]}>
+                {msgAlert[1]}
             </Alert>
-
+            <Loading isLoading={loadingPage} />
         </Main>
     )
 }

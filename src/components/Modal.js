@@ -45,15 +45,17 @@ const Modal = (props) => {
                                  bg-white p-6 text-left align-middle shadow-xl transition-all"
                                     style={{ width: size ? `${size}px` : '100%' }}>
                                     {/* Title dari Modal */}
-                                    <div className="flex justify-between pb-4 divider-bottom mb-4">
-                                        <div className="flex gap-x-2 items-center">
-                                            {iconTitle && <Icon icon={iconTitle} className={`text-2xl text-gold `} />}
-                                            <span className='text-lg text-dark-green font-medium'>{title}</span>
+                                    {title ? (
+                                        <div className="flex justify-between pb-4 divider-bottom mb-4">
+                                            <div className="flex gap-x-2 items-center">
+                                                {iconTitle && <Icon icon={iconTitle} className={`text-2xl text-gold `} />}
+                                                <span className='text-lg text-dark-green font-medium'>{title}</span>
+                                            </div>
+                                            <button onClick={closeModal}>
+                                                <Icon icon="carbon:close" className='text-[28px]' />
+                                            </button>
                                         </div>
-                                        <button onClick={closeModal}>
-                                            <Icon icon="carbon:close" className='text-[28px]' />
-                                        </button>
-                                    </div>
+                                    ) : ''}
                                     {/* Content dari Modal */}
                                     {props.children}
                                 </Dialog.Panel>

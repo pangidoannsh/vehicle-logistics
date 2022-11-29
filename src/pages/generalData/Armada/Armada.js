@@ -22,6 +22,9 @@ export default function Armada() {
     const [isErrorNetwork, setIsErrorNetwork] = useState(false);
 
     const [optionsBranch, setOptionsBranch] = useContext(CreateDataContext).branch;
+    const [optionsType, setOptionsType] = useState([]);
+    const [optionsBrand, setOptionsBrand] = useState([]);
+    const [optionsModel, setOptionsModel] = useState([]);
 
     const headTable = [
         "Branch", "Model Name", "Unit Type", "HUll Number", "Frame Number", "Police Number", "Type", "Status"
@@ -51,8 +54,14 @@ export default function Armada() {
         if (optionsBranch.length === 0) {
             fetchOption("/branch", setOptionsBranch)
         }
+        if (optionsType.length === 0) {
+            fetchOption("/vehicletype", setOptionsType);
+            fetchOption("/vehiclemodel", setOptionsModel);
+            fetchOption("/vehiclebrand", setOptionsBrand);
+        }
         setOpenModalCreate(true)
     }
+
     // use effect untuk consume API
     useEffect(() => {
         api.get('/vehiclearmada').then(res => {
@@ -135,7 +144,7 @@ export default function Armada() {
             </div>
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={"New Vehicle Unit"} size={1000}>
                 <ArmadaCreate setIsOpen={setOpenModalCreate} options={{
-                    branch: { optionsBranch, setOptionsBranch }
+                    optionsBranch, optionsType, optionsModel, optionsBrand
                 }} />
             </Modal>
             <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork}

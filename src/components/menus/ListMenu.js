@@ -66,6 +66,10 @@ const application = [
                     {
                         "title": "Manifest Data",
                         "path": "/manifest-data"
+                    },
+                    {
+                        "title": "B.A.S.T",
+                        "path": "/bast"
                     }
                 ]
             },
