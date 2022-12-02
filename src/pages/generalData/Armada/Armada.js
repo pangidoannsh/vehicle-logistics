@@ -6,14 +6,12 @@ import SearchTable from '../../../components/tables/SearchTable';
 import Table from '../../../components/tables/Table';
 import { api } from '../../../config';
 import ArmadaCreate from './ArmadaCreate';
-import { useContext } from 'react';
-import { CreateDataContext, fetchOption } from '../../../Store';
-import Main from '../../../layouts/Main';
-import { useMemo } from 'react';
 import { useRef } from 'react';
 import Navbar from '../../../components/Navbar';
 import Header from '../../../components/Header';
 import { useCallback } from 'react';
+import Alert from '../../../components/Alert';
+import Loading from '../../../components/Loading';
 
 export default function Armada() {
     const templateObject = useCallback(data => {
@@ -43,37 +41,30 @@ export default function Armada() {
             ) : status
         };
     })
+    const [loadingPage, setLoadingPage] = useState(false);
     const [loading, setLoading] = useState(true);
     const [mainData, setMainData] = useState([]);
     const [dataBody, setDataBody] = useState([]);
     const [dataShow, setDataShow] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [isErrorNetwork, setIsErrorNetwork] = useState(false);
-
     const [optionsBranch, setOptionsBranch] = useState([]);
     const [optionsType, setOptionsType] = useState([]);
     const [optionsBrand, setOptionsBrand] = useState([]);
     const [optionsModel, setOptionsModel] = useState([]);
+    const [alert, setAlert] = useState({
+        isActived: false,
+        code: 0,
+        title: "title",
+        message: "message"
+    })
+    const setAlertActive = active => setAlert({ ...alert, isActived: active });
 
     const headTable = useRef([
         "Branch", "Model Name", "Unit Type", "HUll Number", "Frame Number", "Police Number", "Type", "Status"
     ]);
 
     const customSearch = (e) => {
-        // setDataShow(
-        //     dataBody
-        //         .filter((dataRow) => {
-        //             return (
-        //                 Object.values(dataRow).findIndex((dataCell, index) => {
-        //                     if (index < 7) return dataCell.toLowerCase().includes(e.target.value.toLowerCase());
-        //                     else if (index === 7) return dataCell.props.children[1].props.children.toLowerCase().includes(e.target.value.toLowerCase());
-        //                 }) !== -1
-        //             );
-        //         })
-        //         .map((filter) => {
-        //             return filter;
-        //         })
-        // );
         setDataShow(dataBody.filter(dataRow => {
             return Object.values(dataRow).findIndex(dataCell => {
                 return dataCell.toString().toLowerCase().includes(e.target.value.toLowerCase())
@@ -118,16 +109,9 @@ export default function Armada() {
                 }
             })
         }
-        // if (optionsType.length === 0) {
-        //     // fetchOption("/vehicletype", setOptionsType);
-        //     // fetchOption("/vehiclemodel", setOptionsModel);
-        //     // fetchOption("/vehiclebrand", setOptionsBrand);
-        // }
         setOpenModalCreate(true)
     }
-
-    // use effect untuk consume API
-    useEffect(() => {
+    const fetchArmada = () => {
         api.get('/vehiclearmada?').then(res => {
             setMainData(res.data);
             setDataBody(res.data.map(data => {
@@ -140,43 +124,27 @@ export default function Armada() {
                     setIsErrorNetwork(true)
                 }
             })
+    }
+    // use effect untuk consume API
+    useEffect(() => {
+        fetchArmada();
     }, []);
 
     // pemberian isi dari data show
     useEffect(() => {
-        // Perubahan isi dari Type dan Status karena Type dan Status memiliki Style nya sendiri
-        // dataBody.forEach((data) => {
-        //     if (data.status === "ready") {
-        //         data.status = (
-        //             <div className="flex gap-x-1 py-1 px-2 items-center bg-light-green rounded-sm text-white justify-center">
-        //                 <Icon icon="akar-icons:check" className="text-base" />
-        //                 <span className="text-sm capitalize">{data.status}</span>
-        //             </div>
-        //         );
-        //     } else if (data.status === "repair") {
-        //         data.status = (
-        //             <div className="flex gap-x-1 py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center">
-        //                 <Icon icon="fa6-solid:gears" className="text-base" />
-        //                 <span className="text-sm capitalize">{data.status}</span>
-        //             </div>
-        //         );
-        //     }
-        //     else if (data.status === "used") {
-        //         data.status = (
-        //             <div className="flex gap-x-1 py-1 px-2 items-center bg-yellow-500 rounded-sm text-white justify-center">
-        //                 <Icon icon="game-icons:steering-wheel" className="text-base" />
-        //                 <span className="text-sm capitalize">{data.status}</span>
-        //             </div>
-        //         );
-        //     }
-        // });
-        // End Function
-
         setDataShow(dataBody.map(data => {
             return displayData(data);
         }));
     }, [dataBody]);
 
+    useEffect(() => {
+        if (!openModalCreate) {
+            if (alert.code === 0) {
+                setAlertActive(false);
+            }
+        }
+
+    }, [openModalCreate]);
     return (
         <div id='container'>
             <Navbar />
@@ -209,12 +177,16 @@ export default function Armada() {
                         </div>
                     </div>
                     <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={"New Vehicle Unit"} size={1000}>
-                        <ArmadaCreate setIsOpen={setOpenModalCreate} options={{
+                        <ArmadaCreate setIsOpen={setOpenModalCreate} alert={alert} setAlert={setAlert} options={{
                             optionsBranch, optionsType, optionsModel, optionsBrand
-                        }} />
+                        }} setLoadingPage={setLoadingPage} fetchArmada={fetchArmada} />
                     </Modal>
                     <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork}
                         title="Network Error!" message="Please check your network and Reload your browser" />
+                    <Alert isOpen={alert.isActived} setIsOpen={setAlertActive} codeAlert={alert.code} title={alert.title}>
+                        {alert.message}
+                    </Alert>
+                    <Loading isLoading={loadingPage} />
                 </div>
             </div>
         </div>

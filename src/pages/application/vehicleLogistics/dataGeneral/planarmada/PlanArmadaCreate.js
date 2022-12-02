@@ -40,9 +40,9 @@ const PlanArmadaCreate = (props) => {
                 console.log(response);
             }).catch(error => {
                 setLoadingPage(false);
-                if (error.status !== 422) {
-                    console.log(error.response);
-                }
+                // if (error.status !== 422) {
+                //     console.log(error.response);
+                // }
                 const message = Object.values(error.response.data)[0][0];
                 setAlert({ isActived: true, code: 0, title: `Error ${error.response.status}`, message });
             })

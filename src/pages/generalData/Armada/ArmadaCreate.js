@@ -4,7 +4,7 @@ import Select from "../../../components/inputs/Select";
 import { api } from "../../../config";
 
 const ArmadaCreate = (props) => {
-    const { setIsOpen, options } = props
+    const { setIsOpen, options, fetchArmada, alert, setAlert, setLoadingPage } = props
     const [value, setValue] = useState({
         branch: "",
         type: "",
@@ -38,27 +38,53 @@ const ArmadaCreate = (props) => {
     // function untuk button create
     const handleClickCreate = e => {
         e.preventDefault()
-        // console.log(value);
+        setAlert({ ...alert, isActived: false });
         const postValue = {
-            carhullnumber: value.hullNumber,
+            hullnumber: value.hullNumber,
             enginenumber: value.engineNumber,
             framenumber: value.frameNumber,
-            platnumber: value.policeNumber,
-            unitbrand: value.vehicleBrand,
-            unitmodel: value.vehicleModel,
-            unittype: value.vehicleType,
+            policenumber: value.policeNumber,
+            brandoid: value.vehicleBrand,
+            modeloid: value.vehicleModel,
+            unittypeoid: value.vehicleType,
             status: value.status,
             type: value.type,
-            branch: value.branch
+            branchoid: value.branch,
+            color: value.color,
+            year: value.year
         }
-        console.log(postValue);
-        // api.post('/vehiclearmada', postValue)
-        //     .then(res => {
-        //         console.log(res);
-        //     })
-        //     .catch(error => {
-        //         console.log(error.response);
-        //     })
+        if (Object.values(postValue).findIndex(value => (value === "" || value === null)) === -1) {
+            setLoadingPage(true);
+            api.post('/vehiclearmada', postValue)
+                .then(res => {
+                    if (res.status === 201) {
+                        fetchArmada();
+                        setLoadingPage(false);
+                        setAlert({
+                            isActived: true,
+                            code: 1,
+                            message: "New Data Created Successfully",
+                            title: "Success"
+                        })
+                        setTimeout(() => {
+                            setAlert({ ...alert, isActived: false });
+                        }, 3000)
+                        setIsOpen(false);
+                    }
+                })
+                .catch(error => {
+                    setLoadingPage(false);
+                    const message = Object.values(error.response.data)[0][0];
+                    setAlert({ isActived: true, code: 0, title: `Error ${error.response.status}`, message });
+                })
+        } else {
+            setAlert({
+                isActived: true,
+                code: 0,
+                message: "There is an Empty Field Input!",
+                title: "Can't Create Data"
+            })
+        }
     }
 
     function closeModal() {
@@ -68,7 +94,7 @@ const ArmadaCreate = (props) => {
         <div className='grid grid-cols-2 gap-6 text-slate-700'>
             {/* Branch*/}
             <div className="col-span-1">
-                <Select label="Branch" setValue={setValueBranch} keyId="branchid" keyName="branchname" options={optionsBranch} />
+                <Select label="Branch" setValue={setValueBranch} keyId="oid" keyName="branchname" options={optionsBranch} />
             </div>
             {/* Car Hull Number */}
             <div className="col-span-1">
@@ -87,7 +113,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Vehicle Brand */}
             <div className="col-span-1">
-                <Select label="Vehicle Brand" setValue={setValueVehicleBrand} keyId="brandid" keyName="brand" options={optionsBrand} />
+                <Select label="Vehicle Brand" setValue={setValueVehicleBrand} keyId="oid" keyName="brand" options={optionsBrand} />
             </div>
             {/* Chasis/Frame Number */}
             <div className="col-span-1">
@@ -95,7 +121,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Vehicle Model */}
             <div className="col-span-1">
-                <Select label="Vehicle Model" setValue={setValueVehicleModel} keyId="modelid" keyName="model" options={optionsModel} />
+                <Select label="Vehicle Model" setValue={setValueVehicleModel} keyId="oid" keyName="model" options={optionsModel} />
             </div>
             {/* Engine Number */}
             <div className="col-span-1">
@@ -103,7 +129,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Vehicle Type */}
             <div className="col-span-1">
-                <Select label="Vehicle Type" setValue={setValueVehicleType} keyId="typeid" keyName="unittype" options={optionsType} />
+                <Select label="Vehicle Type" setValue={setValueVehicleType} keyId="oid" keyName="unittype" options={optionsType} />
             </div>
             {/* Color */}
             <div className="col-span-1">

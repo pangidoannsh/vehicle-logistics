@@ -185,9 +185,9 @@ const PlanArmada = () => {
                 }} setAlert={setAlert} setLoadingPage={setLoadingPage} alert={alert} />
             </Modal>
             {/* Notifikasi Ketika Berhasil Create Data */}
-            <Alert isOpen={isSuccessCreated} setIsOpen={setIsSuccessCreated} codeAlert={1} title="Success">
+            {/* <Alert isOpen={isSuccessCreated} setIsOpen={setIsSuccessCreated} codeAlert={1} title="Success">
                 New Data Created
-            </Alert>
+            </Alert> */}
             {/* Alert */}
             <Alert isOpen={alert.isActived} setIsOpen={setAlertActive} codeAlert={alert.code} title={alert.title}>
                 {alert.message}
