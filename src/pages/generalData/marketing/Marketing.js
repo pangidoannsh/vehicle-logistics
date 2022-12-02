@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Table from '../../../components/tables/Table'
 import SearchTable from '../../../components/tables/SearchTable'
 import Modal from '../../../components/Modal'
@@ -8,7 +8,7 @@ import MarketingCreate from './MarketingCreate'
 import MarketingDetail from './MarketingDetail'
 import Main from '../../../layouts/Main'
 import Alert from '../../../components/Alert'
-import { CreateDataContext, fetchOption } from '../../../Store'
+import { fetchOption } from '../../../Store'
 import { useRef } from 'react'
 import Loading from '../../../components/Loading'
 import { moneyFormat } from '../../../utils'
@@ -31,7 +31,6 @@ const Marketing = () => {
     const [openModalDelete, setOpenModalDelete] = useState(false)
     // const [idToBeDelete, setIdToBeDelete] = useState("")
     const idToBeDelete = useRef("");
-    const confirmDelete = useRef("");
     // untuk data yang akan ditampilkan Modal -> ModalContent
     const [dataModalDetail, setDataModalDetail] = useState(null);//object
     // untuk menampung kondisi error network
@@ -44,16 +43,13 @@ const Marketing = () => {
     const [msgAlert, setMsgAlert] = useState(['title', 'message'])
 
     // option branch untuk select pada create po customer
-    const [optionsBranch, setOptionsBranch] = useContext(CreateDataContext).branch;
-    const [optionsContract, setOptionsContract] = useContext(CreateDataContext).contract;
+    const [optionsBranch, setOptionsBranch] = useState([]);
+    const [optionsContract, setOptionsContract] = useState([]);
 
     // data untuk table head
-    const headTable = [
+    const headTable = useRef([
         "Branch", "PO Number", "Customer", "Contract No", "Contract Name", "Value (Rp)"
-    ]
-
-    // penentuan id dari data yang ada di table
-    const data_id = 'oid'
+    ])
 
     // untuk handle Open dari Modal PO Customer Detail
     const handleOpenModalDetail = id => {
@@ -106,6 +102,7 @@ const Marketing = () => {
         setLoadingPage(true);
         api.delete(`/pocustomer/${idToBeDelete.current}`)
             .then(response => {
+                console.log(response.data);
                 setMsgAlert(["Success", response.data])
                 setDataBody(dataBody.filter(data => data.oid !== idToBeDelete.current).map(filter => filter))
                 setIsSuccessAlert(true)
@@ -180,7 +177,7 @@ const Marketing = () => {
                 <div className="card bg-white p-6">
                     {/* Title */}
                     <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
-                        <Icon icon="fluent-mdl2:market" className={`text-2xl text-gold `} />
+                        <Icon icon="bxs:purchase-tag" className={`text-2xl text-gold `} />
                         <span className='text-lg text-dark-green font-medium'>PO Customer</span>
                     </div>
                     {/* Search */}
@@ -189,7 +186,7 @@ const Marketing = () => {
                         return { oid, branch, ponumber, customer, contractno, contractname, value };
                     })} dataSkipSearch={0} />
                     {/* Table */}
-                    <Table dataBody={dataShow} dataHead={headTable} id={data_id} dataHide={0}
+                    <Table dataBody={dataShow} dataHead={headTable.current} id="oid" dataHide={0}
                         loading={loadingTable} handleClick={handleOpenModalDetail} actionInData={2}
                         handleActionDelete={handleOpenModalDelete}
                     />

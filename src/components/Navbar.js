@@ -1,5 +1,5 @@
 import { VehicleLogo } from "../assets"
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import SlideButton from "./SlideButton";
 import Menu from "./menus/Menu";
@@ -61,7 +61,7 @@ function Navbar() {
         }, 300);
     }
     return (
-        <div className={` ${open ? 'w-60' : 'w-16'} bg-dark-green h-screen duration-500`}>
+        <div className={`${open ? 'w-60' : 'w-16'} bg-dark-green h-screen duration-500`}>
             {/* Head */}
             <div className="bg-black bg-opacity-20 h-[72px]">
                 <div className={`fixed top-5 z-10 duration-500 ${open ? 'left-4' : 'left-20'}`}>
@@ -125,4 +125,4 @@ function Navbar() {
     )
 }
 
-export default Navbar
+export default React.memo(Navbar);

@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { NavLink, useLocation } from "react-router-dom";
+import React from "react";
 import Action from "./Action";
 import LoadingTable from "./LoadingTable";
 
@@ -14,7 +14,6 @@ function Table(props) {
             diberikan pada salah satu kolom data
         - dataHide => merupakan index dari data yang tidak ingin ditampilkan atau di-ihide  
     */
-    let location = useLocation()
     return (
         <>
             {/* Table */}
@@ -43,12 +42,12 @@ function Table(props) {
                                     {!noAction &&
                                         <td>
                                             <Action>
-                                                <NavLink to={`${location.pathname}/${dataRow[id]}/edit`} className={`text-yellow-500 hover:text-yellow-400`}>
+                                                <button className={`text-yellow-500 hover:text-yellow-400`}>
                                                     <div className='flex gap-x-3 items-center' >
                                                         <Icon icon={`clarity:note-edit-solid`} className='text-xl' />
                                                         <span className='text-base'>Edit</span>
                                                     </div>
-                                                </NavLink>
+                                                </button>
                                                 {handleActionDelete ? (
                                                     <button className={`text-[#AF183C] hover:text-red-600`} onClick={() => handleActionDelete(dataRow[id])}>
                                                         <div className='flex gap-x-3 items-center'>
@@ -93,4 +92,4 @@ function Table(props) {
 
 }
 
-export default Table
+export default React.memo(Table);

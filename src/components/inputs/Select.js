@@ -1,14 +1,17 @@
-import { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 
-export default function Select(props) {
+const Select = (props) => {
 
-    const { label, setValue, keyId, keyName, options, setTop } = props
+    const { label, setValue, keyId, keyName, options, setTop, catchSelect, className } = props
     const [selected, setSelected] = useState({ [keyId]: null, [keyName]: "nothing selected" })
     const [dataOption, setDataOption] = useState(options);
     useEffect(() => {
         setValue(selected[keyId])
+        if (catchSelect) {
+            catchSelect(selected[keyId])
+        }
     }, [selected]);
 
     useEffect(() => {
@@ -41,14 +44,15 @@ export default function Select(props) {
                                 <Listbox.Option
                                     key={index}
                                     className={({ active }) =>
-                                        `relative cursor-default select-none py-2 px-4 
+                                        `relative cursor-default select-none py-2 px-4
                                         ${active ? 'bg-light-green bg-opacity-20 text-light-green' : 'text-slate-700'}`
                                     }
                                     value={option}
                                 >
                                     {({ selected }) => (
                                         <>
-                                            <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                                            <span className={`block truncate  ${className} 
+                                            ${selected ? 'font-medium' : 'font-normal'}`}>
                                                 {option[keyName]}
                                             </span>
                                         </>
@@ -62,3 +66,4 @@ export default function Select(props) {
         </div>
     )
 }
+export default React.memo(Select);

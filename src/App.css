@@ -43,17 +43,16 @@
 
 .scroll-green::-webkit-scrollbar-thumb {
   background: var(--light-green);
+
 }
 
 #navbar-menu::-webkit-scrollbar {
   display: none;
 }
 
-/* 
-.modal::-webkit-scrollbar {
-  display: none;
+/* * {
+  will-change: width;
 } */
-
 
 .divider-top {
   border-top: 1px solid rgba(0, 0, 0, .2);

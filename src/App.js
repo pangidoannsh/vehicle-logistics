@@ -4,9 +4,7 @@ import Store from './Store'
 
 function App() {
   return (
-    <Store>
-      <Routers />
-    </Store>
+    <Routers />
   );
 }
 

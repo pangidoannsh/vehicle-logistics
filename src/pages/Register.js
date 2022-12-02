@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PasswordInput from '../components/PasswordInput';
+import PasswordInput from '../components/inputs/PasswordInput';
 import Sign from '../layouts/Sign';
 
 export default function Register() {

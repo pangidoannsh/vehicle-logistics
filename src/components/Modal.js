@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 
 const Modal = (props) => {
     // yang wajib dibuatkan props nya isOpen, setIsOpen, ModalContent
-    const { isOpen, setIsOpen, title, iconTitle, size } = props
+    const { isOpen, setIsOpen, title, iconTitle, size, durationOpen } = props
 
     function closeModal() {
         setIsOpen(false)

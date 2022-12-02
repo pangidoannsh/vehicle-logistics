@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
-import { useState } from "react";
-import FormInput from "../../../components/FormInput";
+import { useState, useRef } from "react";
+import FormInput from "../../../components/inputs/FormInput";
 import Table from "../../../components/tables/Table";
 import { api } from "../../../config";
 import { moneyFormat } from "../../../utils";
@@ -14,7 +14,7 @@ const MarketingDetail = (props) => {
     const [valueColor, setValueColor] = useState("");
     const [valueYear, setValueYear] = useState("");
     const [valueAmount, setValueAmount] = useState("");
-
+    const totalPrice = useRef(props.data.value);
     const {
         oid,
         branch,
@@ -22,13 +22,13 @@ const MarketingDetail = (props) => {
         customer,
         contractno,
         contractname,
-        contracttype,
-        value
+        contracttype
     } = props.data
 
-    const headTable = [
+    const headTable = useRef([
         "Engine Number", "Frame Number", "Brand", "Type", "Color", "Year", "Amount (Rp)"
-    ]
+    ]);
+
     const handleSave = e => {
         e.preventDefault()
         // refresh alert dan loading
@@ -48,6 +48,7 @@ const MarketingDetail = (props) => {
         };
         api.post("/vehiclepo", newData).then(response => {
             if (response.status === 201) {
+                totalPrice.current = Number(totalPrice.current) + Number(valueAmount);
                 setLoadingPage(false)
                 setSuccessCreate(true);
                 setValueEngineNumber("");
@@ -58,7 +59,7 @@ const MarketingDetail = (props) => {
                 setValueYear("");
                 setValueAmount("");
                 setMsgAlert(["Success", "Data Unit PO Created"]);
-                setDataUnitPo([...dataUnitPo, newData])
+                setDataUnitPo([...dataUnitPo, newData]);
                 setTimeout(() => {
                     setSuccessCreate(false)
                 }, 3000);
@@ -106,7 +107,7 @@ const MarketingDetail = (props) => {
                             </tr>
                             <tr >
                                 <td className='py-4'>Value</td>
-                                <td className='pr-2 py-4'>Rp {value}</td>
+                                <td className='pr-2 py-4'>Rp {moneyFormat(totalPrice.current)}</td>
                             </tr>
                             <tr >
                                 <td className='py-4'>Quantity</td>
@@ -146,7 +147,7 @@ const MarketingDetail = (props) => {
             <Table dataBody={dataUnitPo.map(data => {
                 const { enginenumber, framenumber, unitbrand, type, color, year, amount } = data;
                 return { enginenumber, framenumber, unitbrand, type, color, year, amount: moneyFormat(amount) };
-            })} dataHead={headTable} id={null}
+            })} dataHead={headTable.current} id={null}
                 loading={false} noAction={true} />
         </>
     )

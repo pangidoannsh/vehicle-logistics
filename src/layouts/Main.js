@@ -2,7 +2,7 @@ import React from 'react'
 import Header from '../components/Header'
 import Navbar from '../components/Navbar'
 
-export default function Main(props) {
+const Main = (props) => {
     return (
         <div id='container'>
             <Navbar />
@@ -15,3 +15,4 @@ export default function Main(props) {
         </div>
     )
 }
+export default React.memo(Main);

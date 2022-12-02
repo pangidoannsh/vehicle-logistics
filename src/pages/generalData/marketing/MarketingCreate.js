@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import Select from '../../../components/Select'
-import FormInput from '../../../components/FormInput'
+import Select from '../../../components/inputs/Select'
+import FormInput from '../../../components/inputs/FormInput'
 import { api } from '../../../config'
 
 const MarketingCreate = (props) => {
@@ -9,20 +9,20 @@ const MarketingCreate = (props) => {
     const { optionsContract, setOptionsContract } = options.contract
     const [valueBranch, setValueBranch] = useState("");
     const [valuePoNumber, setValuePoNumber] = useState("");
-    const [valuePoValue, setValuePoValue] = useState("");
+    // const [valuePoValue, setValuePoValue] = useState("");
     const [valueContract, setValueContract] = useState("");
     // function yang akan dijalankan ketika menekan button create
     const handleClickCreate = e => {
         e.preventDefault()
         setFailCreate(false);
-        if (valueBranch && valuePoNumber && valuePoValue && valueContract) {
+        if (valueBranch && valuePoNumber && valueContract) {
             setLoadingPage(true)
             // POST untuk /pocustomer
             api.post('/pocustomer', {
-                branchid: valueBranch,
+                branchoid: valueBranch,
                 ponumber: valuePoNumber,
-                contractid: valueContract,
-                povalue: valuePoValue
+                contractoid: valueContract,
+                // povalue: valuePoValue
             }).then(response => {
                 setLoadingPage(false)
                 if (response.status === 201) {
@@ -54,13 +54,12 @@ const MarketingCreate = (props) => {
     return <>
         <div className="flex flex-col gap-y-6 pb-2">
             <FormInput label="PO Number" tagId="ponumber" setValue={setValuePoNumber} value={valuePoNumber} />
-            <FormInput label="PO Value" tagId="povalue" setValue={setValuePoValue} />
-            <Select label={"Branch"} setValue={setValueBranch} keyId={"branchid"} keyName={"branchname"} options={optionsBranch} />
-            <Select label={"Contract Name"} setValue={setValueContract} keyId={"contractid"} keyName={"contractname"}
+            {/* <FormInput label="PO Value" tagId="povalue" setValue={setValuePoValue} /> */}
+            <Select label={"Branch"} setValue={setValueBranch} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
+            <Select label={"Contract Name"} setValue={setValueContract} keyId={"oid"} keyName={"contractname"}
                 options={optionsContract.map(opt => {
-                    const { contractid, contractname, contractno } = opt;
-                    const name = contractno + " - " + contractname;
-                    return { contractid, contractname: name }
+                    const name = opt.contractno + " - " + opt.contractname;
+                    return { oid: opt.oid, contractname: name }
                 })} />
             {/* <div className="flex flex-col gap-2">
                 <label htmlFor="remarks" className='text-slate-600 text-sm'>Remarks (Optional)</label>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import FormInput from "../../../components/FormInput";
-import Select from "../../../components/Select";
+import FormInput from "../../../components/inputs/FormInput";
+import Select from "../../../components/inputs/Select";
 import { api } from "../../../config";
 
 const ArmadaCreate = (props) => {
@@ -51,14 +51,14 @@ const ArmadaCreate = (props) => {
             type: value.type,
             branch: value.branch
         }
-        // console.log(postValue);
-        api.post('/vehiclearmada', postValue)
-            .then(res => {
-                console.log(res);
-            })
-            .catch(error => {
-                console.log(error.response);
-            })
+        console.log(postValue);
+        // api.post('/vehiclearmada', postValue)
+        //     .then(res => {
+        //         console.log(res);
+        //     })
+        //     .catch(error => {
+        //         console.log(error.response);
+        //     })
     }
 
     function closeModal() {

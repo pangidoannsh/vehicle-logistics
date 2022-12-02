@@ -8,7 +8,12 @@ import Common from "./generalData/Common"
 import FinanceAr from "./dashboard/FinanceAr"
 import Revenue from "./dashboard/Revenue"
 import PlanArmada from "./application/vehicleLogistics/dataGeneral/planarmada/PlanArmada"
-import Manifest from "./application/vehicleLogistics/dataGeneral/Manifest"
+import Manifest from "./application/vehicleLogistics/dataGeneral/manifest/Manifest"
+import ManifestCreate from "./application/vehicleLogistics/dataGeneral/manifest/ManifestCreate"
+import Bast from "./application/vehicleLogistics/dataGeneral/bast/Bast"
 import Cashier from "./application/vehicleLogistics/Cashier";
 
-export { Dashboard, Armada, Marketing, Login, FinanceAr, PlanArmada, Common, NotFound, Revenue, Manifest, Cashier, Register }
+export {
+    Dashboard, Armada, Marketing, Login, FinanceAr, PlanArmada, Common,
+    NotFound, Revenue, Manifest, Cashier, Register, ManifestCreate, Bast
+}

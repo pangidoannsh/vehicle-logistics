@@ -42,7 +42,7 @@ const generalData = [
     {
         "title": "Marketing",
         "path": "/marketing",
-        "icon": "fluent-mdl2:market"
+        "icon": "bxs:purchase-tag"
     }
 ]
 
@@ -65,7 +65,7 @@ const application = [
                     },
                     {
                         "title": "Manifest Data",
-                        "path": "/manifest-data"
+                        "path": "/manifest"
                     },
                     {
                         "title": "B.A.S.T",
