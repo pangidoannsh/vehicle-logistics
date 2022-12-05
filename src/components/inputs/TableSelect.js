@@ -20,10 +20,10 @@ const TableSelect = (props) => {
             </thead>
             <tbody>
                 {dataBody.map((dataSelect, index) => (
-                    <tr key={index}>
+                    <tr key={`row ${index}`}>
                         <td className="text-center text-slate-600">{index + 1}</td>
                         {Object.values(dataSelect).map((data, indexdata) => indexdata !== dataHide ? (
-                            <td key={indexdata} className="p-4 text-sm text-slate-700">{data}</td>
+                            <td key={`cell ${indexdata}`} className="p-4 text-sm text-slate-700">{data}</td>
                         ) : '')}
                         {!noAction ? (
                             <td className='px-4 py-2 text-center'>

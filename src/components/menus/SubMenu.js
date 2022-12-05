@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useContext, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
-import { MenuContext } from './Menu';
 
 function SubMenu(props) {
     const { menu, open, show, location } = props

@@ -50,6 +50,10 @@
   display: none;
 }
 
+#navbar-menu {
+  scrollbar-width: none;
+}
+
 /* * {
   will-change: width;
 } */

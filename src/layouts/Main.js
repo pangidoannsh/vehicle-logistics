@@ -15,4 +15,4 @@ const Main = (props) => {
         </div>
     )
 }
-export default React.memo(Main);
+export default Main;

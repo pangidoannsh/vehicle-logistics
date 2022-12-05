@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react"
+import React from "react";
 
 /*
     SearchTable berguna untuk mencari data table dengan cara memfilter isi dari 1 row table, contohnya seperti
@@ -9,11 +10,12 @@ import { Icon } from "@iconify/react"
     - setData (useState set dari data yg akan dicari, pada kasus table ini seperti datashow) 
     - dataBody (merupakan sumber data asli yang berasal dari consume API)
 */
-export default function SearchTable(props) {
+const SearchTable = props => {
     const { setData, dataBody, customSearchFunction, dataSkipSearch } = props
     /* dataSkipSearch dapat diisi atau tidak, jika diisi maka ketika melakukan searching, data yng index nya sama dengan
         dataSkipSearch, tidak akan menjadi patokan pencarian data
     */
+
     const handleSearch = e => {
         if (customSearchFunction) {
             customSearchFunction(e)
@@ -46,3 +48,5 @@ export default function SearchTable(props) {
         </>
     )
 }
+
+export default React.memo(SearchTable);

@@ -48,6 +48,7 @@ const MarketingDetail = (props) => {
         };
         api.post("/vehiclepo", newData).then(response => {
             if (response.status === 201) {
+                console.log(response);
                 totalPrice.current = Number(totalPrice.current) + Number(valueAmount);
                 setLoadingPage(false)
                 setSuccessCreate(true);

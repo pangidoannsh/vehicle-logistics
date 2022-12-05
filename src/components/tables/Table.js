@@ -4,7 +4,8 @@ import Action from "./Action";
 import LoadingTable from "./LoadingTable";
 
 function Table(props) {
-    const { dataBody, dataHead, id, loading, handleClick, actionInData, noAction, handleActionDelete, dataHide } = props
+    const { dataBody, dataHead, id, loading, handleClick, actionInData, noAction, handleActionDelete, dataHide,
+        handleActionEdit } = props
     /* 
         - dataBody => data yang akan ditampilkan pada table body <tbody>
         - dataHead => data yang akan menjadi header dari table <thead>
@@ -19,7 +20,7 @@ function Table(props) {
             {/* Table */}
             <table className="table-auto w-full">
                 <thead>
-                    <tr className="sticky top-0">
+                    <tr >
                         {!noAction && <th className={`p-4 bg-dark-green text-white font-semibold 
                             text-sm text-center border border-l-[1px] border-white w-16`}>#</th>
                         }
@@ -38,18 +39,22 @@ function Table(props) {
                         dataBody.length !== 0 ?
                             dataBody.map((dataRow, index) =>
                             (
-                                <tr key={index} className=" even:bg-dark-green even:bg-opacity-10">
+                                <tr key={`row-${index}`} className=" even:bg-dark-green even:bg-opacity-10">
                                     {!noAction &&
                                         <td>
                                             <Action>
-                                                <button className={`text-yellow-500 hover:text-yellow-400`}>
-                                                    <div className='flex gap-x-3 items-center' >
-                                                        <Icon icon={`clarity:note-edit-solid`} className='text-xl' />
-                                                        <span className='text-base'>Edit</span>
-                                                    </div>
-                                                </button>
+                                                {handleActionEdit ? (
+                                                    <button className={`text-yellow-500 hover:text-yellow-400`}
+                                                        onClick={() => handleActionEdit(dataRow[id])}>
+                                                        <div className='flex gap-x-3 items-center' >
+                                                            <Icon icon={`clarity:note-edit-solid`} className='text-xl' />
+                                                            <span className='text-base'>Edit</span>
+                                                        </div>
+                                                    </button>
+                                                ) : ''}
                                                 {handleActionDelete ? (
-                                                    <button className={`text-[#AF183C] hover:text-red-600`} onClick={() => handleActionDelete(dataRow[id])}>
+                                                    <button className={`text-[#AF183C] hover:text-red-600`}
+                                                        onClick={() => handleActionDelete(dataRow[id])}>
                                                         <div className='flex gap-x-3 items-center'>
                                                             <Icon icon={`bxs:trash-alt`} className='text-xl' />
                                                             <span className='text-base'>Delete</span>
@@ -62,7 +67,7 @@ function Table(props) {
                                     <td className="p-4 text-sm text-slate-700 text-center w-14  selection:bg-light-green selection:text-white">{index + 1}</td>
                                     {Object.values(dataRow).map((dataCell, indexData) => indexData !== dataHide ?
                                         (
-                                            <td key={indexData} className="p-4 text-sm text-slate-700
+                                            <td key={`cell-${indexData}`} className="p-4 text-sm text-slate-700
                                              selection:bg-light-green selection:text-white">
                                                 {actionInData ? indexData != actionInData ? dataCell : (
                                                     <button onClick={() => { handleClick(dataRow[id]) }}
@@ -91,5 +96,4 @@ function Table(props) {
     )
 
 }
-
 export default React.memo(Table);

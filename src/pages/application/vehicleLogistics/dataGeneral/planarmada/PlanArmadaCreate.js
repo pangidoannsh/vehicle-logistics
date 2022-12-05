@@ -33,7 +33,7 @@ const PlanArmadaCreate = (props) => {
                 setLoadingPage(false);
                 setAlert({ isActived: true, code: 1, title: `Success`, message: "New Plan Armada Created" });
                 setTimeout(() => {
-                    setAlert({ isActived: false, code: 1, title: `Success`, message: "New Plan Armada Created" });
+                    setAlert({ ...alert, isActived: false });
                 }, 3000);
                 fetchPlanArmada()
                 setIsOpen(false)

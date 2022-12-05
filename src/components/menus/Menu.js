@@ -110,7 +110,3 @@ function Menu(props) {
 }
 
 export default Menu
-
-// ${location.pathname === menu.path ? 'rounded-r-full bg-black bg-opacity-20 text-gold' :'text-opacity-75 text-white'}
-
-// ${location.pathname !== menu.path && 'text-opacity-75'}

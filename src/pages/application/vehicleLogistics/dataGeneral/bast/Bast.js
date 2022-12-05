@@ -33,7 +33,7 @@ const Bast = () => {
 
 
     return (
-        <Main>
+        <>
             {/* After Header */}
             <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
                 <button
@@ -59,9 +59,7 @@ const Bast = () => {
                     <Table dataBody={dataShow} dataHead={headTable} id="policenumber" loading={loading} />
                 </div>
             </div>
-
-
-        </Main>
+        </>
     )
 }
 

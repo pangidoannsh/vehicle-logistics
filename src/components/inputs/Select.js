@@ -4,8 +4,8 @@ import { Icon } from '@iconify/react'
 
 const Select = (props) => {
 
-    const { label, setValue, keyId, keyName, options, setTop, catchSelect, className } = props
-    const [selected, setSelected] = useState({ [keyId]: null, [keyName]: "nothing selected" })
+    const { label, setValue, keyId, keyName, options, setTop, catchSelect, className, defaultValue } = props
+    const [selected, setSelected] = useState(defaultValue ? defaultValue : { [keyId]: null, [keyName]: "nothing selected" });
     const [dataOption, setDataOption] = useState(options);
     useEffect(() => {
         setValue(selected[keyId])
@@ -17,6 +17,12 @@ const Select = (props) => {
     useEffect(() => {
         setDataOption(options)
     }, [options]);
+
+    // useEffect(() => {
+    //     if (defaultValue !== null) {
+    //         setSelected(defaultValue);
+    //     }
+    // }, [defaultValue]);
     return (
         <div className='flex flex-col gap-y-2'>
             <label className={`text-sm text-slate-600`}>{label}</label>

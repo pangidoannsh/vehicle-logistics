@@ -51,7 +51,7 @@ const Manifest = () => {
     }, [dataBody])
 
     return (
-        <Main>
+        <>
             {/* After Header */}
             <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
                 <NavLink to={"/manifest/create"} className={`bg-light-green hover:bg-green-700 text-white rounded flex
@@ -74,7 +74,7 @@ const Manifest = () => {
                     <Table dataBody={dataShow} dataHead={headTable} id="manifestid" loading={loading} />
                 </div>
             </div>
-        </Main>
+        </>
     );
 }
 

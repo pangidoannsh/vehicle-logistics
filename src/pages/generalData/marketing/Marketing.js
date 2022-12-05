@@ -6,15 +6,23 @@ import Modal from '../../../components/Modal'
 import { api } from '../../../config'
 import MarketingCreate from './MarketingCreate'
 import MarketingDetail from './MarketingDetail'
-import Main from '../../../layouts/Main'
 import Alert from '../../../components/Alert'
 import { fetchOption } from '../../../Store'
 import { useRef } from 'react'
 import Loading from '../../../components/Loading'
 import { moneyFormat } from '../../../utils'
+import { useCallback } from 'react'
+import MarketingEdit from './MarketingEdit'
 
 
 const Marketing = () => {
+
+    const dataDisplay = useCallback(data => {
+        const { oid, branch, ponumber, customer, contractno, quantity, value } = data;
+        return {
+            oid, branch, ponumber, customer, contractno, quantity, value
+        }
+    }, []);
     const [loadingPage, setLoadingPage] = useState(false)
     const [loadingTable, setLoadingTable] = useState(true);
     // dataBody merupakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
@@ -25,12 +33,15 @@ const Marketing = () => {
     const [dataUnitPo, setDataUnitPo] = useState([]);
     // untuk membuka dan menutup modal detail
     const [openModalDetail, setOpenModalDetail] = useState(false)
-    // untuk membuka dan menutup modal detail
+    // untuk membuka dan menutup modal Create
     const [openModalCreate, setOpenModalCreate] = useState(false)
+    // untuk membuka dan menutup modal Edit
+    const [openModalEdit, setOpenModalEdit] = useState(false)
     // untuk membuka dan menutup modal delete
     const [openModalDelete, setOpenModalDelete] = useState(false)
     // const [idToBeDelete, setIdToBeDelete] = useState("")
     const idToBeDelete = useRef("");
+    const idToBeEdit = useRef("");
     // untuk data yang akan ditampilkan Modal -> ModalContent
     const [dataModalDetail, setDataModalDetail] = useState(null);//object
     // untuk menampung kondisi error network
@@ -46,9 +57,14 @@ const Marketing = () => {
     const [optionsBranch, setOptionsBranch] = useState([]);
     const [optionsContract, setOptionsContract] = useState([]);
 
+    const [dataEdit, setDataEdit] = useState({
+        valuePoNumber: "",
+        currentBranch: { oid: "", branchname: "" },
+        currentContract: { oid: "", contractname: "" }
+    })
     // data untuk table head
     const headTable = useRef([
-        "Branch", "PO Number", "Customer", "Contract No", "Contract Name", "Value (Rp)"
+        "Branch", "PO Number", "Customer", "Contract No", "Quantity", "Value (Rp)"
     ])
 
     // untuk handle Open dari Modal PO Customer Detail
@@ -89,11 +105,15 @@ const Marketing = () => {
         setOpenModalCreate(true)
     }
 
+    const handleOpenModalEdit = async oid => {
+        setLoadingPage(true);
+        setOpenModalEdit(true)
+    }
     // function untuk menampilkan modal konfirmasi delete ketika mengklik action trash/delete pada table
-    const handleOpenModalDelete = oid => {
+    const handleOpenModalDelete = useCallback(oid => {
         idToBeDelete.current = oid
         setOpenModalDelete(true)
-    }
+    }, []);
 
     // function untuk meng-handle ketika mengklik button delete pada modal konfirmasi delete
     const handleDelete = e => {
@@ -109,7 +129,7 @@ const Marketing = () => {
                 setOpenModalDelete(false)
                 setLoadingPage(false)
                 setTimeout(() => {
-                    setIsSuccessAlert(false)
+                    setIsSuccessAlert(false);
                 }, 3000);
             })
             .catch(error => {
@@ -148,10 +168,7 @@ const Marketing = () => {
     // pemberian isi dari data show
     useEffect(() => {
         setDataShow(dataBody.map(data => {
-            const { oid, branch, ponumber, customer, contractno, contractname, value } = data;
-            return {
-                oid, branch, ponumber, customer, contractno, contractname, value
-            }
+            return dataDisplay(data);
         }));
     }, [dataBody])
 
@@ -162,7 +179,7 @@ const Marketing = () => {
         }
     }, [openModalCreate]);
     return (
-        <Main>
+        <>
             {/* After Header */}
             <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
                 <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
@@ -188,7 +205,7 @@ const Marketing = () => {
                     {/* Table */}
                     <Table dataBody={dataShow} dataHead={headTable.current} id="oid" dataHide={0}
                         loading={loadingTable} handleClick={handleOpenModalDetail} actionInData={2}
-                        handleActionDelete={handleOpenModalDelete}
+                        handleActionDelete={handleOpenModalDelete} handleActionEdit={handleOpenModalEdit}
                     />
                 </div>
             </div>
@@ -207,6 +224,14 @@ const Marketing = () => {
                         branch: { optionsBranch, setOptionsBranch },
                         contract: { optionsContract, setOptionsContract }
                     }} setLoadingPage={setLoadingPage} />
+            </Modal>
+
+            {/* Modal Edit */}
+            <Modal dataEdit={dataEdit} isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title={'Edit PO Customer'} size={700}>
+                {/* <MarketingEdit oid={idToBeEdit.current} setIsOpen={setOpenModalEdit} setLoadingPage={setLoadingPage} options={{
+                    branch: { optionsBranch, setOptionsBranch },
+                    contract: { optionsContract, setOptionsContract }
+                }} setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert} setMsgAlert={setMsgAlert} /> */}
             </Modal>
 
             {/* Modal Delete */}
@@ -236,7 +261,7 @@ const Marketing = () => {
                 {msgAlert[1]}
             </Alert>
             <Loading isLoading={loadingPage} />
-        </Main>
+        </>
     )
 }
 

@@ -152,10 +152,15 @@ const PlanArmada = () => {
         }));
     }, [dataBody])
 
-
-
+    useEffect(() => {
+        if (!openModalCreate) {
+            if (alert.code === 0) {
+                setAlert({ ...alert, isActived: false });
+            }
+        }
+    }, [openModalCreate]);
     return (
-        <Main>
+        <>
             {/* After Header */}
             <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
                 <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
@@ -193,7 +198,7 @@ const PlanArmada = () => {
                 {alert.message}
             </Alert>
             <Loading isLoading={loadingPage} />
-        </Main>
+        </>
     );
 }
 
