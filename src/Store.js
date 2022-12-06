@@ -7,6 +7,7 @@ export const fetchOption = (url, setOption) => {
     api.get(url).then(res => {
         setOption(res.data)
     }).catch(error => {
+        console.log(error.response);
         if (error.code === "ERR_NETWORK") {
             alert('Periksa jaringan anda dan Reload Browser')
         }

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import Select from '../../../components/inputs/Select'
-import FormInput from '../../../components/inputs/FormInput'
-import { api } from '../../../config'
+import { useState } from "react";
+import FormInput from "../../../../../components/inputs/FormInput";
+import Select from "../../../../../components/inputs/Select";
+import { api } from "../../../../../config";
 
-const MarketingCreate = (props) => {
+
+const POCustomerCreate = (props) => {
     const { setIsOpen, setSuccessCreate, setFailCreate, setMsgAlert, fetchPoCustomer, options, setLoadingPage } = props
     const { optionsBranch, setOptionsBranch } = options.branch
     const { optionsContract, setOptionsContract } = options.contract
@@ -77,4 +78,4 @@ const MarketingCreate = (props) => {
     </>
 }
 
-export default MarketingCreate;
+export default POCustomerCreate;

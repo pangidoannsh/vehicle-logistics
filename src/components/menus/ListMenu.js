@@ -35,14 +35,14 @@ const generalData = [
         "icon": "fa-solid:truck"
     },
     {
-        "title": "Organization",
-        "path": "/organization",
+        "title": "Branch",
+        "path": "/branch",
         "icon": "clarity:organization-solid"
     },
     {
-        "title": "Marketing",
-        "path": "/marketing",
-        "icon": "bxs:purchase-tag"
+        "title": "Customer",
+        "path": "/customer",
+        "icon": "fluent:people-team-20-filled"
     }
 ]
 
@@ -60,16 +60,8 @@ const application = [
                         "path": "/contact-price"
                     },
                     {
-                        "title": "Plan Armada",
-                        "path": "/plan-armada"
-                    },
-                    {
-                        "title": "Manifest Data",
-                        "path": "/manifest"
-                    },
-                    {
-                        "title": "B.A.S.T",
-                        "path": "/bast"
+                        "title": "PO Customer",
+                        "path": "/pocustomer"
                     }
                 ]
             },
@@ -77,6 +69,14 @@ const application = [
                 "title": "Administration",
                 "icon": "dashicons:admin-settings",
                 "sub": [
+                    {
+                        "title": "Manifest",
+                        "path": "/manifest"
+                    },
+                    {
+                        "title": "B.A.S.T",
+                        "path": "/bast"
+                    },
                     {
                         "title": "Delivery Order",
                         "path": "/delivery-order"
@@ -88,10 +88,6 @@ const application = [
                     {
                         "title": "Handover",
                         "path": "/handover"
-                    },
-                    {
-                        "title": "Barcode",
-                        "path": "/barcode"
                     }
                 ]
             },
@@ -100,18 +96,17 @@ const application = [
                 "icon": "ep:operation",
                 "sub": [
                     {
+                        "title": "Plan Armada",
+                        "path": "/plan-armada"
+                    },
+                    {
                         "title": "Loading",
                         "path": "/loading"
                     }
                 ]
             },
             {
-                "title": "Cashier",
-                "icon": "mdi:cash-register",
-                "path": "/cashier"
-            },
-            {
-                "title": "Billing",
+                "title": "Finance",
                 "icon": "fa-solid:file-invoice-dollar",
                 "sub": [
                     {

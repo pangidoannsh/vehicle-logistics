@@ -1,21 +1,27 @@
-import { Icon } from '@iconify/react'
-import React, { useEffect, useState } from 'react'
-import Table from '../../../components/tables/Table'
-import SearchTable from '../../../components/tables/SearchTable'
-import Modal from '../../../components/Modal'
-import { api } from '../../../config'
-import MarketingCreate from './MarketingCreate'
-import MarketingDetail from './MarketingDetail'
-import Alert from '../../../components/Alert'
-import { fetchOption } from '../../../Store'
-import { useRef } from 'react'
-import Loading from '../../../components/Loading'
-import { moneyFormat } from '../../../utils'
-import { useCallback } from 'react'
-import MarketingEdit from './MarketingEdit'
+import { Icon } from '@iconify/react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import Alert from '../../../../../components/Alert';
+import Loading from '../../../../../components/Loading';
+import Modal from '../../../../../components/Modal';
+import SearchTable from '../../../../../components/tables/SearchTable';
+import Table from '../../../../../components/tables/Table';
+import { api } from '../../../../../config';
+import { fetchOption } from '../../../../../Store';
+import { moneyFormat } from '../../../../../utils';
+import POCustomerCreate from './POCustomerCreate';
+import POCustomerDetail from './POCustomerDetail';
 
+const columnTable = [
+    { field: "branch", header: "branch" },
+    { field: "ponumber", header: "PO Number" },
+    { field: "customer", header: "Customer" },
+    { field: "contractno", header: "Contract No" },
+    { field: "quantity", header: "Quantity" },
+    { field: "value", header: "Total (Rp)" },
+];
+const clickFieldTable = "ponumber";
 
-const Marketing = () => {
+const POCustomer = () => {
 
     const dataDisplay = useCallback(data => {
         const { oid, branch, ponumber, customer, contractno, quantity, value } = data;
@@ -68,7 +74,7 @@ const Marketing = () => {
     ])
 
     // untuk handle Open dari Modal PO Customer Detail
-    const handleOpenModalDetail = id => {
+    const handleOpenModalDetail = useCallback(id => {
         const fetchDataUnit = () => {
             api.get(`/vehiclepo/${id}`).then(res => {
                 setDataUnitPo(res.data)
@@ -93,19 +99,19 @@ const Marketing = () => {
                 setOpenModalDetail(true)
             }
         }
-    }
+    }, [dataBody])
     const handleOpenModalCreate = e => {
         e.preventDefault()
         if (optionsBranch.length === 0) {
-            fetchOption("/branch", setOptionsBranch);
+            fetchOption("/branchlist", setOptionsBranch);
         }
         if (optionsContract.length === 0) {
-            fetchOption("/contract", setOptionsContract);
+            fetchOption("/contractlist", setOptionsContract);
         }
         setOpenModalCreate(true)
     }
 
-    const handleOpenModalEdit = async oid => {
+    const handleOpenModalEdit = oid => {
         setLoadingPage(true);
         setOpenModalEdit(true)
     }
@@ -143,12 +149,7 @@ const Marketing = () => {
     //function untuk fetch data PO Customer
     const fetchPoCustomer = () => {
         api.get('/pocustomer').then(res => {
-            // .sort((a, b) => (a.oid > b.oid) ? 1 : ((b.oid > a.oid) ? -1 : 0)).
             setDataBody(res.data.map(data => {
-                // const { oid, branch, ponumber, customer, contractno, contracttype, contractname, value } = data;
-                // return {
-                //     oid, branch, ponumber, customer, contractno, contractname, contracttype, value: moneyFormat(value)
-                // }
                 return { ...data, value: moneyFormat(data.value) };
             }))
             setLoadingTable(false)
@@ -159,7 +160,6 @@ const Marketing = () => {
             }
         })
     }
-
     // use effect untuk consume API
     useEffect(() => {
         fetchPoCustomer()
@@ -198,28 +198,24 @@ const Marketing = () => {
                         <span className='text-lg text-dark-green font-medium'>PO Customer</span>
                     </div>
                     {/* Search */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody.map(data => {
-                        const { oid, branch, ponumber, customer, contractno, contractname, value } = data;
-                        return { oid, branch, ponumber, customer, contractno, contractname, value };
-                    })} dataSkipSearch={0} />
+                    <SearchTable setData={setDataShow} dataBody={dataBody} dataSkipSearch={0} />
                     {/* Table */}
-                    <Table dataBody={dataShow} dataHead={headTable.current} id="oid" dataHide={0}
-                        loading={loadingTable} handleClick={handleOpenModalDetail} actionInData={2}
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable}
                         handleActionDelete={handleOpenModalDelete} handleActionEdit={handleOpenModalEdit}
-                    />
+                        handleClickField={handleOpenModalDetail} clickField={clickFieldTable} />
                 </div>
             </div>
 
             {/* Modal Detail */}
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title={"PO Customer Detail"} iconTitle={"ooui:view-details-ltr"}>
-                <MarketingDetail data={dataModalDetail} dataUnitPo={dataUnitPo} setDataUnitPo={setDataUnitPo}
+                <POCustomerDetail data={dataModalDetail} dataUnitPo={dataUnitPo} setDataUnitPo={setDataUnitPo}
                     setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert} setMsgAlert={setMsgAlert}
                     setLoadingPage={setLoadingPage} />
             </Modal>
 
             {/* Modal Create */}
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={'New PO Customer'} size={700}>
-                <MarketingCreate setIsOpen={setOpenModalCreate} setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert}
+                <POCustomerCreate setIsOpen={setOpenModalCreate} setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert}
                     setMsgAlert={setMsgAlert} fetchPoCustomer={fetchPoCustomer} options={{
                         branch: { optionsBranch, setOptionsBranch },
                         contract: { optionsContract, setOptionsContract }
@@ -265,4 +261,4 @@ const Marketing = () => {
     )
 }
 
-export default Marketing
+export default POCustomer

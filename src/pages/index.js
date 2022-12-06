@@ -3,17 +3,17 @@ import Dashboard from "./Dashboard";
 import Login from "./Login";
 import Register from "./Register";
 import Armada from "./generalData/armada/Armada"
-import Marketing from "./generalData/marketing/Marketing"
-import Common from "./generalData/Common"
+import Common from "./generalData/common/Common"
 import FinanceAr from "./dashboard/FinanceAr"
 import Revenue from "./dashboard/Revenue"
-import PlanArmada from "./application/vehicleLogistics/dataGeneral/planarmada/PlanArmada"
-import Manifest from "./application/vehicleLogistics/dataGeneral/manifest/Manifest"
-import ManifestCreate from "./application/vehicleLogistics/dataGeneral/manifest/ManifestCreate"
-import Bast from "./application/vehicleLogistics/dataGeneral/bast/Bast"
-import Cashier from "./application/vehicleLogistics/Cashier";
+import PlanArmada from "./application/vehicleLogistics/operational/planarmada/PlanArmada"
+import Manifest from "./application/vehicleLogistics/administration/manifest/Manifest"
+import ManifestCreate from "./application/vehicleLogistics/administration/manifest/ManifestCreate"
+import Bast from "./application/vehicleLogistics/administration/bast/Bast"
+import POCustomer from "./application/vehicleLogistics/dataGeneral/pocustomer/POCustomer"
 
 export {
-    Dashboard, Armada, Marketing, Login, FinanceAr, PlanArmada, Common,
-    NotFound, Revenue, Manifest, Cashier, Register, ManifestCreate, Bast
+    Dashboard, Armada, Login, FinanceAr, PlanArmada, Common,
+    NotFound, Revenue, Manifest, Register, ManifestCreate, Bast,
+    POCustomer,
 }

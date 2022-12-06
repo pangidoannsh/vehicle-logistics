@@ -3,15 +3,46 @@ import Modal from '../../../../../components/Modal';
 import SearchTable from '../../../../../components/tables/SearchTable';
 import Table from '../../../../../components/tables/Table';
 import { api } from '../../../../../config';
-import Main from '../../../../../layouts/Main';
 import PlanArmadaCreate from './PlanArmadaCreate';
 import Alert from '../../../../../components/Alert';
 import { fetchOption } from '../../../../../Store';
 import { Icon } from '@iconify/react';
 import Loading from '../../../../../components/Loading';
+import { useCallback } from 'react';
 
+const columnTable = [
+    { field: "branch", header: "Branch" },
+    { field: "moda", header: "Moda" },
+    { field: "plandate", header: "Plan Date" },
+    { field: "payloadcomposition", header: "Payload Composition" },
+    { field: "policenumber", header: "Police Number" },
+    { field: "status", header: "Status" },
+]
 
 const PlanArmada = () => {
+    const howDataGet = useCallback(data => {
+        const { branch, moda, destination, plandate, payloadcomposition, policenumber, status } = data;
+        const date = plandate.split(" ")[0].split("-").reverse();
+        return { branch, moda, destination, plandate: `${date[0]}-${date[1]}-${date[2]}`, payloadcomposition, policenumber, status };
+    })
+    const displayData = useCallback(data => {
+        return {
+            ...data,
+            status: data.status.toLowerCase() === 'ready' ? (
+                <div className="text-center py-1 px-2 items-center bg-light-green rounded-sm text-white justify-center text-sm capitalize">
+                    {data.status}
+                </div>
+            ) : data.status.toLowerCase() === 'used' ? (
+                <div className="text-center py-1 px-2 items-center bg-yellow-500 rounded-sm text-white justify-center text-sm capitalize">
+                    {data.status}
+                </div>
+            ) : data.status.toLowerCase() === 'closed' ? (
+                <div className="text-center py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center text-sm capitalize">
+                    {data.status}
+                </div>
+            ) : data.status
+        }
+    }, []);
     const [loadingPage, setLoadingPage] = useState(false)
     const [loading, setLoading] = useState(true);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
@@ -43,41 +74,6 @@ const PlanArmada = () => {
         message: "message"
     })
     const setAlertActive = active => setAlert({ ...alert, isActived: active });
-    // data untuk table head
-    const headTable = [
-        "Branch", "Type", "Destination", "Plan Date", "Payload Composition", "Police Number", "Status"
-    ]
-
-    // penentuan id dari data yang ada di table
-    const data_id = 'branch'
-
-    const customSearch = (e) => {
-        setDataShow(
-            dataBody.filter(dataRow => {
-                return Object.values(dataRow).findIndex((dataCell, index) => {
-                    return dataCell.toString().toLowerCase().includes(e.target.value.toLowerCase())
-                }) !== -1
-            }
-            ).map(data => {
-                return {
-                    ...data,
-                    status: data.status.toLowerCase() === 'ready' ? (
-                        <div className="text-center py-1 px-2 items-center bg-light-green rounded-sm text-white justify-center text-sm capitalize">
-                            {data.status}
-                        </div>
-                    ) : data.status.toLowerCase() === 'used' ? (
-                        <div className="text-center py-1 px-2 items-center bg-yellow-500 rounded-sm text-white justify-center text-sm capitalize">
-                            {data.status}
-                        </div>
-                    ) : data.status.toLowerCase() === 'closed' ? (
-                        <div className="text-center py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center text-sm capitalize">
-                            {data.status}
-                        </div>
-                    ) : data.status
-                }
-            })
-        )
-    };
 
     const handleOpenModalCreate = e => {
         e.preventDefault()
@@ -108,9 +104,7 @@ const PlanArmada = () => {
     const fetchPlanArmada = () => {
         api.get('/planarmada').then(res => {
             setDataBody(res.data.map(data => {
-                const { branch, moda, destination, plandate, payloadcomposition, policenumber, status } = data;
-                const date = plandate.split("-").reverse();
-                return { branch, moda, destination, plandate: `${date[0]}/${date[1]}/${date[2]}`, payloadcomposition, policenumber, status };
+                return howDataGet(data);
             }));
             setLoading(false)
         }).catch(error => {
@@ -133,22 +127,7 @@ const PlanArmada = () => {
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
         setDataShow(dataBody.map(data => {
-            return {
-                ...data,
-                status: data.status.toLowerCase() === 'ready' ? (
-                    <div className="text-center py-1 px-2 items-center bg-light-green rounded-sm text-white justify-center text-sm capitalize">
-                        {data.status}
-                    </div>
-                ) : data.status.toLowerCase() === 'used' ? (
-                    <div className="text-center py-1 px-2 items-center bg-yellow-500 rounded-sm text-white justify-center text-sm capitalize">
-                        {data.status}
-                    </div>
-                ) : data.status.toLowerCase() === 'closed' ? (
-                    <div className="text-center py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center text-sm capitalize">
-                        {data.status}
-                    </div>
-                ) : data.status
-            }
+            return displayData(data);
         }));
     }, [dataBody])
 
@@ -178,9 +157,9 @@ const PlanArmada = () => {
                         <span className='text-lg text-dark-green font-medium'>Plan Armada</span>
                     </div>
                     {/* Search */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} customSearchFunction={customSearch} />
+                    <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
                     {/* Table */}
-                    <Table dataBody={dataShow} dataHead={headTable} id={data_id} loading={loading} />
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading} />
                 </div>
             </div>
             {/* Modal Create */}

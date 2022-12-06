@@ -1,8 +1,18 @@
 import { Icon } from '@iconify/react'
 import React, { useState, useMemo } from 'react'
 import SearchTable from '../../../../../components/tables/SearchTable'
-import Table from '../../../../../components/tables/Table'
+import Table from '../../../../../components/tables/_Table'
 import Main from '../../../../../layouts/Main'
+
+const columnTable = [
+    { field: 'oid', header: 'BAST Number' },
+    { field: 'bastdate', header: 'BAST Date' },
+    { field: 'origin', header: 'Origin' },
+    { field: 'destination', header: 'Destination' },
+    { field: 'manifestnumber', header: 'Manifest Number' },
+    { field: 'moda', header: 'Moda' },
+    { field: 'status', header: 'Status' },
+]
 
 const Bast = () => {
     const [loading, setLoading] = useState(true);
