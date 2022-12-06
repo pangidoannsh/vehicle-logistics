@@ -26,7 +26,7 @@ const POCustomer = () => {
     const dataDisplay = useCallback(data => {
         const { oid, branch, ponumber, customer, contractno, quantity, value } = data;
         return {
-            oid, branch, ponumber, customer, contractno, quantity, value
+            oid, branch, ponumber, customer, contractno, quantity, value: moneyFormat(value)
         }
     }, []);
     const [loadingPage, setLoadingPage] = useState(false)
@@ -62,19 +62,25 @@ const POCustomer = () => {
     // option branch untuk select pada create po customer
     const [optionsBranch, setOptionsBranch] = useState([]);
     const [optionsContract, setOptionsContract] = useState([]);
+    const [optionsBrand, setOptionsBrand] = useState([]);
 
     const [dataEdit, setDataEdit] = useState({
         valuePoNumber: "",
         currentBranch: { oid: "", branchname: "" },
         currentContract: { oid: "", contractname: "" }
     })
-    // data untuk table head
-    const headTable = useRef([
-        "Branch", "PO Number", "Customer", "Contract No", "Quantity", "Value (Rp)"
-    ])
 
     // untuk handle Open dari Modal PO Customer Detail
     const handleOpenModalDetail = useCallback(id => {
+        api.get('/vehiclebrand').then(res => {
+            setOptionsBrand(res.data.map(data => {
+                return { oid: data.brand, name: data.brand };
+            }))
+        }).catch(error => {
+            console.log(error.response);
+            isFailAlert(true);
+            setMsgAlert('error');
+        })
         const fetchDataUnit = () => {
             api.get(`/vehiclepo/${id}`).then(res => {
                 setDataUnitPo(res.data)
@@ -149,9 +155,7 @@ const POCustomer = () => {
     //function untuk fetch data PO Customer
     const fetchPoCustomer = () => {
         api.get('/pocustomer').then(res => {
-            setDataBody(res.data.map(data => {
-                return { ...data, value: moneyFormat(data.value) };
-            }))
+            setDataBody(res.data)
             setLoadingTable(false)
         }).catch(error => {
             console.log(error);
@@ -210,7 +214,7 @@ const POCustomer = () => {
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title={"PO Customer Detail"} iconTitle={"ooui:view-details-ltr"}>
                 <POCustomerDetail data={dataModalDetail} dataUnitPo={dataUnitPo} setDataUnitPo={setDataUnitPo}
                     setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert} setMsgAlert={setMsgAlert}
-                    setLoadingPage={setLoadingPage} />
+                    setLoadingPage={setLoadingPage} optionsBrand={optionsBrand} />
             </Modal>
 
             {/* Modal Create */}

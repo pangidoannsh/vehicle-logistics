@@ -1,12 +1,23 @@
 import { Icon } from "@iconify/react";
 import { useState, useRef } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
-import Table from "../../../../../components/tables/_Table";
+import Select from "../../../../../components/inputs/Select";
+import Table from "../../../../../components/tables/Table";
 import { api } from "../../../../../config";
 import { moneyFormat } from "../../../../../utils";
 
+const columnTable = [
+    { field: 'enginenumber', header: 'Engine Number' },
+    { field: 'framenumber', header: 'Frame Number' },
+    { field: 'unitbrand', header: 'Brand' },
+    { field: 'type', header: 'Type' },
+    { field: 'color', header: 'Color' },
+    { field: 'year', header: 'Year' },
+    { field: 'amount', header: 'Amount (Rp)' },
+]
+
 const POCustomerDetail = (props) => {
-    const { dataUnitPo, setDataUnitPo, setSuccessCreate, setFailCreate, setMsgAlert, setLoadingPage } = props
+    const { dataUnitPo, setDataUnitPo, setSuccessCreate, setFailCreate, setMsgAlert, setLoadingPage, optionsBrand } = props
     const [valueEngineNumber, setValueEngineNumber] = useState("");
     const [valueFrameNumber, setValueFrameNumber] = useState("");
     const [valueBrand, setValueBrand] = useState("");
@@ -14,7 +25,8 @@ const POCustomerDetail = (props) => {
     const [valueColor, setValueColor] = useState("");
     const [valueYear, setValueYear] = useState("");
     const [valueAmount, setValueAmount] = useState("");
-    const totalPrice = useRef(props.data.value);
+    const [totalPrice, setTotalPrice] = useState(props.data.value);
+
     const {
         oid,
         branch,
@@ -22,14 +34,11 @@ const POCustomerDetail = (props) => {
         customer,
         contractno,
         contractname,
-        contracttype
+        contracttype,
+        value
     } = props.data
 
-    const headTable = useRef([
-        "Engine Number", "Frame Number", "Brand", "Type", "Color", "Year", "Amount (Rp)"
-    ]);
-
-    const handleSave = e => {
+    const handleCreateUnit = e => {
         e.preventDefault()
         // refresh alert dan loading
         setLoadingPage(true);
@@ -49,12 +58,11 @@ const POCustomerDetail = (props) => {
         api.post("/vehiclepo", newData).then(response => {
             if (response.status === 201) {
                 console.log(response);
-                totalPrice.current = Number(totalPrice.current) + Number(valueAmount);
+                setTotalPrice(Number(totalPrice) + Number(valueAmount));
                 setLoadingPage(false)
                 setSuccessCreate(true);
                 setValueEngineNumber("");
                 setValueFrameNumber("");
-                setValueBrand("");
                 setValueType("");
                 setValueColor("");
                 setValueYear("");
@@ -76,6 +84,12 @@ const POCustomerDetail = (props) => {
         })
     }
 
+    const handleEditUnit = oid => {
+        console.log(oid);
+    }
+    const handleDeleteUnit = oid => {
+        console.log(oid);
+    }
     return (
         <>
             <div className='grid grid-cols-12 px-2'>
@@ -108,7 +122,7 @@ const POCustomerDetail = (props) => {
                             </tr>
                             <tr >
                                 <td className='py-4'>Value</td>
-                                <td className='pr-2 py-4'>Rp {moneyFormat(totalPrice.current)}</td>
+                                <td className='pr-2 py-4'>Rp {moneyFormat(totalPrice)}</td>
                             </tr>
                             <tr >
                                 <td className='py-4'>Quantity</td>
@@ -122,14 +136,14 @@ const POCustomerDetail = (props) => {
                         <div className="flex flex-col gap-y-4">
                             <FormInput sizeLabel="text-base" label="Engine Number" tagId="enginenumber" setValue={setValueEngineNumber} value={valueEngineNumber} />
                             <FormInput sizeLabel="text-base" label="Frame Number" tagId="framenumber" setValue={setValueFrameNumber} value={valueFrameNumber} />
-                            <FormInput sizeLabel="text-base" label="Brand" tagId="brand" setValue={setValueBrand} value={valueBrand} />
+                            <Select label="Brand" setValue={setValueBrand} keyId="oid" keyName="name" options={optionsBrand} />
                             <FormInput sizeLabel="text-base" label="Type" tagId="type" setValue={setValueType} value={valueType} />
                             <FormInput sizeLabel="text-base" label="Color" tagId="color" setValue={setValueColor} value={valueColor} />
                             <FormInput sizeLabel="text-base" label="Year" tagId="year" setValue={setValueYear} value={valueYear} />
                             <FormInput sizeLabel="text-base" label="Amount" tagId="amount" setValue={setValueAmount} value={valueAmount} />
                         </div>
                         <button className={`bg-light-green hover:bg-green-700 text-white rounded flex active:ring active:ring-green-200
-                        focus:ring focus:ring-green-200 items-center gap-x-1 py-1 px-4 mt-6`} onClick={handleSave}>Save</button>
+                        focus:ring focus:ring-green-200 items-center gap-x-1 py-1 px-4 mt-6`} onClick={handleCreateUnit}>Save</button>
                     </form>
                 </div>
             </div>
@@ -145,11 +159,9 @@ const POCustomerDetail = (props) => {
                     <span className='text-base'>Upload</span>
                 </button>
             </div>
-            <Table dataBody={dataUnitPo.map(data => {
-                const { enginenumber, framenumber, unitbrand, type, color, year, amount } = data;
-                return { enginenumber, framenumber, unitbrand, type, color, year, amount: moneyFormat(amount) };
-            })} dataHead={headTable.current} id={null}
-                loading={false} noAction={true} />
+            <Table dataBody={dataUnitPo.map(data => { return { ...data, amount: moneyFormat(data.amount) } })}
+                column={columnTable} id="oid" loading={false} handleActionEdit={handleEditUnit}
+                handleActionDelete={handleDeleteUnit} />
         </>
     )
 }

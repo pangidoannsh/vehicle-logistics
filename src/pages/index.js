@@ -11,9 +11,12 @@ import Manifest from "./application/vehicleLogistics/administration/manifest/Man
 import ManifestCreate from "./application/vehicleLogistics/administration/manifest/ManifestCreate"
 import Bast from "./application/vehicleLogistics/administration/bast/Bast"
 import POCustomer from "./application/vehicleLogistics/dataGeneral/pocustomer/POCustomer"
+import Branch from "./generalData/branch/Branch"
+import Customers from "./generalData/customers/Customers"
+import Contract from "./application/vehicleLogistics/dataGeneral/contract/Contract"
 
 export {
     Dashboard, Armada, Login, FinanceAr, PlanArmada, Common,
     NotFound, Revenue, Manifest, Register, ManifestCreate, Bast,
-    POCustomer,
+    POCustomer, Branch, Customers, Contract
 }

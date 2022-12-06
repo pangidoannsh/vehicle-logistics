@@ -1,8 +1,7 @@
 import { Icon } from '@iconify/react'
 import React, { useState, useMemo } from 'react'
 import SearchTable from '../../../../../components/tables/SearchTable'
-import Table from '../../../../../components/tables/_Table'
-import Main from '../../../../../layouts/Main'
+import Table from '../../../../../components/tables/Table'
 
 const columnTable = [
     { field: 'oid', header: 'BAST Number' },
@@ -18,29 +17,6 @@ const Bast = () => {
     const [loading, setLoading] = useState(true);
     const [dataBody, setDataBody] = useState([]);
     const [dataShow, setDataShow] = useState([]);
-
-
-    const headTable = useMemo(() => [
-        "BAST Number", "BAST Date", "Origin", "Destination", "Manifest Number", "Moda", "Status"
-    ])
-
-    const customSearch = (e) => {
-        setDataShow(
-            dataBody
-                .filter((dataRow) => {
-                    return (
-                        Object.values(dataRow).findIndex((dataCell, index) => {
-                            if (index < 7) return dataCell.toLowerCase().includes(e.target.value.toLowerCase());
-                            else if (index === 7) return dataCell.props.children[1].props.children.toLowerCase().includes(e.target.value.toLowerCase());
-                        }) !== -1
-                    );
-                })
-                .map((filter) => {
-                    return filter;
-                })
-        );
-    };
-
 
     return (
         <>
@@ -64,9 +40,9 @@ const Bast = () => {
                         <span className="text-lg text-dark-green font-medium">BAST</span>
                     </div>
                     {/* Search searchFunct={customSearch} */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} customSearchFunction={customSearch} />
+                    <SearchTable setData={setDataShow} dataBody={dataBody} />
                     {/* Table */}
-                    <Table dataBody={dataShow} dataHead={headTable} id="policenumber" loading={loading} />
+                    <Table dataBody={dataShow} column={columnTable} id="policenumber" loading={loading} />
                 </div>
             </div>
         </>

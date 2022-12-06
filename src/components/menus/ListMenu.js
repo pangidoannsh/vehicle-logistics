@@ -40,8 +40,8 @@ const generalData = [
         "icon": "clarity:organization-solid"
     },
     {
-        "title": "Customer",
-        "path": "/customer",
+        "title": "Customers",
+        "path": "/customers",
         "icon": "fluent:people-team-20-filled"
     }
 ]
@@ -56,8 +56,8 @@ const application = [
                 "icon": "bi:clipboard-data-fill",
                 "sub": [
                     {
-                        "title": "Contact / Price",
-                        "path": "/contact-price"
+                        "title": "Contract",
+                        "path": "/contract"
                     },
                     {
                         "title": "PO Customer",
