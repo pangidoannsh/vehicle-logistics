@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import React, { useState, useMemo } from 'react'
+import { NavLink } from 'react-router-dom'
 import SearchTable from '../../../../../components/tables/SearchTable'
 import Table from '../../../../../components/tables/Table'
 import Main from '../../../../../layouts/Main'
@@ -36,14 +37,14 @@ const Bast = () => {
         <>
             {/* After Header */}
             <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
-                <button
+                <NavLink to="/bast/create"
                     className={`bg-light-green hover:bg-green-700 text-white rounded flex
                                 items-center gap-x-1 py-[2px] px-4 `}
 
                 >
                     <Icon icon="fluent:add-12-filled" className="text-base" />
                     <span className="text-base">Create</span>
-                </button>
+                </NavLink>
             </div>
             {/* Content */}
             <div className="p-4">

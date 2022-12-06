@@ -35,8 +35,8 @@ const generalData = [
         "icon": "fa-solid:truck"
     },
     {
-        "title": "Organization",
-        "path": "/organization",
+        "title": "Branch",
+        "path": "/branch",
         "icon": "clarity:organization-solid"
     },
     {

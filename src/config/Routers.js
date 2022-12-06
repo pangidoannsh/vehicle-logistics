@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Main from '../layouts/Main'
 import {
     Dashboard, Login, Marketing, FinanceAr, PlanArmada, NotFound,
-    Armada, Revenue, Manifest, Cashier, Register, ManifestCreate, Bast
+    Armada, Revenue, Manifest, Cashier, Register, ManifestCreate, Bast , BastCreate, Branch
 } from '../pages'
 
 function Routers() {
@@ -14,12 +14,14 @@ function Routers() {
                 <Route path='/' element={<Main><Dashboard /></Main>} />
                 <Route path='/armada' element={<Main><Armada /></Main>} />
                 <Route path='/marketing' element={<Main><Marketing /></Main>} />
+                <Route path='/branch' element={<Main><Branch /></Main>} />
                 <Route path='/financear' element={<Main><FinanceAr /></Main>} />
                 <Route path='/revenue' element={<Main><Revenue /></Main>} />
                 <Route path='/plan-armada' element={<Main><PlanArmada /></Main>} />
                 <Route path='/manifest' element={<Main><Manifest /></Main>} />
                 <Route path='/manifest/create' element={<Main><ManifestCreate /></Main>} />
                 <Route path='/bast' element={<Main><Bast /></Main>} />
+                <Route path='/bast/create' element={<Main><BastCreate /></Main>} />
                 <Route path='/cashier' element={<Main><Cashier /></Main>} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
