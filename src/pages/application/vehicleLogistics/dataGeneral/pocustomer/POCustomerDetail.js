@@ -1,11 +1,11 @@
 import { Icon } from "@iconify/react";
 import { useState, useRef } from "react";
-import FormInput from "../../../components/inputs/FormInput";
-import Table from "../../../components/tables/Table";
-import { api } from "../../../config";
-import { moneyFormat } from "../../../utils";
+import FormInput from "../../../../../components/inputs/FormInput";
+import Table from "../../../../../components/tables/_Table";
+import { api } from "../../../../../config";
+import { moneyFormat } from "../../../../../utils";
 
-const MarketingDetail = (props) => {
+const POCustomerDetail = (props) => {
     const { dataUnitPo, setDataUnitPo, setSuccessCreate, setFailCreate, setMsgAlert, setLoadingPage } = props
     const [valueEngineNumber, setValueEngineNumber] = useState("");
     const [valueFrameNumber, setValueFrameNumber] = useState("");
@@ -136,7 +136,7 @@ const MarketingDetail = (props) => {
             {/* Title */}
             <div className="flex justify-between px-2 py-4 items-center divider-bottom mb-6">
                 <div className="flex gap-x-2 items-center">
-                    <Icon icon="fa-solid:truck" className={`text-2xl text-gold `} />
+                    <Icon icon="fa6-solid:car-side" className={`text-2xl text-gold `} />
                     <span className='text-lg text-dark-green font-medium'>Data Unit</span>
                 </div>
                 <button className={`bg-[#015796] hover:bg-blue-700 text-white rounded flex
@@ -154,4 +154,4 @@ const MarketingDetail = (props) => {
     )
 }
 
-export default MarketingDetail;
+export default POCustomerDetail;

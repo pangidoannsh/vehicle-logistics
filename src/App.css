@@ -6,6 +6,7 @@
 
 * {
   font-family: 'Poppins', sans-serif;
+
 }
 
 .mid-burger {
@@ -30,6 +31,11 @@
 
 ::-webkit-scrollbar {
   width: 6px;
+}
+
+.content {
+  scrollbar-color: var(--dark-green) #F1F1F1;
+  scrollbar-width: thin;
 }
 
 ::-webkit-scrollbar-track {

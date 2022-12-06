@@ -1,9 +1,10 @@
 import React from 'react';
+import NewTable from '../../../components/tables/Table'
 
 const Common = () => {
     return (
         <div>
-            Common
+            {/* <NewTable /> */}
         </div>
     );
 }

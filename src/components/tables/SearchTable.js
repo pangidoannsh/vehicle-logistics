@@ -11,26 +11,30 @@ import React from "react";
     - dataBody (merupakan sumber data asli yang berasal dari consume API)
 */
 const SearchTable = props => {
-    const { setData, dataBody, customSearchFunction, dataSkipSearch } = props
+    const { setData, dataBody, dataSkipSearch, customDisplay } = props
     /* dataSkipSearch dapat diisi atau tidak, jika diisi maka ketika melakukan searching, data yng index nya sama dengan
         dataSkipSearch, tidak akan menjadi patokan pencarian data
     */
 
     const handleSearch = e => {
-        if (customSearchFunction) {
-            customSearchFunction(e)
-        } else {
-            setData(
-                dataBody.filter(dataRow => {
-                    return Object.values(dataRow).findIndex((dataCell, index) => {
-                        if (index !== dataSkipSearch) {
-                            return dataCell.toString().toLowerCase().includes(e.target.value.toLowerCase())
+        setData(
+            dataBody.filter(dataRow => {
+                return Object.values(dataRow).findIndex((dataCell, index) => {
+                    if (index !== dataSkipSearch) {
+                        if (dataCell === null) {
+                            return false;
                         }
-                    }) !== -1
+                        return dataCell.toString().toLowerCase().includes(e.target.value.toLowerCase())
+                    }
+                }) !== -1
+            }
+            ).map(filter => {
+                if (customDisplay) {
+                    return customDisplay(filter)
                 }
-                ).map(filter => { return filter })
-            )
-        }
+                return filter
+            })
+        )
     }
     return (
         <>

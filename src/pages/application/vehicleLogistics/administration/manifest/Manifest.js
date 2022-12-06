@@ -7,10 +7,17 @@ import Main from "../../../../../layouts/Main";
 import { NavLink } from "react-router-dom";
 import { useMemo } from "react";
 
+const columnTable = [
+    { field: 'oid', header: 'Manifest Number' },
+    { field: 'manifestdate', header: 'Manifest Date' },
+    { field: 'origin', header: 'Origin' },
+    { field: 'destination', header: 'Destination' },
+    { field: 'status', header: 'Status' },
+]
 const Manifest = () => {
     const templateObject = data => {
-        const { manifestno, manifestdate, origin, destination, moda, status } = data;
-        return { manifestno, manifestdate, origin, destination, moda, status };
+        const { oid, manifestdate, origin, destination, status } = data;
+        return { oid, manifestdate, origin, destination, status };
     }
     const [loading, setLoading] = useState(true);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
@@ -25,18 +32,13 @@ const Manifest = () => {
     // untuk membuka dan menutup modal detail
     const [openModalCreate, setOpenModalCreate] = useState(false);
 
-    // data untuk table head
-    const headTable = useMemo(() => [
-        "Manifest Number", "Manifest Date", "Origin", "Destination", "Moda", "Status"
-    ]);
-
     // use effect untuk consume API
     useEffect(() => {
         api.get('/manifest').then(res => {
             setDataBody(res.data)
             setLoading(false)
         }).catch(error => {
-            // console.log(error);
+            console.log(error.response);
             if (error.code === "ERR_NETWORK") {
                 setIsErrorNetwork(true)
             }
@@ -71,7 +73,7 @@ const Manifest = () => {
                     {/* Search */}
                     <SearchTable setData={setDataShow} dataBody={dataBody} />
                     {/* Table */}
-                    <Table dataBody={dataShow} dataHead={headTable} id="manifestid" loading={loading} />
+                    <Table dataBody={dataShow} column={columnTable} id="manifestid" loading={loading} />
                 </div>
             </div>
         </>

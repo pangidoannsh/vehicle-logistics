@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
 import Modal from "../../../../../components/Modal";
 import Select from "../../../../../components/inputs/Select";
-import Table from "../../../../../components/tables/Table";
+import Table from "../../../../../components/tables/_Table";
 import { api } from "../../../../../config";
-import Main from "../../../../../layouts/Main";
 import TableSelect from "../../../../../components/inputs/TableSelect";
 import { fetchOption } from "../../../../../Store";
 import { useRef } from "react";
@@ -74,11 +73,19 @@ const ManifestCreate = () => {
             origin: value.origin,
             destination: value.destination,
             deliverydate: value.deliverydate,
-            driver: value.driver,
-            pocustomer: value.pocustomer,
-            dataunit: idUnitSelected
+            driveroid: value.driver,
+            planoid: value.planarmada,
+            pocustomeroid: value.pocustomer,
+            vehiclepooid: idUnitSelected
         }
-        console.log(dataCreate);
+        // console.log(dataCreate);
+        api.post('/manifest', dataCreate).then(res => {
+            console.log(res);
+            alert("success pak");
+        }).catch(err => {
+            alert("gagal pak");
+            console.log(err.response);
+        })
     }
 
     const handleOpenModalSelectUnit = e => {
@@ -179,9 +186,9 @@ const ManifestCreate = () => {
                     <TableSelect dataBody={unitSelect} handleAdd={handleOpenModalSelectUnit} dataHead={dataHeadUnit.current}
                         dataHide={0} handleDelete={handleDeleteUnit} />
                     <div className="flex justify-end pr-6 mx-auto mt-10">
-                        <button className={`bg-light-green hover:bg-green-700 text-white flex
-                                items-center gap-x-1 py-2 px-8 font-medium rounded`} onClick={handleCreate}>
-                            <span className="text-base">Create</span>
+                        <button className={`bg-light-green hover:bg-green-700 text-white flex active:ring active:ring-green-300
+                               focus:ring focus:ring-green-300 items-center gap-x-1 py-2 px-8 font-medium rounded`} onClick={handleCreate}>
+                            Create
                         </button>
                     </div>
                 </div>

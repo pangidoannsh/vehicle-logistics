@@ -37,9 +37,10 @@ const PlanArmadaCreate = (props) => {
                 }, 3000);
                 fetchPlanArmada()
                 setIsOpen(false)
-                console.log(response);
+                // console.log(response);
             }).catch(error => {
                 setLoadingPage(false);
+                console.log(error.response);
                 // if (error.status !== 422) {
                 //     console.log(error.response);
                 // }
