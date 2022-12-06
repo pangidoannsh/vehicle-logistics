@@ -3,13 +3,30 @@ import { useEffect, useState } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
 import Modal from "../../../../../components/Modal";
 import Select from "../../../../../components/inputs/Select";
-import Table from "../../../../../components/tables/_Table";
+import Table from "../../../../../components/tables/Table";
 import { api } from "../../../../../config";
 import TableSelect from "../../../../../components/inputs/TableSelect";
 import { fetchOption } from "../../../../../Store";
 import { useRef } from "react";
 import { useCallback } from "react";
 
+const columnTableModal = [
+    { field: "enginenumber", header: "Engine Number" },
+    { field: "framenumber", header: "Frame Number" },
+    { field: "type", header: "Type" },
+    { field: "color", header: "Color" },
+    { field: "year", header: "Year" },
+    { field: "amount", header: "Amount" },
+    { field: "action", header: "#" }
+]
+const columnSelectUnit = [
+    { field: "enginenumber", header: "Engine Number" },
+    { field: "framenumber", header: "Frame Number" },
+    { field: "type", header: "Type" },
+    { field: "color", header: "Color" },
+    { field: "year", header: "Year" },
+    { field: "amount", header: "Amount" }
+]
 
 const ManifestCreate = () => {
     // ====================== Template Object ==============================
@@ -33,13 +50,26 @@ const ManifestCreate = () => {
         return { oid, enginenumber, framenumber, type, color, year, amount };
     })
     // ========================== END Template Object =======================
-
+    const templateUnitSelect = useCallback(data => {
+        const action = (
+            <div className="text-center w-6">
+                <button className="px-2 py-1 bg-light-green rounded-sm hover:bg-green-800
+                                 active:bg-green-700 text-white"
+                    onClick={() => handleSelectUnit(data.oid)}>
+                    Select
+                </button>
+            </div>
+        )
+        return { ...data, action };
+    });
     // data unit selected
     const sourceDataUnit = useRef([])
     const [unitSelect, setUnitSelect] = useState([]);
     const idUnitSelected = useRef([]);
 
     // options input
+    const [optionsOrigin, setOptionsOrigin] = useState([]);
+    const [optionsDestination, setOptionsDestination] = useState([]);
     const [optionsPlanArmada, setOptionsPlanArmada] = useState([]);
     const [optionsDataUnit, setOptionsDataUnit] = useState([]);
     const [openModalSelectUnit, setOpenModalSelectUnit] = useState(false);
@@ -63,9 +93,7 @@ const ManifestCreate = () => {
     const setValueDeliveryDate = newValue => setValue({ ...value, deliverydate: newValue });
     // ================== end value input variable declare ====================
 
-    const dataHeadUnit = useRef([
-        "Engine Number", "Frame Number", "Type", "Color", "Year", "Amount", "#"
-    ])
+
     // handle function
     const handleCreate = e => {
         e.preventDefault();
@@ -76,16 +104,16 @@ const ManifestCreate = () => {
             driveroid: value.driver,
             planoid: value.planarmada,
             pocustomeroid: value.pocustomer,
-            vehiclepooid: idUnitSelected
+            vehiclepooid: idUnitSelected.current
         }
-        // console.log(dataCreate);
-        api.post('/manifest', dataCreate).then(res => {
-            console.log(res);
-            alert("success pak");
-        }).catch(err => {
-            alert("gagal pak");
-            console.log(err.response);
-        })
+        console.log(dataCreate);
+        // api.post('/manifest', dataCreate).then(res => {
+        //     console.log(res);
+        //     alert("success pak");
+        // }).catch(err => {
+        //     alert("gagal pak");
+        //     console.log(err.response);
+        // })
     }
 
     const handleOpenModalSelectUnit = e => {
@@ -96,6 +124,7 @@ const ManifestCreate = () => {
     const handlePoCustomerInput = id => {
         if (id !== null) {
             // sourceDataUnit.current = [];
+            idUnitSelected.current = [];
             setUnitSelect([]);
             setOptionsDataUnit([]);
             api.get(`/vehiclepo/${id}`).then(res => {
@@ -139,6 +168,22 @@ const ManifestCreate = () => {
         });
         fetchOption('/driver', setOptionsDriver);
         fetchOption('/pocustomerlist', setOptionsPoCustomer);
+        api.get('/origin').then(res => {
+            setOptionsOrigin(res.data.map(data => {
+                return { key: data.origin, name: data.origin };
+            }))
+        }).catch(error => {
+            console.log(error.response);
+            alert(error);
+        })
+        api.get('/destination').then(res => {
+            setOptionsDestination(res.data.map(data => {
+                return { key: data.destination, name: data.destination };
+            }))
+        }).catch(error => {
+            console.log(error.response);
+            alert(error);
+        })
     }
     // get all data
     useEffect(() => {
@@ -156,8 +201,10 @@ const ManifestCreate = () => {
                     </div>
 
                     <div className="grid grid-cols-3 gap-6 mb-6">
-                        <FormInput label="Origin" tagId="origin" setValue={setValueOrigin} value={value.origin} />
-                        <FormInput label="Destination" tagId="destination" setValue={setValueDestinantion} value={value.destination} />
+                        <Select label="Origin" setValue={setValueOrigin} keyId="key" keyName="name"
+                            options={optionsOrigin} value={value.origin} />
+                        <Select label="Destination" setValue={setValueDestinantion} keyId="key" keyName="name"
+                            options={optionsDestination} value={value.destination} />
                         <FormInput label="Delivery Date" setValue={setValueDeliveryDate} tagId={"deliverydate"} type="date" />
                         <Select label="Driver" setValue={setValueDriver} keyId="oid" keyName="drivername"
                             options={optionsDriver} className="capitalize" />
@@ -183,12 +230,13 @@ const ManifestCreate = () => {
                             <span className='text-lg text-dark-green font-medium'>Data Unit</span>
                         </div>
                     </div>
-                    <TableSelect dataBody={unitSelect} handleAdd={handleOpenModalSelectUnit} dataHead={dataHeadUnit.current}
-                        dataHide={0} handleDelete={handleDeleteUnit} />
+                    <TableSelect dataBody={unitSelect} handleAdd={handleOpenModalSelectUnit}
+                        handleDelete={handleDeleteUnit} column={columnSelectUnit} />
                     <div className="flex justify-end pr-6 mx-auto mt-10">
                         <button className={`bg-light-green hover:bg-green-700 text-white flex active:ring active:ring-green-300
-                               focus:ring focus:ring-green-300 items-center gap-x-1 py-2 px-8 font-medium rounded`} onClick={handleCreate}>
-                            Create
+                               focus:ring focus:ring-green-300 items-center gap-x-1 py-2 px-8 font-medium rounded`}
+                            onClick={handleCreate}>
+                            Save
                         </button>
                     </div>
                 </div>
@@ -197,17 +245,8 @@ const ManifestCreate = () => {
             {/* Modal Sleect Data Unit*/}
             <Modal isOpen={openModalSelectUnit} setIsOpen={setOpenModalSelectUnit} title="Select Data Unit" >
                 <Table dataBody={optionsDataUnit.map(option => {
-                    const action = (
-                        <div className="text-center w-6">
-                            <button className="px-2 py-1 bg-light-green rounded-sm hover:bg-green-800
-                                 active:bg-green-700 text-white"
-                                onClick={() => handleSelectUnit(option.oid)}>
-                                Select
-                            </button>
-                        </div>
-                    )
-                    return { ...option, action };
-                })} noAction={true} dataHead={dataHeadUnit.current} dataHide={0} />
+                    return templateUnitSelect(option);
+                })} column={columnTableModal} />
             </Modal>
         </>
     )

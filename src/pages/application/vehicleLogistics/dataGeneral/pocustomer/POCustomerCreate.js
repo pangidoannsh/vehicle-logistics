@@ -72,7 +72,7 @@ const POCustomerCreate = (props) => {
             <button type="Submit" onClick={handleClickCreate}
                 className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-2 px-4 
                 focus:ring focus:ring-green-200 active:ring active:ring-green-200`}>
-                Create New
+                Save
             </button>
         </div>
     </>
