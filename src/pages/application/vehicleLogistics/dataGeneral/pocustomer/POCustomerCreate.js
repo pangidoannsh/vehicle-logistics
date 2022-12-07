@@ -1,10 +1,13 @@
+import { useContext } from "react";
 import { useState } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
 import Select from "../../../../../components/inputs/Select";
 import { api } from "../../../../../config";
+import { UserContext } from "../../../../../Store";
 
 
 const POCustomerCreate = (props) => {
+    const user = useContext(UserContext);
     const { setIsOpen, setSuccessCreate, setFailCreate, setMsgAlert, fetchPoCustomer, options, setLoadingPage } = props
     const { optionsBranch, setOptionsBranch } = options.branch
     const { optionsContract, setOptionsContract } = options.contract
@@ -23,7 +26,7 @@ const POCustomerCreate = (props) => {
                 branchoid: valueBranch,
                 ponumber: valuePoNumber,
                 contractoid: valueContract,
-                // povalue: valuePoValue
+                user: user.id
             }).then(response => {
                 setLoadingPage(false)
                 if (response.status === 201) {

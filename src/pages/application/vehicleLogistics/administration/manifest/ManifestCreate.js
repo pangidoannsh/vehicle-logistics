@@ -6,9 +6,12 @@ import Select from "../../../../../components/inputs/Select";
 import Table from "../../../../../components/tables/Table";
 import { api } from "../../../../../config";
 import TableSelect from "../../../../../components/inputs/TableSelect";
-import { fetchOption } from "../../../../../Store";
+import { fetchOption, UserContext } from "../../../../../Store";
 import { useRef } from "react";
 import { useCallback } from "react";
+import Alert from "../../../../../components/Alert";
+import Loading from "../../../../../components/Loading";
+import { useContext } from "react";
 
 const columnTableModal = [
     { field: "enginenumber", header: "Engine Number" },
@@ -29,6 +32,7 @@ const columnSelectUnit = [
 ]
 
 const ManifestCreate = () => {
+    const user = useContext(UserContext);
     // ====================== Template Object ==============================
     //  Plan Armada
     const planArmadaObject = useCallback(data => {
@@ -61,6 +65,13 @@ const ManifestCreate = () => {
             </div>
         )
         return { ...data, action };
+    });
+    const [loading, setLoading] = useState(false);
+    const [alert, setAlert] = useState({
+        isActived: false,
+        code: 0,
+        title: "",
+        message: ""
     });
     // data unit selected
     const sourceDataUnit = useRef([])
@@ -98,6 +109,7 @@ const ManifestCreate = () => {
     const handleCreate = e => {
         e.preventDefault();
         const dataCreate = {
+            branch: user.branch,
             origin: value.origin,
             destination: value.destination,
             deliverydate: value.deliverydate,
@@ -106,14 +118,30 @@ const ManifestCreate = () => {
             pocustomeroid: value.pocustomer,
             vehiclepooid: idUnitSelected.current
         }
-        console.log(dataCreate);
-        // api.post('/manifest', dataCreate).then(res => {
-        //     console.log(res);
-        //     alert("success pak");
-        // }).catch(err => {
-        //     alert("gagal pak");
-        //     console.log(err.response);
-        // })
+        // console.log(dataCreate);
+        setLoading(true);
+        api.post('/manifest', dataCreate).then(res => {
+            console.log(res);
+            setLoading(false);
+            setAlert({
+                isActived: true,
+                code: 1,
+                title: "Success",
+                message: "Success Create Manifest"
+            })
+            setTimeout(() => {
+                setAlert({ ...alert, isActived: false })
+            }, 3000);
+        }).catch(err => {
+            setLoading(false);
+            setAlert({
+                isActived: true,
+                code: 0,
+                title: "Error",
+                message: "Failed Create Manifest"
+            })
+            console.log(err.response);
+        })
     }
 
     const handleOpenModalSelectUnit = e => {
@@ -248,6 +276,11 @@ const ManifestCreate = () => {
                     return templateUnitSelect(option);
                 })} column={columnTableModal} />
             </Modal>
+            <Alert isOpen={alert.isActived} setIsOpen={isActived => setAlert({ ...alert, isActived })}
+                title={alert.title} codeAlert={alert.code}>
+                {alert.message}
+            </Alert>
+            <Loading isLoading={loading} />
         </>
     )
 }

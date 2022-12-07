@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import SearchTable from '../../../../../components/tables/SearchTable'
 import Table from '../../../../../components/tables/Table'
 
@@ -36,7 +36,7 @@ const Bast = () => {
                 <div className="card drop-shadow-lg bg-white px-4 pb-4 pt-2">
                     {/* Title */}
                     <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
-                        <Icon icon="fa-solid:truck" className={`text-xl text-gold `} />
+                        <Icon icon="fa-solid:truck-loading" className={`text-xl text-gold `} />
                         <span className="text-lg text-dark-green font-medium">BAST</span>
                     </div>
                     {/* Search searchFunct={customSearch} */}

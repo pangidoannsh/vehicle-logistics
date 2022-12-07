@@ -54,9 +54,9 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                                     {index + 1}
                                 </td>
                                 {column.map(col => (
-                                    <td key={col.field} className="p-4 text-sm text-slate-700
+                                    <td key={col.field} className="p-4 text-sm text-slate-600
                             selection:bg-light-green selection:text-white">
-                                        {col.field === clickField ? (
+                                        {col.field === clickField || col.field === id ? (
                                             <button onClick={() => { handleClickField(dataRow[id]) }}
                                                 className="text-gold hover:underline">
                                                 {dataRow[col.field]}

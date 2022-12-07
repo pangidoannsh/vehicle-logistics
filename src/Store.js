@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { api } from './config'
 
-export const CreateDataContext = React.createContext()
+export const UserContext = React.createContext()
 
 export const fetchOption = (url, setOption) => {
     api.get(url).then(res => {
@@ -15,17 +15,15 @@ export const fetchOption = (url, setOption) => {
 }
 
 const Store = (props) => {
-    const [branch, setBranch] = useState([]);
-    const [contract, setContract] = useState([])
-    const [vehicleType, setVehicleType] = useState([])
+    const user = {
+        id: 1,
+        name: "DEV",
+        branch: "30000",
+    }
     return (
-        <CreateDataContext.Provider value={{
-            branch: [branch, setBranch],
-            contract: [contract, setContract],
-            vehicleType: [vehicleType, setVehicleType]
-        }}>
+        <UserContext.Provider value={user}>
             {props.children}
-        </CreateDataContext.Provider>
+        </UserContext.Provider>
     );
 }
 

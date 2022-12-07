@@ -6,6 +6,7 @@ import { api } from "../../../../../config";
 import Main from "../../../../../layouts/Main";
 import { NavLink } from "react-router-dom";
 import { useMemo } from "react";
+import Modal from "../../../../../components/Modal";
 
 const columnTable = [
     { field: 'oid', header: 'Manifest Number' },
@@ -28,10 +29,12 @@ const Manifest = () => {
     const [dataModal, setDataModal] = useState({});
     const [isErrorNetwork, setIsErrorNetwork] = useState(false);
     // untuk membuka dan menutup modal
-    const [openModal, setOpenModal] = useState(false);
-    // untuk membuka dan menutup modal detail
-    const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [openModalDetail, setOpenModalDetail] = useState(false);
 
+    const handleOpenModalDetail = oid => {
+        setOpenModalDetail(true);
+
+    }
     // use effect untuk consume API
     useEffect(() => {
         api.get('/manifest').then(res => {
@@ -56,7 +59,7 @@ const Manifest = () => {
         <>
             {/* After Header */}
             <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
-                <NavLink to={"/manifest/create"} className={`bg-light-green hover:bg-green-700 text-white rounded flex
+                <NavLink to="/manifest/create" className={`bg-light-green hover:bg-green-700 text-white rounded flex
                                 items-center gap-x-1 py-[2px] px-4 `} >
                     <Icon icon="fluent:add-12-filled" className="text-base" />
                     <span className='text-base'>Create</span>
@@ -73,9 +76,11 @@ const Manifest = () => {
                     {/* Search */}
                     <SearchTable setData={setDataShow} dataBody={dataBody} />
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="manifestid" loading={loading} />
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading}
+                        handleClickField={handleOpenModalDetail} />
                 </div>
             </div>
+            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Manifest Detail" ></Modal>
         </>
     );
 }

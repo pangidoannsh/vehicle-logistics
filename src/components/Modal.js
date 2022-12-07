@@ -1,17 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
-import { Fragment } from 'react'
+import React, { Fragment } from 'react'
 
 const Modal = (props) => {
     // yang wajib dibuatkan props nya isOpen, setIsOpen, ModalContent
-    const { isOpen, setIsOpen, title, iconTitle, size, durationOpen } = props
+    const { isOpen, setIsOpen, title, iconTitle, size } = props
 
     function closeModal() {
         setIsOpen(false)
-    }
-
-    function openModal() {
-        setIsOpen(true)
     }
 
     return (
