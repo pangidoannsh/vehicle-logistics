@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useEffect, useState } from "react";
 import FormInput from "../../../components/inputs/FormInput";
 import Select from "../../../components/inputs/Select";
@@ -5,53 +6,38 @@ import { api } from "../../../config";
 
 const ArmadaCreate = (props) => {
     const { setIsOpen, options, fetchArmada, alert, setAlert, setLoadingPage } = props
-    const [value, setValue] = useState({
-        branch: "",
-        type: "",
-        vehicleModel: "",
-        vehicleBrand: "",
-        vehicleType: "",
-        year: "",
-        status: "",
-        hullNumber: "",
-        policeNumber: "",
-        frameNumber: "",
-        engineNumber: "",
-        color: ""
-    });
-    const setValueBranch = newValue => setValue({ ...value, branch: newValue });
-    const setValueType = newValue => setValue({ ...value, type: newValue });
-    const setValueVehicleModel = newValue => setValue({ ...value, vehicleModel: newValue });
-    const setValueVehicleBrand = newValue => setValue({ ...value, vehicleBrand: newValue });
-    const setValueVehicleType = newValue => setValue({ ...value, vehicleType: newValue });
-    const setValueYear = newValue => setValue({ ...value, year: newValue });
-    const setValueStatus = newValue => setValue({ ...value, status: newValue });
-    const setValueHullNumber = newValue => setValue({ ...value, hullNumber: newValue });
-    const setValuePoliceNumber = newValue => setValue({ ...value, policeNumber: newValue });
-    const setValueFrameNumber = newValue => setValue({ ...value, frameNumber: newValue });
-    const setValueEngineNumber = newValue => setValue({ ...value, engineNumber: newValue });
-    const setValueColor = newValue => setValue({ ...value, color: newValue });
+    const [valueBranch, setValueBranch] = useState("");
+    const [valueType, setValueType] = useState("");
+    const [valueVehicleModel, setValueVehicleModel] = useState("");
+    const [valueVehicleBrand, setValueVehicleBrand] = useState("");
+    const [valueVehicleType, setValueVehicleType] = useState("");
+    const [valueStatus, setValueStatus] = useState("");
+    const refYear = useRef();
+    const refHullnumber = useRef();
+    const refPoliceNumber = useRef();
+    const refFramenumber = useRef();
+    const refEnginenumber = useRef();
+    const refColor = useRef();
 
     const { optionsBranch, optionsType, optionsModel, optionsBrand } = options;
-
 
     // function untuk button create
     const handleClickCreate = e => {
         e.preventDefault()
         setAlert({ ...alert, isActived: false });
         const postValue = {
-            hullnumber: value.hullNumber,
-            enginenumber: value.engineNumber,
-            framenumber: value.frameNumber,
-            policenumber: value.policeNumber,
-            brandoid: value.vehicleBrand,
-            modeloid: value.vehicleModel,
-            unittypeoid: value.vehicleType,
-            status: value.status,
-            type: value.type,
-            branchoid: value.branch,
-            color: value.color,
-            year: value.year
+            hullnumber: refHullnumber.current.value.toUpperCase(),
+            enginenumber: refEnginenumber.current.value.toUpperCase(),
+            framenumber: refFramenumber.current.value.toUpperCase(),
+            policenumber: refPoliceNumber.current.value.toUpperCase(),
+            brandoid: valueVehicleBrand,
+            modeloid: valueVehicleModel,
+            unittypeoid: valueVehicleType,
+            status: valueStatus,
+            type: valueType,
+            branchoid: valueBranch,
+            color: refColor.current.value.toUpperCase(),
+            year: refYear.current.value.toUpperCase()
         }
         if (Object.values(postValue).findIndex(value => (value === "" || value === null)) === -1) {
             setLoadingPage(true);
@@ -98,7 +84,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Car Hull Number */}
             <div className="col-span-1">
-                <FormInput label="Car Hull Number" tagId="hullnumber" value={value.hullNumber} setValue={setValueHullNumber} />
+                <FormInput label="Car Hull Number" tagId="hullnumber" refrence={refHullnumber} />
             </div>
             {/* Type */}
             <div className="col-span-1">
@@ -109,7 +95,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Plat Number */}
             <div className="col-span-1">
-                <FormInput label="Police Number" tagId="policenumber" value={value.policeNumber} setValue={setValuePoliceNumber} />
+                <FormInput label="Police Number" tagId="policenumber" refrence={refPoliceNumber} />
             </div>
             {/* Vehicle Brand */}
             <div className="col-span-1">
@@ -117,7 +103,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Chasis/Frame Number */}
             <div className="col-span-1">
-                <FormInput label="Chasis/Frame Number" tagId="framenumber" value={value.frameNumber} setValue={setValueFrameNumber} />
+                <FormInput label="Chasis/Frame Number" tagId="framenumber" refrence={refFramenumber} />
             </div>
             {/* Vehicle Model */}
             <div className="col-span-1">
@@ -125,7 +111,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Engine Number */}
             <div className="col-span-1">
-                <FormInput label="Engine Number" tagId="enginenumber" value={value.engineNumber} setValue={setValueEngineNumber} />
+                <FormInput label="Engine Number" tagId="enginenumber" refrence={refEnginenumber} />
             </div>
             {/* Vehicle Type */}
             <div className="col-span-1">
@@ -133,11 +119,11 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Color */}
             <div className="col-span-1">
-                <FormInput label="Color" tagId="color" value={value.color} setValue={setValueColor} />
+                <FormInput label="Color" tagId="color" refrence={refColor} />
             </div>
             {/* Realesed Year */}
             <div className="col-span-1">
-                <FormInput label="Released Year" tagId="year" value={value.year} setValue={setValueYear} />
+                <FormInput label="Released Year" tagId="year" refrence={refYear} />
             </div>
             {/* Realesed Year */}
             <div className="col-span-1">

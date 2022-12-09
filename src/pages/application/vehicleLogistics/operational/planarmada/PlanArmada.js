@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Modal from '../../../../../components/Modal';
 import SearchTable from '../../../../../components/tables/SearchTable';
 import Table from '../../../../../components/tables/Table';
 import { api } from '../../../../../config';
 import PlanArmadaCreate from './PlanArmadaCreate';
 import Alert from '../../../../../components/Alert';
-import { fetchOption } from '../../../../../Store';
+import { fetchOption } from '../../../../../utils';
 import { Icon } from '@iconify/react';
 import Loading from '../../../../../components/Loading';
-import { useCallback } from 'react';
 
 const columnTable = [
     { field: "branch", header: "Branch" },
@@ -168,10 +167,6 @@ const PlanArmada = () => {
                     optionsBranch, optionsModa, optionsVehicleArmada
                 }} setAlert={setAlert} setLoadingPage={setLoadingPage} alert={alert} />
             </Modal>
-            {/* Notifikasi Ketika Berhasil Create Data */}
-            {/* <Alert isOpen={isSuccessCreated} setIsOpen={setIsSuccessCreated} codeAlert={1} title="Success">
-                New Data Created
-            </Alert> */}
             {/* Alert */}
             <Alert isOpen={alert.isActived} setIsOpen={setAlertActive} codeAlert={alert.code} title={alert.title}>
                 {alert.message}

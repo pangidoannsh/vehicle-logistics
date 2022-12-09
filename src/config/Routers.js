@@ -4,11 +4,11 @@ import {
     Dashboard, Login, FinanceAr, PlanArmada, NotFound,
     Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract
 } from '../pages'
-import Store from "../Store"
+import User from "./User"
 
 function Routers() {
     return (
-        <Store>
+        <User>
             <Router>
                 <Routes>
                     <Route path='/login' element={<Login />} />
@@ -29,7 +29,7 @@ function Routers() {
                     <Route path='*' element={<NotFound />} />
                 </Routes>
             </Router>
-        </Store>
+        </User>
     )
 }
 

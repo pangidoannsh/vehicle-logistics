@@ -1,9 +1,11 @@
 import { Icon } from "@iconify/react";
-import { useState, useRef } from "react";
+import { useCallback } from "react";
+import { useState, useRef, useContext } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
 import Select from "../../../../../components/inputs/Select";
 import Table from "../../../../../components/tables/Table";
 import { api } from "../../../../../config";
+import { UserContext } from "../../../../../config/User";
 import { moneyFormat } from "../../../../../utils";
 
 const columnTable = [
@@ -17,15 +19,23 @@ const columnTable = [
 ]
 
 const POCustomerDetail = (props) => {
+    const user = useContext(UserContext);
     const { dataUnitPo, setDataUnitPo, setSuccessCreate, setFailCreate, setMsgAlert, setLoadingPage, optionsBrand } = props
-    const [valueEngineNumber, setValueEngineNumber] = useState("");
-    const [valueFrameNumber, setValueFrameNumber] = useState("");
     const [valueBrand, setValueBrand] = useState("");
-    const [valueType, setValueType] = useState("");
-    const [valueColor, setValueColor] = useState("");
-    const [valueYear, setValueYear] = useState("");
-    const [valueAmount, setValueAmount] = useState("");
+    // const [valueEngineNumber, setValueEngineNumber] = useState("");
+    // const [valueFrameNumber, setValueFrameNumber] = useState("");
+    // const [valueType, setValueType] = useState("");
+    // const [valueColor, setValueColor] = useState("");
+    // const [valueYear, setValueYear] = useState("");
+    // const [valueAmount, setValueAmount] = useState("");
     const [totalPrice, setTotalPrice] = useState(props.data.value);
+
+    const refEngineNumber = useRef();
+    const refFrameNumber = useRef();
+    const refType = useRef();
+    const refColor = useRef();
+    const refYear = useRef();
+    const refAmount = useRef();
 
     const {
         oid,
@@ -38,6 +48,15 @@ const POCustomerDetail = (props) => {
         value
     } = props.data
 
+    const resetInput = useCallback(() => {
+        refEngineNumber.current.value = "";
+        refFrameNumber.current.value = "";
+        refType.current.value = "";
+        refColor.current.value = "";
+        refYear.current.value = "";
+        refAmount.current.value = "";
+    }, []);
+
     const handleCreateUnit = e => {
         e.preventDefault()
         // refresh alert dan loading
@@ -46,27 +65,23 @@ const POCustomerDetail = (props) => {
         setSuccessCreate(false);
         // menampung data baru
         const newData = {
+            user: user.id,
             pocustomeroid: oid,
-            enginenumber: valueEngineNumber,
-            framenumber: valueFrameNumber,
+            enginenumber: refEngineNumber.current.value.toUpperCase(),
+            framenumber: refFrameNumber.current.value.toUpperCase(),
             unitbrand: valueBrand,
-            type: valueType,
-            color: valueColor,
-            year: valueYear,
-            amount: valueAmount,
+            type: refType.current.value.toUpperCase(),
+            color: refColor.current.value.toUpperCase(),
+            year: refYear.current.value.toUpperCase(),
+            amount: refAmount.current.value,
         };
         api.post("/vehiclepo", newData).then(response => {
             if (response.status === 201) {
                 console.log(response);
-                setTotalPrice(Number(totalPrice) + Number(valueAmount));
+                setTotalPrice(Number(totalPrice) + Number(refAmount.current.value));
                 setLoadingPage(false)
                 setSuccessCreate(true);
-                setValueEngineNumber("");
-                setValueFrameNumber("");
-                setValueType("");
-                setValueColor("");
-                setValueYear("");
-                setValueAmount("");
+                resetInput();
                 setMsgAlert(["Success", "Data Unit PO Created"]);
                 setDataUnitPo([...dataUnitPo, newData]);
                 setTimeout(() => {
@@ -134,13 +149,13 @@ const POCustomerDetail = (props) => {
                 <div className="col-span-5 col-start-8 pt-4">
                     <form >
                         <div className="flex flex-col gap-y-4">
-                            <FormInput sizeLabel="text-base" label="Engine Number" tagId="enginenumber" setValue={setValueEngineNumber} value={valueEngineNumber} />
-                            <FormInput sizeLabel="text-base" label="Frame Number" tagId="framenumber" setValue={setValueFrameNumber} value={valueFrameNumber} />
+                            <FormInput sizeLabel="text-base" label="Engine Number" tagId="enginenumber" refrence={refEngineNumber} />
+                            <FormInput sizeLabel="text-base" label="Frame Number" tagId="framenumber" refrence={refFrameNumber} />
                             <Select label="Brand" setValue={setValueBrand} keyId="oid" keyName="name" options={optionsBrand} />
-                            <FormInput sizeLabel="text-base" label="Type" tagId="type" setValue={setValueType} value={valueType} />
-                            <FormInput sizeLabel="text-base" label="Color" tagId="color" setValue={setValueColor} value={valueColor} />
-                            <FormInput sizeLabel="text-base" label="Year" tagId="year" setValue={setValueYear} value={valueYear} />
-                            <FormInput sizeLabel="text-base" label="Amount" tagId="amount" setValue={setValueAmount} value={valueAmount} />
+                            <FormInput sizeLabel="text-base" label="Type" tagId="type" refrence={refType} />
+                            <FormInput sizeLabel="text-base" label="Color" tagId="color" refrence={refColor} />
+                            <FormInput sizeLabel="text-base" label="Year" tagId="year" refrence={refYear} />
+                            <FormInput sizeLabel="text-base" label="Amount" tagId="amount" refrence={refAmount} />
                         </div>
                         <button className={`bg-light-green hover:bg-green-700 text-white rounded flex active:ring active:ring-green-200
                         focus:ring focus:ring-green-200 items-center gap-x-1 py-1 px-4 mt-6`} onClick={handleCreateUnit}>Save</button>

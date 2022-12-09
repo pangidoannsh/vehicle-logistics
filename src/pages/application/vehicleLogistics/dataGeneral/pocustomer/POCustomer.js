@@ -6,8 +6,7 @@ import Modal from '../../../../../components/Modal';
 import SearchTable from '../../../../../components/tables/SearchTable';
 import Table from '../../../../../components/tables/Table';
 import { api } from '../../../../../config';
-import { fetchOption } from '../../../../../Store';
-import { moneyFormat } from '../../../../../utils';
+import { moneyFormat, fetchOption } from '../../../../../utils';
 import POCustomerCreate from './POCustomerCreate';
 import POCustomerDetail from './POCustomerDetail';
 

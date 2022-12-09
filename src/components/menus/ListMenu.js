@@ -66,6 +66,20 @@ const application = [
                 ]
             },
             {
+                "title": "Operational",
+                "icon": "ep:operation",
+                "sub": [
+                    {
+                        "title": "Plan Armada",
+                        "path": "/plan-armada"
+                    },
+                    {
+                        "title": "Loading",
+                        "path": "/loading"
+                    }
+                ]
+            },
+            {
                 "title": "Administration",
                 "icon": "dashicons:admin-settings",
                 "sub": [
@@ -88,20 +102,6 @@ const application = [
                     {
                         "title": "Handover",
                         "path": "/handover"
-                    }
-                ]
-            },
-            {
-                "title": "Operational",
-                "icon": "ep:operation",
-                "sub": [
-                    {
-                        "title": "Plan Armada",
-                        "path": "/plan-armada"
-                    },
-                    {
-                        "title": "Loading",
-                        "path": "/loading"
                     }
                 ]
             },

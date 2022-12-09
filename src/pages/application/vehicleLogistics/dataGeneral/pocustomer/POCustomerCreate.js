@@ -1,9 +1,9 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { useState } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
 import Select from "../../../../../components/inputs/Select";
 import { api } from "../../../../../config";
-import { UserContext } from "../../../../../Store";
+import { UserContext } from "../../../../../config/User";
 
 
 const POCustomerCreate = (props) => {
@@ -12,13 +12,14 @@ const POCustomerCreate = (props) => {
     const { optionsBranch, setOptionsBranch } = options.branch
     const { optionsContract, setOptionsContract } = options.contract
     const [valueBranch, setValueBranch] = useState("");
-    const [valuePoNumber, setValuePoNumber] = useState("");
+    const refPoNumber = useRef();
     // const [valuePoValue, setValuePoValue] = useState("");
     const [valueContract, setValueContract] = useState("");
     // function yang akan dijalankan ketika menekan button create
     const handleClickCreate = e => {
         e.preventDefault()
         setFailCreate(false);
+        const valuePoNumber = refPoNumber.current.value.toUpperCase()
         if (valueBranch && valuePoNumber && valueContract) {
             setLoadingPage(true)
             // POST untuk /pocustomer
@@ -52,12 +53,11 @@ const POCustomerCreate = (props) => {
             setFailCreate(true)
             setMsgAlert(["Can't Create", "There is an empty field input"])
         }
-
     }
 
     return <>
         <div className="flex flex-col gap-y-6 pb-2">
-            <FormInput label="PO Number" tagId="ponumber" setValue={setValuePoNumber} value={valuePoNumber} />
+            <FormInput label="PO Number" tagId="ponumber" refrence={refPoNumber} />
             {/* <FormInput label="PO Value" tagId="povalue" setValue={setValuePoValue} /> */}
             <Select label={"Branch"} setValue={setValueBranch} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
             <Select label={"Contract Name"} setValue={setValueContract} keyId={"oid"} keyName={"contractname"}
