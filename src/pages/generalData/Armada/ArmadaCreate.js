@@ -45,7 +45,7 @@ const ArmadaCreate = (props) => {
             api.post('/vehiclearmada', postValue)
                 .then(res => {
                     if (res.status === 201) {
-                        fetchArmada(setLoadingPage);
+                        fetchArmada();
                         setAlert({
                             isActived: true,
                             code: 1,
@@ -59,10 +59,9 @@ const ArmadaCreate = (props) => {
                     }
                 })
                 .catch(error => {
-                    setLoadingPage(false);
                     const message = Object.values(error.response.data)[0][0];
                     setAlert({ isActived: true, code: 0, title: `Error ${error.response.status}`, message });
-                })
+                }).finally(() => setLoadingPage(false))
         } else {
             setAlert({
                 isActived: true,
