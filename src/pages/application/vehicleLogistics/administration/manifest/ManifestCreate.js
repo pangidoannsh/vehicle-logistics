@@ -6,9 +6,14 @@ import Select from "../../../../../components/inputs/Select";
 import Table from "../../../../../components/tables/Table";
 import { api } from "../../../../../config";
 import TableSelect from "../../../../../components/inputs/TableSelect";
-import { fetchOption } from "../../../../../Store";
+import { UserContext } from "../../../../../config/User";
 import { useRef } from "react";
 import { useCallback } from "react";
+import Alert from "../../../../../components/Alert";
+import Loading from "../../../../../components/Loading";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchOption } from "../../../../../utils";
 
 const columnTableModal = [
     { field: "enginenumber", header: "Engine Number" },
@@ -29,12 +34,12 @@ const columnSelectUnit = [
 ]
 
 const ManifestCreate = () => {
+    let navigate = useNavigate();
+    const user = useContext(UserContext);
     // ====================== Template Object ==============================
     //  Plan Armada
     const planArmadaObject = useCallback(data => {
-        // const { oid, branch, destination, plandate, payloadcomposition, policenumber, status } = data;
-        const { oid, branch, destination, plandate, payloadcomposition, policenumber, status } = data;
-        // return { oid, branch, destination, plandate, payloadcomposition, policenumber, status };
+        const { oid, policenumber, status } = data;
         return {
             oid, planarmada: (
                 <div className="flex justify-between pr-4">
@@ -61,6 +66,13 @@ const ManifestCreate = () => {
             </div>
         )
         return { ...data, action };
+    });
+    const [loading, setLoading] = useState(false);
+    const [alert, setAlert] = useState({
+        isActived: false,
+        code: 0,
+        title: "",
+        message: ""
     });
     // data unit selected
     const sourceDataUnit = useRef([])
@@ -98,6 +110,8 @@ const ManifestCreate = () => {
     const handleCreate = e => {
         e.preventDefault();
         const dataCreate = {
+            user: user.id,
+            branch: user.branch,
             origin: value.origin,
             destination: value.destination,
             deliverydate: value.deliverydate,
@@ -106,14 +120,30 @@ const ManifestCreate = () => {
             pocustomeroid: value.pocustomer,
             vehiclepooid: idUnitSelected.current
         }
-        console.log(dataCreate);
-        // api.post('/manifest', dataCreate).then(res => {
-        //     console.log(res);
-        //     alert("success pak");
-        // }).catch(err => {
-        //     alert("gagal pak");
-        //     console.log(err.response);
-        // })
+        // console.log(dataCreate);
+        setLoading(true);
+        api.post('/manifest', dataCreate).then(res => {
+            console.log(res);
+            setLoading(false);
+            setAlert({
+                isActived: true,
+                code: 1,
+                title: "Success",
+                message: "Success Create Manifest"
+            })
+            setTimeout(() => {
+                navigate('/manifest');
+            }, 2000);
+        }).catch(err => {
+            setLoading(false);
+            setAlert({
+                isActived: true,
+                code: 0,
+                title: "Error",
+                message: "Failed Create Manifest"
+            })
+            console.log(err.response);
+        })
     }
 
     const handleOpenModalSelectUnit = e => {
@@ -157,7 +187,7 @@ const ManifestCreate = () => {
     })
 
     const loadData = async () => {
-        await api.get('/planarmada').then(res => {
+        await api.get('/planarmadalist').then(res => {
             // console.log('planarmada');
             setOptionsPlanArmada(res.data.map(data => {
                 return planArmadaObject(data);
@@ -196,7 +226,7 @@ const ManifestCreate = () => {
                 <div className="card drop-shadow-lg bg-white p-6">
                     {/* Title */}
                     <div className="flex px-2 pb-4 gap-x-2 items-center divider-bottom mb-12">
-                        <Icon icon="eos-icons:init-container" className={`text-2xl text-gold `} />
+                        <Icon icon="bi:stack" className={`text-2xl text-gold `} />
                         <span className="text-lg text-dark-green font-medium">Manifest Create</span>
                     </div>
 
@@ -248,6 +278,11 @@ const ManifestCreate = () => {
                     return templateUnitSelect(option);
                 })} column={columnTableModal} />
             </Modal>
+            <Alert isOpen={alert.isActived} setIsOpen={isActived => setAlert({ ...alert, isActived })}
+                title={alert.title} codeAlert={alert.code}>
+                {alert.message}
+            </Alert>
+            <Loading isLoading={loading} />
         </>
     )
 }

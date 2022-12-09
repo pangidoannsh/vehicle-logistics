@@ -1,23 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useContext, useState, useRef } from 'react';
 import FormInput from '../../../../../components/inputs/FormInput';
 import Select from '../../../../../components/inputs/Select';
 import { api } from '../../../../../config';
+import { UserContext } from '../../../../../config/User';
 
 const PlanArmadaCreate = (props) => {
+    const user = useContext(UserContext);
     const { setIsOpen, options, alert, setAlert, setLoadingPage, fetchPlanArmada } = props;
 
+    const refDestination = useRef();
+    const refPlanDate = useRef();
+    const refPayload = useRef();
+
     const [valueBranch, setValueBranch] = useState(null);
-    const [valueDestinantion, setValueDestinantion] = useState("");
-    const [valuePlanDate, setValuePlanDate] = useState("");
-    const [valuePayload, setValuePayload] = useState("");
     const [valueModa, setValueModa] = useState([]);
     const [valueArmada, setValueArmada] = useState([]);
 
     const { optionsBranch, optionsModa, optionsVehicleArmada } = options;
 
     const handleClickCreate = e => {
+
         e.preventDefault()
         setAlert({ ...alert, isActived: false });
+        const valueDestinantion = refDestination.current.value.toUpperCase();
+        const valuePayload = refPayload.current.value.toUpperCase();
+        const valuePlanDate = refPlanDate.current.value.toUpperCase();
+
         if (valueBranch && valueDestinantion && valuePlanDate && valuePayload && valueArmada && valueModa) {
             setLoadingPage(true);
             const postValue = {
@@ -26,7 +34,8 @@ const PlanArmadaCreate = (props) => {
                 hullnumber: valueArmada,
                 destination: valueDestinantion,
                 payloadcomposition: valuePayload,
-                plandate: valuePlanDate
+                plandate: valuePlanDate,
+                user: user.id
             };
 
             api.post('/planarmada', postValue).then(response => {
@@ -57,15 +66,15 @@ const PlanArmadaCreate = (props) => {
             <Select label={"Branch"} setValue={setValueBranch} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
             <Select label={"Moda"} setValue={setValueModa} keyId={"id"} keyName={"name"} options={optionsModa} />
             <Select label={"Vihcle Armada"} setValue={setValueArmada} keyId={"hullnumber"} keyName={"armadaname"} options={optionsVehicleArmada} />
-            <FormInput label="Destination" tagId="destinantion" setValue={setValueDestinantion} value={valueDestinantion} />
-            <FormInput label="Plan Date" tagId="plandate" setValue={setValuePlanDate} type="date" />
-            <FormInput label="Payload Composition" tagId="payload" setValue={setValuePayload} value={valuePayload} />
+            <FormInput label="Destination" tagId="destinantion" refrence={refDestination} />
+            <FormInput label="Plan Date" tagId="plandate" refrence={refPlanDate} type="date" />
+            <FormInput label="Payload Composition" tagId="payload" refrence={refPayload} />
         </div>
         <div className="flex justify-end gap-4 px-4 pt-6">
             <button className="text-green-600 py-2 px-4" onClick={() => props.setIsOpen(false)}>Close</button>
             <button type="Submit" onClick={handleClickCreate}
                 className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-2 px-4 `}>
-                Create New
+                Save
             </button>
         </div>
     </>

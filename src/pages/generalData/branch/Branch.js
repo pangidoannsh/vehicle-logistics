@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
+import Modal from '../../../components/Modal';
 import SearchTable from '../../../components/tables/SearchTable';
 import Table from '../../../components/tables/Table';
 import { api } from '../../../config';
@@ -14,7 +15,6 @@ const columnTable = [
     { field: "email", header: "Email" },
 ];
 
-
 const Branch = () => {
     const templateObject = data => {
         const { oid, branchname, branchaddress, phoneno, email } = data;
@@ -25,8 +25,11 @@ const Branch = () => {
     const [dataShow, setDataShow] = useState([]);
     const [dataBody, setDataBody] = useState([]);
     const [isErrorNetwork, setIsErrorNetwork] = useState(false);
+    const [openModalDetail, setOpenModalDetail] = useState(false);
 
-
+    const handleOpenModalDetail = oid => {
+        setOpenModalDetail(true);
+    }
     // use effect untuk consume API
     useEffect(() => {
         api.get('/branch').then(res => {
@@ -61,12 +64,13 @@ const Branch = () => {
                     {/* Search searchFunct={customSearch} */}
                     <SearchTable setData={setDataShow} dataBody={dataBody} />
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} />
-
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable}
+                        handleClickField={handleOpenModalDetail} />
                 </div>
             </div>
-
-
+            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Detail Branch" size={700}>
+                Testing
+            </Modal>
         </>
     )
 }

@@ -6,11 +6,10 @@ import SearchTable from '../../../components/tables/SearchTable';
 import Table from '../../../components/tables/Table';
 import { api } from '../../../config';
 import ArmadaCreate from './ArmadaCreate';
-import { useRef } from 'react';
 import { useCallback } from 'react';
 import Alert from '../../../components/Alert';
 import Loading from '../../../components/Loading';
-
+import { useFetch } from '../../../hooks';
 const columnTable = [
     { field: "branch", header: "Branch" },
     { field: "hullnumber", header: "Hull Number" },
@@ -20,12 +19,12 @@ const columnTable = [
     { field: "unittype", header: "Unit Type" },
     { field: "status", header: "Status" },
 ]
+const howDataGet = data => {
+    const { branch, modelname, unittype, hullnumber, framenumber, policenumber, status } = data;
+    return { branch, modelname, unittype, hullnumber, framenumber, policenumber, status };
+}
 export default function Armada() {
 
-    const howDataGet = useCallback(data => {
-        const { branch, modelname, unittype, hullnumber, framenumber, policenumber, status } = data;
-        return { branch, modelname, unittype, hullnumber, framenumber, policenumber, status };
-    })
 
     const displayData = useCallback(data => {
         const { branch, modelname, unittype, hullnumber, framenumber, policenumber, status } = data;
@@ -49,9 +48,10 @@ export default function Armada() {
             ) : status
         };
     })
+
     const [loadingPage, setLoadingPage] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [dataBody, setDataBody] = useState([]);
+    const [dataBody, setDataBody] = useFetch("vehiclearmada", howDataGet, setLoading);
     const [dataShow, setDataShow] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [isErrorNetwork, setIsErrorNetwork] = useState(false);
@@ -66,15 +66,6 @@ export default function Armada() {
         message: "message"
     })
     const setAlertActive = active => setAlert({ ...alert, isActived: active });
-
-    // const customSearch = useCallback((e) => {
-    //     setDataShow(dataBody.filter(dataRow => {
-    //         return Object.values(dataRow).findIndex(dataCell => {
-    //             return dataCell.toString().toLowerCase().includes(e.target.value.toLowerCase())
-    //         }) !== -1
-    //     }
-    //     ).map(filter => { return displayData(filter) }));
-    // }, [dataBody]);
 
     const handleOpenModalCreate = e => {
         e.preventDefault();
@@ -127,9 +118,9 @@ export default function Armada() {
             })
     }
     // use effect untuk consume API
-    useEffect(() => {
-        fetchArmada();
-    }, []);
+    // useEffect(() => {
+    //     fetchArmada();
+    // }, []);
 
     // pemberian isi dari data show
     useEffect(() => {
@@ -150,29 +141,29 @@ export default function Armada() {
     }, [openModalCreate]);
     return (
         <>
-            {/* After Header */}
-            <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
-                <button
-                    className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `}
-                    onClick={handleOpenModalCreate}>
-                    <Icon icon="fluent:add-12-filled" className="text-base" />
-                    <span className="text-base">Create</span>
-                </button>
-            </div>
-
             {/* Content */}
             <div className="p-4">
                 <div className="card drop-shadow-lg bg-white px-4 pb-4 pt-2">
                     {/* Title */}
-                    <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
-                        <Icon icon="fa-solid:truck" className={`text-xl text-gold `} />
-                        <span className="text-lg text-dark-green font-medium">Armada</span>
+                    <div className="flex justify-between  divider-bottom">
+                        <div className="flex px-2 py-4 gap-x-2 items-center">
+                            <Icon icon="fa-solid:truck" className={`text-xl text-gold `} />
+                            <span className="text-lg text-dark-green font-medium">Armada</span>
+                        </div>
+                        <div className="flex items-center">
+                            <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
+                                items-center gap-x-1 py-1 px-4 `}
+                                onClick={handleOpenModalCreate}>
+                                <Icon icon="fluent:add-12-filled" className="text-base" />
+                                <span className="text-base">Create</span>
+                            </button>
+                        </div>
                     </div>
                     {/* Search */}
                     <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="hullnumber" loading={loading} />
+                    <Table dataBody={dataShow} column={columnTable} id="hullnumber" loading={loading} pagination />
+
                 </div>
             </div>
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={"New Vehicle Unit"} size={1000}>
