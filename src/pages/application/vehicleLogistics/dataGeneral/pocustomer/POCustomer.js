@@ -20,14 +20,14 @@ const columnTable = [
 ];
 const clickFieldTable = "ponumber";
 
+const dataDisplay = data => {
+    const { oid, branch, ponumber, customer, contractno, quantity, value } = data;
+    return {
+        oid, branch, ponumber, customer, contractno, quantity, value: moneyFormat(value)
+    }
+}
 const POCustomer = () => {
 
-    const dataDisplay = useCallback(data => {
-        const { oid, branch, ponumber, customer, contractno, quantity, value } = data;
-        return {
-            oid, branch, ponumber, customer, contractno, quantity, value: moneyFormat(value)
-        }
-    }, []);
     const [loadingPage, setLoadingPage] = useState(false)
     const [loadingTable, setLoadingTable] = useState(true);
     // dataBody merupakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
@@ -201,7 +201,7 @@ const POCustomer = () => {
                         <span className='text-lg text-dark-green font-medium'>PO Customer</span>
                     </div>
                     {/* Search */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} dataSkipSearch={0} />
+                    <SearchTable setData={setDataShow} dataBody={dataBody} dataSkipSearch={0} customDisplay={dataDisplay} />
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable}
                         handleActionDelete={handleOpenModalDelete} handleActionEdit={handleOpenModalEdit}

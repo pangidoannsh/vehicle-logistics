@@ -39,13 +39,13 @@ const ArmadaCreate = (props) => {
             color: refColor.current.value.toUpperCase(),
             year: refYear.current.value.toUpperCase()
         }
+        console.log(postValue);
         if (Object.values(postValue).findIndex(value => (value === "" || value === null)) === -1) {
             setLoadingPage(true);
             api.post('/vehiclearmada', postValue)
                 .then(res => {
                     if (res.status === 201) {
-                        fetchArmada();
-                        setLoadingPage(false);
+                        fetchArmada(setLoadingPage);
                         setAlert({
                             isActived: true,
                             code: 1,
@@ -138,7 +138,7 @@ const ArmadaCreate = (props) => {
             <button className="text-green-600 py-2 px-4" onClick={() => closeModal()}>Close</button>
             <button type="Submit" onClick={handleClickCreate}
                 className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-2 px-4 `}>
-                Create New
+                Save
             </button>
         </div>
     </>

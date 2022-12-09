@@ -9,7 +9,6 @@ import ArmadaCreate from './ArmadaCreate';
 import { useCallback } from 'react';
 import Alert from '../../../components/Alert';
 import Loading from '../../../components/Loading';
-import { useFetch } from '../../../hooks';
 const columnTable = [
     { field: "branch", header: "Branch" },
     { field: "hullnumber", header: "Hull Number" },
@@ -51,7 +50,7 @@ export default function Armada() {
 
     const [loadingPage, setLoadingPage] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [dataBody, setDataBody] = useFetch("vehiclearmada", howDataGet, setLoading);
+    const [dataBody, setDataBody] = useState([]);
     const [dataShow, setDataShow] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [isErrorNetwork, setIsErrorNetwork] = useState(false);
@@ -118,9 +117,9 @@ export default function Armada() {
             })
     }
     // use effect untuk consume API
-    // useEffect(() => {
-    //     fetchArmada();
-    // }, []);
+    useEffect(() => {
+        fetchArmada();
+    }, []);
 
     // pemberian isi dari data show
     useEffect(() => {
