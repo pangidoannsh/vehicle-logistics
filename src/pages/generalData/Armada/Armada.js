@@ -104,7 +104,7 @@ export default function Armada() {
         setOpenModalCreate(true)
     }
     const fetchArmada = () => {
-        api.get('/vehiclearmada?').then(res => {
+        api.get('/vehiclearmada').then(res => {
             setDataBody(res.data.map(data => {
                 return howDataGet(data);
             }));

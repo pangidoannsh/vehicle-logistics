@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const PaginationTable = ({ lengthData, limit, setLimit, page, setPage }) => {
     return (

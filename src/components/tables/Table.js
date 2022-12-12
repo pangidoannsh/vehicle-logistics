@@ -17,7 +17,7 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                             text-sm text-center border border-l-[1px] border-white w-16`}>#</th> : ''
                             }
                             <th className={`p-4 bg-dark-green text-white font-semibold 
-                    text-sm text-center border border-l-[1px] border-white w-14`}>No</th>
+                            text-sm text-center border border-l-[1px] border-white w-14`}>No</th>
                             {column.map(col => (
                                 <th key={col.field} className={`p-4 bg-dark-green text-white font-semibold text-sm text-center
                                 border border-l-[1px] border-white`}>
@@ -29,6 +29,7 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                     <tbody>
                         {!loading ?
                             dataBody.length !== 0 ?
+                                // slice(0,)
                                 dataBody.slice(page === 1 ? 0 : limit, limit * page).map((dataRow, index) => (
                                     <tr key={index} className=" even:bg-dark-green even:bg-opacity-10">
                                         {(handleActionDelete || handleActionEdit) ?
