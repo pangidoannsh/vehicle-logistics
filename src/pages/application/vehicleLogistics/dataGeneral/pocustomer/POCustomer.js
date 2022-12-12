@@ -183,22 +183,24 @@ const POCustomer = () => {
     }, [openModalCreate]);
     return (
         <>
-            {/* After Header */}
-            <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
-                <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `} onClick={handleOpenModalCreate}>
-                    <Icon icon="fluent:add-12-filled" className="text-base" />
-                    <span className='text-base'>Create</span>
-                </button>
-            </div>
 
             {/* Content */}
             <div className="p-4">
-                <div className="card bg-white p-6">
+                <div className="card drop-shadow-lg bg-white px-4 pb-4 pt-2">
                     {/* Title */}
-                    <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
-                        <Icon icon="bxs:purchase-tag" className={`text-2xl text-gold `} />
-                        <span className='text-lg text-dark-green font-medium'>PO Customer</span>
+                    <div className="flex justify-between  divider-bottom">
+                        <div className="flex px-2 py-4 gap-x-2 items-center">
+                            <Icon icon="fa-solid:truck" className={`text-xl text-gold `} />
+                            <span className="text-lg text-dark-green font-medium">PO Customers</span>
+                        </div>
+                        <div className="flex items-center">
+                            <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
+                                items-center gap-x-1 py-1 px-4 `}
+                                onClick={handleOpenModalCreate}>
+                                <Icon icon="fluent:add-12-filled" className="text-base" />
+                                <span className="text-base">Create</span>
+                            </button>
+                        </div>
                     </div>
                     {/* Search */}
                     <SearchTable setData={setDataShow} dataBody={dataBody} dataSkipSearch={0} />

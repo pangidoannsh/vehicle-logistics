@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import React, { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import SearchTable from '../../../../../components/tables/SearchTable'
 import Table from '../../../../../components/tables/Table'
 
@@ -20,24 +21,24 @@ const Bast = () => {
 
     return (
         <>
-            {/* After Header */}
-            <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
-                <NavLink to="/bast/create"
-                    className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `}
-
-                >
-                    <Icon icon="fluent:add-12-filled" className="text-base" />
-                    <span className="text-base">Create</span>
-                </NavLink>
-            </div>
+            
             {/* Content */}
             <div className="p-4">
                 <div className="card drop-shadow-lg bg-white px-4 pb-4 pt-2">
                     {/* Title */}
-                    <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
-                        <Icon icon="fa-solid:truck-loading" className={`text-xl text-gold `} />
-                        <span className="text-lg text-dark-green font-medium">BAST</span>
+                    
+                    <div className="flex justify-between  divider-bottom">
+                        <div className="flex px-2 py-4 gap-x-2 items-center">
+                            <Icon icon="fa-solid:truck-loading" className={`text-xl text-gold `} />
+                            <span className="text-lg text-dark-green font-medium">Bast</span>
+                        </div>
+                        <div className="flex items-center">
+                            <NavLink to="/bast/create" className={`bg-light-green hover:bg-green-700 text-white rounded flex
+                                items-center gap-x-1 py-1 px-4 `}>
+                                <Icon icon="fluent:add-12-filled" className="text-base" />
+                                <span className="text-base">Create</span>
+                            </NavLink>
+                        </div>
                     </div>
                     {/* Search searchFunct={customSearch} */}
                     <SearchTable setData={setDataShow} dataBody={dataBody} />
