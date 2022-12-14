@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
 import PasswordInput from '../components/inputs/PasswordInput';
 import Sign from '../layouts/Sign';
+import Loading from "../components/Loading";
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    let navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const handleSubmit = e => {
         e.preventDefault()
+        // setLoading(true);
+        // setTimeout(() => {
+        //     setLoading(false);
+        //     localStorage.setItem("access-token", "x123");
+        //     window.location.reload();
+        // }, 2000);
+
     }
     return (
         <Sign>
@@ -28,6 +39,7 @@ const Login = () => {
                     LOGIN
                 </button>
             </form>
+            <Loading isLoading={loading} />
         </Sign>
     )
 }

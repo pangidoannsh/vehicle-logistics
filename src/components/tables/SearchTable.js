@@ -10,8 +10,7 @@ import React from "react";
     - setData (useState set dari data yg akan dicari, pada kasus table ini seperti datashow) 
     - dataBody (merupakan sumber data asli yang berasal dari consume API)
 */
-const SearchTable = props => {
-    const { setData, dataBody, dataSkipSearch, customDisplay } = props
+const SearchTable = ({ setData, dataBody, dataSkipSearch, customDisplay }) => {
     /* dataSkipSearch dapat diisi atau tidak, jika diisi maka ketika melakukan searching, data yng index nya sama dengan
         dataSkipSearch, tidak akan menjadi patokan pencarian data
     */
@@ -53,4 +52,4 @@ const SearchTable = props => {
     )
 }
 
-export default React.memo(SearchTable);
+export default SearchTable;

@@ -4,12 +4,17 @@ import Action from './Action';
 import LoadingTable from './LoadingTable';
 import PaginationTable from './PaginationTable';
 
-const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleClickField, id, clickField, loading, pagination }) => {
+const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleClickField, id, clickField, loading, pagination, children }) => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     if (pagination) {
         return (
             <>
+                <div className={`flex items-center ${children ? 'justify-between' : 'justify-end'}`}>
+                    {children}
+                    <PaginationTable lengthData={dataBody.length} limit={limit} setLimit={setLimit} page={page} setPage={setPage} />
+                </div>
+                {/* <PaginationTable lengthData={dataBody.length} limit={limit} setLimit={setLimit} page={page} setPage={setPage} noShowing /> */}
                 <table className='table-auto w-full'>
                     <thead>
                         <tr>
@@ -30,7 +35,7 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                         {!loading ?
                             dataBody.length !== 0 ?
                                 // slice(0,)
-                                dataBody.slice(page === 1 ? 0 : limit, limit * page).map((dataRow, index) => (
+                                dataBody.slice((limit * (page - 1)), limit * page).map((dataRow, index) => (
                                     <tr key={index} className=" even:bg-dark-green even:bg-opacity-10">
                                         {(handleActionDelete || handleActionEdit) ?
                                             <td>
@@ -57,7 +62,7 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                                             </td> : ''
                                         }
                                         <td className="p-4 text-sm text-slate-700 text-center w-14  selection:bg-light-green selection:text-white">
-                                            {index + 1}
+                                            {index + 1 + (limit * (page - 1))}
                                         </td>
                                         {column.map(col => (
                                             <td key={col.field} className="p-4 text-sm text-slate-600
@@ -80,7 +85,9 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                             : <LoadingTable />}
                     </tbody>
                 </table>
-                <PaginationTable lengthData={dataBody.length} limit={limit} setLimit={setLimit} page={page} setPage={setPage} />
+                <div className="flex justify-end text-slate-400 mt-6">showing
+                    {dataBody.length > 0 ? ` 1 to ${limit < dataBody.length ? limit : dataBody.length} of ` : ''} {dataBody.length} data
+                </div>
             </>
         )
     }

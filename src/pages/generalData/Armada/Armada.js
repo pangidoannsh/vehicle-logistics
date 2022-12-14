@@ -158,11 +158,11 @@ export default function Armada() {
                             </button>
                         </div>
                     </div>
-                    {/* Search */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="hullnumber" loading={loading} pagination />
-
+                    <Table dataBody={dataShow} column={columnTable} id="hullnumber" loading={loading} pagination >
+                        {/* Search */}
+                        <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
+                    </Table>
                 </div>
             </div>
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={"New Vehicle Unit"} size={1000}>

@@ -1,17 +1,17 @@
 import { useRef } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FormInput from "../../../components/inputs/FormInput";
 import Select from "../../../components/inputs/Select";
 import { api } from "../../../config";
 
 const ArmadaCreate = (props) => {
     const { setIsOpen, options, fetchArmada, alert, setAlert, setLoadingPage } = props
-    const [valueBranch, setValueBranch] = useState("");
-    const [valueType, setValueType] = useState("");
-    const [valueVehicleModel, setValueVehicleModel] = useState("");
-    const [valueVehicleBrand, setValueVehicleBrand] = useState("");
-    const [valueVehicleType, setValueVehicleType] = useState("");
-    const [valueStatus, setValueStatus] = useState("");
+    const [valueBranch, setValueBranch] = useState({ oid: null, branchname: "nothing selected" });
+    const [valueType, setValueType] = useState({ id: null, name: "nothing selected" });
+    const [valueVehicleModel, setValueVehicleModel] = useState({ oid: null, model: "nothing selected" });
+    const [valueVehicleBrand, setValueVehicleBrand] = useState({ oid: null, brand: "nothing selected" });
+    const [valueVehicleType, setValueVehicleType] = useState({ oid: null, unittype: "nothing selected" });
+    const [valueStatus, setValueStatus] = useState({ id: null, name: "nothing selected" });
     const refYear = useRef();
     const refHullnumber = useRef();
     const refPoliceNumber = useRef();
@@ -30,16 +30,16 @@ const ArmadaCreate = (props) => {
             enginenumber: refEnginenumber.current.value.toUpperCase(),
             framenumber: refFramenumber.current.value.toUpperCase(),
             policenumber: refPoliceNumber.current.value.toUpperCase(),
-            brandoid: valueVehicleBrand,
-            modeloid: valueVehicleModel,
-            unittypeoid: valueVehicleType,
-            status: valueStatus,
-            type: valueType,
-            branchoid: valueBranch,
+            brandoid: valueVehicleBrand.oid,
+            modeloid: valueVehicleModel.oid,
+            unittypeoid: valueVehicleType.oid,
+            status: valueStatus.id,
+            type: valueType.id,
+            branchoid: valueBranch.oid,
             color: refColor.current.value.toUpperCase(),
             year: refYear.current.value.toUpperCase()
         }
-        console.log(postValue);
+        // console.log(postValue);
         if (Object.values(postValue).findIndex(value => (value === "" || value === null)) === -1) {
             setLoadingPage(true);
             api.post('/vehiclearmada', postValue)
@@ -79,7 +79,7 @@ const ArmadaCreate = (props) => {
         <div className='grid grid-cols-2 gap-6 text-slate-700'>
             {/* Branch*/}
             <div className="col-span-1">
-                <Select label="Branch" setValue={setValueBranch} keyId="oid" keyName="branchname" options={optionsBranch} />
+                <Select label="Branch" useSelect={[valueBranch, setValueBranch]} keyId="oid" keyName="branchname" options={optionsBranch} />
             </div>
             {/* Car Hull Number */}
             <div className="col-span-1">
@@ -87,7 +87,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Type */}
             <div className="col-span-1">
-                <Select label="Type" setValue={setValueType} keyId="id" keyName="name" options={[
+                <Select label="Type" useSelect={[valueType, setValueType]} keyId="id" keyName="name" options={[
                     { id: 1, name: "asset" },
                     { id: 2, name: "vendor" }
                 ]} />
@@ -98,7 +98,8 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Vehicle Brand */}
             <div className="col-span-1">
-                <Select label="Vehicle Brand" setValue={setValueVehicleBrand} keyId="oid" keyName="brand" options={optionsBrand} />
+                <Select label="Vehicle Brand" useSelect={[valueVehicleBrand, setValueVehicleBrand]}
+                    keyId="oid" keyName="brand" options={optionsBrand} />
             </div>
             {/* Chasis/Frame Number */}
             <div className="col-span-1">
@@ -106,7 +107,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Vehicle Model */}
             <div className="col-span-1">
-                <Select label="Vehicle Model" setValue={setValueVehicleModel} keyId="oid" keyName="model" options={optionsModel} />
+                <Select label="Vehicle Model" useSelect={[valueVehicleModel, setValueVehicleModel]} keyId="oid" keyName="model" options={optionsModel} />
             </div>
             {/* Engine Number */}
             <div className="col-span-1">
@@ -114,7 +115,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Vehicle Type */}
             <div className="col-span-1">
-                <Select label="Vehicle Type" setValue={setValueVehicleType} keyId="oid" keyName="unittype" options={optionsType} />
+                <Select label="Vehicle Type" useSelect={[valueVehicleType, setValueVehicleType]} keyId="oid" keyName="unittype" options={optionsType} />
             </div>
             {/* Color */}
             <div className="col-span-1">
@@ -126,7 +127,7 @@ const ArmadaCreate = (props) => {
             </div>
             {/* Realesed Year */}
             <div className="col-span-1">
-                <Select label="Status" setValue={setValueStatus} keyId="id" keyName="name" options={[
+                <Select label="Status" useSelect={[valueStatus, setValueStatus]} keyId="id" keyName="name" options={[
                     { id: "ready", name: "Ready" },
                     { id: "repair", name: "Repair" },
                     { id: "used", name: "Used" }

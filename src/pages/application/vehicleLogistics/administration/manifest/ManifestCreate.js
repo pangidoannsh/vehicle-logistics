@@ -90,12 +90,12 @@ const ManifestCreate = () => {
 
     // =================== value input variables ========================
     const [value, setValue] = useState({
-        driver: "",
-        pocustomer: "",
-        origin: "",
-        destination: "",
+        driver: { oid: null, drivername: "nothing selected" },
+        pocustomer: { oid: null, ponumber: "nothing selected" },
+        origin: { key: null, name: "nothing selected" },
+        destination: { key: null, name: "nothing selected" },
         deliverydate: "",
-        planarmada: ""
+        planarmada: { oid: null, planarmada: "nothing selected" }
     })
     const setValuePlanArmada = newValue => setValue({ ...value, planarmada: newValue });
     const setValueDriver = newValue => setValue({ ...value, driver: newValue });
@@ -112,13 +112,23 @@ const ManifestCreate = () => {
         const dataCreate = {
             user: user.id,
             branch: user.branch,
-            origin: value.origin,
-            destination: value.destination,
+            origin: value.origin.key,
+            destination: value.destination.key,
             deliverydate: value.deliverydate,
-            driveroid: value.driver,
-            planoid: value.planarmada,
-            pocustomeroid: value.pocustomer,
+            driveroid: value.driver.oid,
+            planoid: value.planarmada.oid,
+            pocustomeroid: value.pocustomer.oid,
             vehiclepooid: idUnitSelected.current
+        }
+        // console.log(dataCreate);
+        if (Object.values(dataCreate).findIndex(data => (data === "" || data === null)) !== -1) {
+            setAlert({
+                isActived: true,
+                code: 0,
+                title: "Can't Create",
+                message: "There is an empty field input"
+            })
+            return;
         }
         // console.log(dataCreate);
         setLoading(true);
@@ -188,7 +198,6 @@ const ManifestCreate = () => {
 
     const loadData = async () => {
         await api.get('/planarmadalist').then(res => {
-            // console.log('planarmada');
             setOptionsPlanArmada(res.data.map(data => {
                 return planArmadaObject(data);
             }))
@@ -231,21 +240,21 @@ const ManifestCreate = () => {
                     </div>
 
                     <div className="grid grid-cols-3 gap-6 mb-6">
-                        <Select label="Origin" setValue={setValueOrigin} keyId="key" keyName="name"
-                            options={optionsOrigin} value={value.origin} />
-                        <Select label="Destination" setValue={setValueDestinantion} keyId="key" keyName="name"
-                            options={optionsDestination} value={value.destination} />
+                        <Select label="Origin" useSelect={[value.origin, setValueOrigin]} keyId="key" keyName="name"
+                            options={optionsOrigin} />
+                        <Select label="Destination" useSelect={[value.destination, setValueDestinantion]} keyId="key" keyName="name"
+                            options={optionsDestination} />
                         <FormInput label="Delivery Date" setValue={setValueDeliveryDate} tagId={"deliverydate"} type="date" />
-                        <Select label="Driver" setValue={setValueDriver} keyId="oid" keyName="drivername"
+                        <Select label="Driver" useSelect={[value.driver, setValueDriver]} keyId="oid" keyName="drivername"
                             options={optionsDriver} className="capitalize" />
-                        <Select label="Plan Armada" setValue={setValuePlanArmada} keyId="oid" keyName="planarmada"
+                        <Select label="Plan Armada" useSelect={[value.planarmada, setValuePlanArmada]} keyId="oid" keyName="planarmada"
                             options={optionsPlanArmada} className="capitalize" />
-                        <Select label="PO Customer" setValue={setValuePoCustomer} keyId="oid" keyName="ponumber"
+                        <Select label="PO Customer" useSelect={[value.pocustomer, setValuePoCustomer]} keyId="oid" keyName="ponumber"
                             options={optionsPoCustomer.map(option => {
                                 return {
                                     oid: option.oid, ponumber: (
-                                        <div className="flex justify-between w-[60%] text-start">
-                                            <span>{option.oid}</span> |
+                                        <div className="grid grid-cols-2 text-start">
+                                            <span>{option.oid}</span>
                                             <span>{option.ponumber}</span>
                                         </div>
                                     )

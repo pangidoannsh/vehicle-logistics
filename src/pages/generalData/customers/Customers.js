@@ -1,8 +1,11 @@
 import { Icon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
+import Alert from '../../../components/Alert';
+import ErrorNetwork from '../../../components/ErrorNetwork';
 import SearchTable from '../../../components/tables/SearchTable';
 import Table from '../../../components/tables/Table';
 import { api } from '../../../config';
+import { useFetch } from '../../../hooks';
 
 
 
@@ -24,22 +27,9 @@ const Customers = () => {
     // const [loading, setLoading] = useState(true);
     const [loadingTable, setLoadingTable] = useState(true);
     const [dataShow, setDataShow] = useState([]);
-    const [dataBody, setDataBody] = useState([]);
-    const [isErrorNetwork, setIsErrorNetwork] = useState(false);
-
-
-    // use effect untuk consume API
-    useEffect(() => {
-        api.get('/customers').then(res => {
-            setDataBody(res.data)
-            setLoadingTable(false)
-        }).catch(error => {
-            console.log(error.response);
-            if (error.code === "ERR_NETWORK") {
-                setIsErrorNetwork(true)
-            }
-        })
-    }, []);
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
+        url: '/customers', setLoading: setLoadingTable
+    })
 
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
@@ -59,15 +49,15 @@ const Customers = () => {
                         <span className="text-lg text-dark-green font-medium">Customers</span>
                     </div>
 
-                    {/* Search searchFunct={customSearch} */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} />
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="branch" loading={loadingTable} />
-
+                    <Table dataBody={dataShow} column={columnTable} id="branch" loading={loadingTable} pagination>
+                        {/* Search searchFunct={customSearch} */}
+                        <SearchTable setData={setDataShow} dataBody={dataBody} />
+                    </Table>
                 </div>
             </div>
-
-
+            {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
+            <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
         </>
     )
 }

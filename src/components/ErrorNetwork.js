@@ -1,17 +1,14 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 
-const ErrorNetwork = props => {
-    const { isOpen, setIsOpen, title, message } = props
-
+const ErrorNetwork = ({ isOpen, setIsOpen }) => {
     function closeModal() {
         setIsOpen(false)
     }
 
-    function openModal() {
-        setIsOpen(true)
+    const reload = () => {
+        window.location.reload();
     }
-
     return (
         <>
             <Transition appear show={isOpen} as={Fragment}>
@@ -45,11 +42,11 @@ const ErrorNetwork = props => {
                                         as="h3"
                                         className="text-xl font-medium leading-6 text-gray-900"
                                     >
-                                        {title}
+                                        Error Network
                                     </Dialog.Title>
                                     <div className="mt-2">
                                         <p className="text-base text-gray-500">
-                                            {message}
+                                            Please Check Your Connection and Reload the Browser!
                                         </p>
                                     </div>
 
@@ -58,7 +55,7 @@ const ErrorNetwork = props => {
                                             className="inline-flex justify-center rounded-sm border border-transparent
                                              bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200
                                               focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                                            onClick={closeModal}
+                                            onClick={reload}
                                         >
                                             OK
                                         </button>

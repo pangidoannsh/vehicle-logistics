@@ -22,7 +22,13 @@ const dashboard = [
         ]
     }
 ]
-
+const monitoringPoUnit = [
+    {
+        "title": "Monitoring PO Unit",
+        "icon": "fa6-solid:car-side",
+        "path": "/pounit"
+    }
+]
 const generalData = [
     {
         "title": "Common",
@@ -195,4 +201,4 @@ const administrator = [
     }
 ]
 
-export { dashboard, generalData, application, report, administrator }
+export { dashboard, monitoringPoUnit, generalData, application, report, administrator }

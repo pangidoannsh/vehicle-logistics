@@ -8,41 +8,41 @@ const PlanArmadaCreate = (props) => {
     const user = useContext(UserContext);
     const { setIsOpen, options, alert, setAlert, setLoadingPage, fetchPlanArmada } = props;
 
-    const refDestination = useRef();
     const refPlanDate = useRef();
     const refPayload = useRef();
 
-    const [valueBranch, setValueBranch] = useState(null);
-    const [valueModa, setValueModa] = useState([]);
-    const [valueArmada, setValueArmada] = useState([]);
+    const [valueBranch, setValueBranch] = useState({ oid: null, branchname: "nothing selected" });
+    const [valueModa, setValueModa] = useState({ id: null, name: "nothing selected" });
+    const [valueArmada, setValueArmada] = useState({ hullnumber: null, armadaname: "nothing selected" });
+    const [valueDestination, setValueDestination] = useState({ key: null, name: "nothing selected" });
 
-    const { optionsBranch, optionsModa, optionsVehicleArmada } = options;
+    const { optionsBranch, optionsModa, optionsVehicleArmada, optionsDestination } = options;
 
     const handleClickCreate = e => {
+        e.preventDefault();
 
-        e.preventDefault()
         setAlert({ ...alert, isActived: false });
-        const valueDestinantion = refDestination.current.value.toUpperCase();
+        const valueDestinantion = valueDestination.key;
         const valuePayload = refPayload.current.value.toUpperCase();
         const valuePlanDate = refPlanDate.current.value.toUpperCase();
 
         if (valueBranch && valueDestinantion && valuePlanDate && valuePayload && valueArmada && valueModa) {
             setLoadingPage(true);
             const postValue = {
-                branchoid: valueBranch,
-                moda: valueModa,
-                hullnumber: valueArmada,
+                branchoid: valueBranch.oid,
+                moda: valueModa.id,
+                hullnumber: valueArmada.hullnumber,
                 destination: valueDestinantion,
                 payloadcomposition: valuePayload,
                 plandate: valuePlanDate,
                 user: user.id
             };
-
+            // console.log(postValue);
             api.post('/planarmada', postValue).then(response => {
                 setLoadingPage(false);
                 setAlert({ isActived: true, code: 1, title: `Success`, message: "New Plan Armada Created" });
                 setTimeout(() => {
-                    setAlert({ ...alert, isActived: false });
+                    setAlert(prev => { return { ...prev, isActived: false } });
                 }, 3000);
                 fetchPlanArmada()
                 setIsOpen(false)
@@ -61,23 +61,26 @@ const PlanArmadaCreate = (props) => {
         }
     }
 
-    return <>
+    return <form onSubmit={handleClickCreate}>
         <div className="flex flex-col gap-y-6 pb-2">
-            <Select label={"Branch"} setValue={setValueBranch} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
-            <Select label={"Moda"} setValue={setValueModa} keyId={"id"} keyName={"name"} options={optionsModa} />
-            <Select label={"Vihcle Armada"} setValue={setValueArmada} keyId={"hullnumber"} keyName={"armadaname"} options={optionsVehicleArmada} />
-            <FormInput label="Destination" tagId="destinantion" refrence={refDestination} />
+            <Select label={"Branch"} useSelect={[valueBranch, setValueBranch]} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
+            <Select label={"Moda"} useSelect={[valueModa, setValueModa]} keyId={"id"} keyName={"name"} options={optionsModa} />
+            <Select label={"Vihcle Armada"} useSelect={[valueArmada, setValueArmada]} keyId={"hullnumber"} keyName={"armadaname"} options={optionsVehicleArmada} />
+            <Select label={"Destination"} useSelect={[valueDestination, setValueDestination]} keyId={"key"} keyName={"name"}
+                options={optionsDestination.map(option => {
+                    return { key: option.destination, name: option.destination }
+                })} />
             <FormInput label="Plan Date" tagId="plandate" refrence={refPlanDate} type="date" />
             <FormInput label="Payload Composition" tagId="payload" refrence={refPayload} />
         </div>
         <div className="flex justify-end gap-4 px-4 pt-6">
             <button className="text-green-600 py-2 px-4" onClick={() => props.setIsOpen(false)}>Close</button>
-            <button type="Submit" onClick={handleClickCreate}
+            <button type="Submit"
                 className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-2 px-4 `}>
                 Save
             </button>
         </div>
-    </>
+    </form>
 }
 
 export default PlanArmadaCreate

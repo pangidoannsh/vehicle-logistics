@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 import SearchTable from "../../../../../components/tables/SearchTable";
 import Table from "../../../../../components/tables/Table";
 import { api } from "../../../../../config";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Modal from "../../../../../components/Modal";
+import Alert from "../../../../../components/Alert";
+import ErrorNetwork from "../../../../../components/ErrorNetwork";
+import { useFetch } from "../../../../../hooks";
 
 const columnTable = [
     { field: 'oid', header: 'Manifest Number' },
@@ -41,34 +44,36 @@ const displayData = data => {
 }
 
 const Manifest = () => {
-
+    let navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
-    const [dataBody, setDataBody] = useState([]);
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({ url: "/manifest", setLoading });
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
     // untuk data yang akan ditampilkan Modal -> ModalContent
     const [dataModal, setDataModal] = useState({});
-    const [isErrorNetwork, setIsErrorNetwork] = useState(false);
     // untuk membuka dan menutup modal
     const [openModalDetail, setOpenModalDetail] = useState(false);
-
+    const [openModalDelete, setOpenModalDelete] = useState(false);
+    const [alert, setAlert] = useState({
+        isActived: false,
+        code: 0,
+        title: "title",
+        message: "message"
+    })
+    const setActivedAlert = isActived => {
+        setAlert({ ...alert, isActived });
+    }
     const handleOpenModalDetail = oid => {
         setOpenModalDetail(true);
 
     }
-    // use effect untuk consume API
-    useEffect(() => {
-        api.get('/manifest').then(res => {
-            setDataBody(res.data.map(data => templateData(data)))
-            setLoading(false)
-        }).catch(error => {
-            console.log(error.response);
-            if (error.code === "ERR_NETWORK") {
-                setIsErrorNetwork(true)
-            }
-        })
-    }, []);
+    const handleEdit = oid => {
+        navigate(`/manifest/${oid}/edit`);
+    }
+    const handleOpenModalDelete = oid => {
+        setOpenModalDelete(true);
+    }
 
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
@@ -79,30 +84,39 @@ const Manifest = () => {
 
     return (
         <>
-            {/* After Header */}
-            <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
-                <NavLink to="/manifest/create" className="bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4" >
-                    <Icon icon="fluent:add-12-filled" className="text-base" />
-                    <span className='text-base'>Create</span>
-                </NavLink>
-            </div>
             {/* Content */}
             <div className="p-4 pb-14">
                 <div className="card bg-white p-6">
                     {/* Title */}
-                    <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
-                        <Icon icon="bi:stack" className={`text-2xl text-gold `} />
-                        <span className='text-lg text-dark-green font-medium'>Manifest</span>
+                    <div className="flex justify-between items-center divider-bottom">
+                        <div className="flex px-2 py-4 gap-x-2 items-center">
+                            <Icon icon="bi:stack" className={`text-2xl text-gold `} />
+                            <span className='text-lg text-dark-green font-medium'>Manifest</span>
+                        </div>
+                        <div>
+                            <NavLink to="/manifest/create" className="bg-light-green hover:bg-green-700 text-white rounded flex
+                                items-center gap-x-1 py-[2px] px-4" >
+                                <Icon icon="fluent:add-12-filled" className="text-base" />
+                                <span className='text-base'>Create</span>
+                            </NavLink>
+                        </div>
                     </div>
-                    {/* Search */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading}
-                        handleClickField={handleOpenModalDetail} />
+                        handleClickField={handleOpenModalDetail} handleActionEdit={handleEdit}
+                        handleActionDelete={handleOpenModalDelete} pagination>
+                        {/* Search */}
+                        <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
+                    </Table>
                 </div>
             </div>
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Manifest Detail" ></Modal>
+            <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} title="Delete Manifest" ></Modal>
+            <Alert isOpen={alert.isActived} setIsOpen={setActivedAlert} codeAlert={alert.code} title={alert.title}>
+                {alert.message}
+            </Alert>
+            {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
+            <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
         </>
     );
 }

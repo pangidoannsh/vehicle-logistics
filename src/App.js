@@ -1,9 +1,11 @@
 import './App.css';
-import { Routers } from './config';
+import { Authentication, Routers } from './config';
 
 function App() {
   return (
-    <Routers />
+    <Authentication>
+      <Routers />
+    </Authentication>
   );
 }
 

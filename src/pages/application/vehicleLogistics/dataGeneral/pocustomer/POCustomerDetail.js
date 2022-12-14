@@ -139,10 +139,10 @@ const POCustomerDetail = (props) => {
                                 <td className='py-4'>Value</td>
                                 <td className='pr-2 py-4'>Rp {moneyFormat(totalPrice)}</td>
                             </tr>
-                            <tr >
+                            {/* <tr >
                                 <td className='py-4'>Quantity</td>
                                 <td className='pr-2 py-4'>{dataUnitPo.length}</td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
                 </div>
@@ -151,11 +151,15 @@ const POCustomerDetail = (props) => {
                         <div className="flex flex-col gap-y-4">
                             <FormInput sizeLabel="text-base" label="Engine Number" tagId="enginenumber" refrence={refEngineNumber} />
                             <FormInput sizeLabel="text-base" label="Frame Number" tagId="framenumber" refrence={refFrameNumber} />
-                            <Select label="Brand" setValue={setValueBrand} keyId="oid" keyName="name" options={optionsBrand} />
-                            <FormInput sizeLabel="text-base" label="Type" tagId="type" refrence={refType} />
-                            <FormInput sizeLabel="text-base" label="Color" tagId="color" refrence={refColor} />
-                            <FormInput sizeLabel="text-base" label="Year" tagId="year" refrence={refYear} />
-                            <FormInput sizeLabel="text-base" label="Amount" tagId="amount" refrence={refAmount} />
+                            <div className="grid grid-cols-2 gap-x-2">
+                                <Select label="Brand" setValue={setValueBrand} keyId="oid" keyName="name" options={optionsBrand} />
+                                <FormInput sizeLabel="text-base" label="Type" tagId="type" refrence={refType} />
+                            </div>
+                            <div className="grid grid-cols-3 gap-x-2">
+                                <FormInput sizeLabel="text-base" label="Color" tagId="color" refrence={refColor} />
+                                <FormInput sizeLabel="text-base" label="Year" tagId="year" refrence={refYear} />
+                                <FormInput sizeLabel="text-base" label="Amount" tagId="amount" refrence={refAmount} />
+                            </div>
                         </div>
                         <button className={`bg-light-green hover:bg-green-700 text-white rounded flex active:ring active:ring-green-200
                         focus:ring focus:ring-green-200 items-center gap-x-1 py-1 px-4 mt-6`} onClick={handleCreateUnit}>Save</button>
@@ -168,7 +172,7 @@ const POCustomerDetail = (props) => {
                     <Icon icon="fa6-solid:car-side" className={`text-2xl text-gold `} />
                     <span className='text-lg text-dark-green font-medium'>Data Unit</span>
                 </div>
-                <button className={`bg-[#015796] hover:bg-blue-700 text-white rounded flex
+                <button className={`bg-custom-blue hover:bg-blue-700 text-white rounded flex
                                 items-center gap-x-1 py-1 px-4 `}>
                     <Icon icon="file-icons:microsoft-excel" className="text-base" />
                     <span className='text-base'>Upload</span>

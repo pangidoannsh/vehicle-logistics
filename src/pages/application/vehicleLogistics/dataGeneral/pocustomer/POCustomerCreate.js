@@ -11,10 +11,9 @@ const POCustomerCreate = (props) => {
     const { setIsOpen, setSuccessCreate, setFailCreate, setMsgAlert, fetchPoCustomer, options, setLoadingPage } = props
     const { optionsBranch, setOptionsBranch } = options.branch
     const { optionsContract, setOptionsContract } = options.contract
-    const [valueBranch, setValueBranch] = useState("");
+    const [valueBranch, setValueBranch] = useState({ oid: null, branchname: "nothing selected" });
     const refPoNumber = useRef();
-    // const [valuePoValue, setValuePoValue] = useState("");
-    const [valueContract, setValueContract] = useState("");
+    const [valueContract, setValueContract] = useState({ oid: null, contractname: "nothing selected" });
     // function yang akan dijalankan ketika menekan button create
     const handleClickCreate = e => {
         e.preventDefault()
@@ -24,9 +23,9 @@ const POCustomerCreate = (props) => {
             setLoadingPage(true)
             // POST untuk /pocustomer
             api.post('/pocustomer', {
-                branchoid: valueBranch,
+                branchoid: valueBranch.oid,
                 ponumber: valuePoNumber,
-                contractoid: valueContract,
+                contractoid: valueContract.oid,
                 user: user.id
             }).then(response => {
                 setLoadingPage(false)
@@ -58,17 +57,12 @@ const POCustomerCreate = (props) => {
     return <>
         <div className="flex flex-col gap-y-6 pb-2">
             <FormInput label="PO Number" tagId="ponumber" refrence={refPoNumber} />
-            {/* <FormInput label="PO Value" tagId="povalue" setValue={setValuePoValue} /> */}
-            <Select label={"Branch"} setValue={setValueBranch} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
-            <Select label={"Contract Name"} setValue={setValueContract} keyId={"oid"} keyName={"contractname"}
+            <Select label={"Branch"} useSelect={[valueBranch, setValueBranch]} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
+            <Select label={"Contract Name"} useSelect={[valueContract, setValueContract]} keyId={"oid"} keyName={"contractname"}
                 options={optionsContract.map(opt => {
                     const name = opt.contractno + " - " + opt.contractname;
                     return { oid: opt.oid, contractname: name }
                 })} />
-            {/* <div className="flex flex-col gap-2">
-                <label htmlFor="remarks" className='text-slate-600 text-sm'>Remarks (Optional)</label>
-                <textarea id="remarks" className="border px-4 py-2 border-template-input text-sm text-slate-700" rows="4"></textarea>
-            </div> */}
         </div>
         <div className="flex justify-end gap-4 px-4 pt-6">
             <button className="text-green-600 py-2 px-4" onClick={() => props.setIsOpen(false)}>Close</button>

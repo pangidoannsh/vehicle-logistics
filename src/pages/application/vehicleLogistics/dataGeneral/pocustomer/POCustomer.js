@@ -9,7 +9,8 @@ import { api } from '../../../../../config';
 import { moneyFormat, fetchOption } from '../../../../../utils';
 import POCustomerCreate from './POCustomerCreate';
 import POCustomerDetail from './POCustomerDetail';
-
+import { useFetch } from '../../../../../hooks'
+import ErrorNetwork from '../../../../../components/ErrorNetwork';
 const columnTable = [
     { field: "branch", header: "branch" },
     { field: "ponumber", header: "PO Number" },
@@ -31,7 +32,10 @@ const POCustomer = () => {
     const [loadingPage, setLoadingPage] = useState(false)
     const [loadingTable, setLoadingTable] = useState(true);
     // dataBody merupakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
-    const [dataBody, setDataBody] = useState([]);
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
+        url: '/pocustomer', setLoading: setLoadingTable
+    });
+
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
     // dataUnitPo berfungsi sebagai data yang akan ditampilkan ketika masuk ke modal detail pada bagian table vehicle unit
@@ -49,8 +53,7 @@ const POCustomer = () => {
     const idToBeEdit = useRef("");
     // untuk data yang akan ditampilkan Modal -> ModalContent
     const [dataModalDetail, setDataModalDetail] = useState(null);//object
-    // untuk menampung kondisi error network
-    const [isErrorNetwork, setIsErrorNetwork] = useState(false);
+
     // untuk menampung kondisi berhasil
     const [isSuccessAlert, setIsSuccessAlert] = useState(false);
     // untuk menampung kondisi gagal
@@ -105,6 +108,7 @@ const POCustomer = () => {
             }
         }
     }, [dataBody])
+
     const handleOpenModalCreate = e => {
         e.preventDefault()
         if (optionsBranch.length === 0) {
@@ -151,23 +155,6 @@ const POCustomer = () => {
             })
     }
 
-    //function untuk fetch data PO Customer
-    const fetchPoCustomer = () => {
-        api.get('/pocustomer').then(res => {
-            setDataBody(res.data)
-            setLoadingTable(false)
-        }).catch(error => {
-            console.log(error);
-            if (error.code === "ERR_NETWORK") {
-                setIsErrorNetwork(true)
-            }
-        })
-    }
-    // use effect untuk consume API
-    useEffect(() => {
-        fetchPoCustomer()
-    }, []);
-
     // pemberian isi dari data show
     useEffect(() => {
         setDataShow(dataBody.map(data => {
@@ -183,29 +170,31 @@ const POCustomer = () => {
     }, [openModalCreate]);
     return (
         <>
-            {/* After Header */}
-            <div className="flex justify-end items-center px-4 py-3 divider-top bg-white">
-                <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `} onClick={handleOpenModalCreate}>
-                    <Icon icon="fluent:add-12-filled" className="text-base" />
-                    <span className='text-base'>Create</span>
-                </button>
-            </div>
 
             {/* Content */}
             <div className="p-4">
                 <div className="card bg-white p-6">
                     {/* Title */}
-                    <div className="flex px-2 py-4 gap-x-2 items-center divider-bottom">
-                        <Icon icon="bxs:purchase-tag" className={`text-2xl text-gold `} />
-                        <span className='text-lg text-dark-green font-medium'>PO Customer</span>
+                    <div className="flex justify-between items-center divider-bottom">
+                        <div className="flex px-2 py-4 gap-x-2 items-center ">
+                            <Icon icon="bxs:purchase-tag" className={`text-2xl text-gold `} />
+                            <span className='text-lg text-dark-green font-medium'>PO Customer</span>
+                        </div>
+                        <div>
+                            <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
+                                items-center gap-x-1 py-[2px] px-4 `} onClick={handleOpenModalCreate}>
+                                <Icon icon="fluent:add-12-filled" className="text-base" />
+                                <span className='text-base'>Create</span>
+                            </button>
+                        </div>
                     </div>
-                    {/* Search */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} dataSkipSearch={0} customDisplay={dataDisplay} />
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable}
                         handleActionDelete={handleOpenModalDelete} handleActionEdit={handleOpenModalEdit}
-                        handleClickField={handleOpenModalDetail} clickField={clickFieldTable} />
+                        handleClickField={handleOpenModalDetail} clickField={clickFieldTable} pagination>
+                        {/* Search */}
+                        <SearchTable setData={setDataShow} dataBody={dataBody} dataSkipSearch={0} customDisplay={dataDisplay} />
+                    </Table>
                 </div>
             </div>
 
@@ -219,7 +208,7 @@ const POCustomer = () => {
             {/* Modal Create */}
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={'New PO Customer'} size={700}>
                 <POCustomerCreate setIsOpen={setOpenModalCreate} setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert}
-                    setMsgAlert={setMsgAlert} fetchPoCustomer={fetchPoCustomer} options={{
+                    setMsgAlert={setMsgAlert} fetchPoCustomer={fetchDataBody} options={{
                         branch: { optionsBranch, setOptionsBranch },
                         contract: { optionsContract, setOptionsContract }
                     }} setLoadingPage={setLoadingPage} />
@@ -248,9 +237,7 @@ const POCustomer = () => {
                 </div>
             </Modal>
             {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
-            <Alert isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} codeAlert={0} title="Error Network">
-                Please Check Your Connection and Reload the Browser!
-            </Alert>
+            <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
             {/* Notifikasi Ketika Berhasil Create Data */}
             <Alert isOpen={isSuccessAlert} setIsOpen={setIsSuccessAlert} codeAlert={1} title={msgAlert[0]}>
                 {msgAlert[1]}

@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Background from '../assets/images/login-bg.jpg'
 import { VehicleLogo, Logo, TopShape, BottomShape } from '../assets'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from "../config";
 
 export default function Sign(props) {
-    let location = useLocation()
+    const [isLogged, setIsLogged] = useContext(AuthContext);
+    let navigate = useNavigate();
+    if (isLogged) navigate('/');
+    let location = useLocation();
     const widthSceen = window.innerWidth
     const [isOpen, setIsOpen] = useState(false);
     const [isShow, setIsShow] = useState(false)
@@ -14,8 +18,6 @@ export default function Sign(props) {
         }
         return false
     })
-
-    let navigate = useNavigate()
 
     const handleContent = e => {
         if (e.target.id === "login") {
@@ -53,6 +55,7 @@ export default function Sign(props) {
             onceEffect = true
         };
     }, []);
+    // if (isLogged) return <Navigate to="/" />;
     return (
         <div className='bg-no-repeat bg-center bg-cover overflow-hidden'
             style={{ backgroundImage: `url(${Background})` }}>

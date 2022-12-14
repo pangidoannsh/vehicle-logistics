@@ -1,32 +1,22 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 
-const Select = (props) => {
+const Select = ({ label, keyId, keyName, options, setTop, catchSelect, className, useSelect }) => {
 
-    const { label, setValue, keyId, keyName, options, setTop, catchSelect, className, defaultValue } = props
-    const [selected, setSelected] = useState(defaultValue ? defaultValue : { [keyId]: null, [keyName]: "nothing selected" });
-    const [dataOption, setDataOption] = useState(options);
-    useEffect(() => {
-        setValue(selected[keyId])
+    const [selected, setSelected] = useSelect;
+
+    const handleSelect = select => {
+        setSelected(select);
         if (catchSelect) {
-            catchSelect(selected[keyId])
+            catchSelect(select[keyId]);
         }
-    }, [selected]);
+    }
 
-    useEffect(() => {
-        setDataOption(options)
-    }, [options]);
-
-    // useEffect(() => {
-    //     if (defaultValue !== null) {
-    //         setSelected(defaultValue);
-    //     }
-    // }, [defaultValue]);
     return (
         <div className='flex flex-col gap-y-2'>
             <label className={`text-sm text-slate-600`}>{label}</label>
-            <Listbox value={selected} onChange={setSelected} >
+            <Listbox value={selected} onChange={handleSelect} >
                 <div className="relative">
                     <Listbox.Button className={`relative w-full rounded bg-white py-2 px-4
                     ${selected[keyId] === null ? 'text-slate-400' : 'text-slate-600'}
@@ -46,7 +36,7 @@ const Select = (props) => {
                         <Listbox.Options className={`absolute mt-1 max-h-60 w-full overflow-auto rounded z-20 bg-white 
                         text-base shadow-lg shadow-slate-400/20 ring-1 ring-slate-400/20 focus:outline-none sm:text-sm`}
                             style={{ top: setTop && `${setTop}px` }}>
-                            {dataOption.map((option, index) => (
+                            {options.map((option, index) => (
                                 <Listbox.Option
                                     key={index}
                                     className={({ active }) =>

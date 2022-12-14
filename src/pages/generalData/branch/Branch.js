@@ -1,9 +1,12 @@
 import { Icon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
+import Alert from '../../../components/Alert';
+import ErrorNetwork from '../../../components/ErrorNetwork';
 import Modal from '../../../components/Modal';
 import SearchTable from '../../../components/tables/SearchTable';
 import Table from '../../../components/tables/Table';
 import { api } from '../../../config';
+import { useFetch } from '../../../hooks';
 
 
 
@@ -23,25 +26,14 @@ const Branch = () => {
     // const [loading, setLoading] = useState(true);
     const [loadingTable, setLoadingTable] = useState(true);
     const [dataShow, setDataShow] = useState([]);
-    const [dataBody, setDataBody] = useState([]);
-    const [isErrorNetwork, setIsErrorNetwork] = useState(false);
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
+        url: '/branch', setLoading: setLoadingTable
+    });
     const [openModalDetail, setOpenModalDetail] = useState(false);
 
     const handleOpenModalDetail = oid => {
         setOpenModalDetail(true);
     }
-    // use effect untuk consume API
-    useEffect(() => {
-        api.get('/branch').then(res => {
-            setDataBody(res.data)
-            setLoadingTable(false)
-        }).catch(error => {
-            console.log(error.response);
-            if (error.code === "ERR_NETWORK") {
-                setIsErrorNetwork(true)
-            }
-        })
-    }, []);
 
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
@@ -61,16 +53,18 @@ const Branch = () => {
                         <span className="text-lg text-dark-green font-medium">Branch</span>
                     </div>
 
-                    {/* Search searchFunct={customSearch} */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} />
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable}
-                        handleClickField={handleOpenModalDetail} />
+                        handleClickField={handleOpenModalDetail} pagination>
+                        {/* Search searchFunct={customSearch} */}
+                        <SearchTable setData={setDataShow} dataBody={dataBody} />
+                    </Table>
                 </div>
             </div>
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Detail Branch" size={700}>
                 Testing
             </Modal>
+            <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
         </>
     )
 }

@@ -1,10 +1,12 @@
 import { Icon, _api } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
+import Alert from '../../../../../components/Alert'
+import ErrorNetwork from '../../../../../components/ErrorNetwork'
 import SearchTable from '../../../../../components/tables/SearchTable'
 import Table from '../../../../../components/tables/Table'
 import { api } from '../../../../../config/Api'
+import { useFetch } from '../../../../../hooks'
 import { moneyFormat } from '../../../../../utils'
-import Alert from "../../../../../components/Alert"
 
 const columnTable = [
     { field: "branch", header: "Branch" },
@@ -23,21 +25,10 @@ const Contract = () => {
     // const [loading, setLoading] = useState(true);
     const [loadingTable, setLoadingTable] = useState(true);
     const [dataShow, setDataShow] = useState([]);
-    const [dataBody, setDataBody] = useState([]);
-    const [isErrorNetwork, setIsErrorNetwork] = useState(false);
-
-    // use effect untuk consume API
-    useEffect(() => {
-        api.get('/contract').then(res => {
-            setDataBody(res.data)
-            setLoadingTable(false)
-        }).catch(error => {
-            console.log(error.response);
-            if (error.code === "ERR_NETWORK") {
-                setIsErrorNetwork(true)
-            }
-        })
-    }, []);
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
+        url: '/contract',
+        setLoading: setLoadingTable
+    });
 
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
@@ -55,16 +46,15 @@ const Contract = () => {
                         <Icon icon="clarity:contract-solid" className={`text-xl text-gold `} />
                         <span className="text-lg text-dark-green font-medium">Contract</span>
                     </div>
-                    {/* Search */}
-                    <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={templateObject} />
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} />
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination>
+                        {/* Search */}
+                        <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={templateObject} />
+                    </Table>
                 </div>
-                {/* Error Network */}
-                <Alert isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} title="Network Error" codeAlert={0}>
-                    Please check your connection and reload browser
-                </Alert>
             </div>
+            {/* Error Network */}
+            <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
         </>
     )
 }

@@ -5,7 +5,7 @@ import SlideButton from "./SlideButton";
 import Menu from "./menus/Menu";
 
 // Data Menus
-import { dashboard, generalData, application, report, administrator } from './menus/ListMenu'
+import { dashboard, monitoringPoUnit, generalData, application, report, administrator } from './menus/ListMenu'
 
 function Navbar() {
     const storage = window.sessionStorage;
@@ -81,6 +81,15 @@ function Navbar() {
                 </div>
                 <div className="mb-4 grid gap-y-1">
                     {dashboard.map((menu, index) => (
+                        <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
+                    ))}
+                </div>
+                {/* Group Menu : MONITORING PO UNIT */}
+                <div className={`px-4 mb-2 `}>
+                    <h3 className={`uppercase text-gold text-xs ${!show ? 'hidden' : ''}`}>Monitoring Po Unit</h3>
+                </div>
+                <div className="mb-4 grid gap-y-1">
+                    {monitoringPoUnit.map((menu, index) => (
                         <Menu key={index} open={open} show={show} handleMenu={handleOnClickMenu} menu={menu} location={location} />
                     ))}
                 </div>
