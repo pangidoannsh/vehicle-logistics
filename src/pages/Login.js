@@ -3,18 +3,34 @@ import PasswordInput from '../components/inputs/PasswordInput';
 import Sign from '../layouts/Sign';
 import Loading from "../components/Loading";
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import { api, AuthContext } from '../config';
+import { useContext } from 'react';
 
 const Login = () => {
-    let navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const emailInput = useRef();
+    const passwordInput = useRef();
     const handleSubmit = e => {
-        e.preventDefault()
-        // setLoading(true);
-        // setTimeout(() => {
-        //     setLoading(false);
-        //     localStorage.setItem("access-token", "x123");
-        //     window.location.reload();
-        // }, 2000);
+        e.preventDefault();
+        const input = {
+            email: emailInput.current.value,
+            password: passwordInput.current.value
+        }
+
+        setLoading(true);
+        api.post('/login', input).then(res => {
+            console.log(res.data);
+            localStorage.setItem("access-token", res.data.token);
+            setLoading(false);
+            window.location.href = '/';
+        }).catch(err => {
+            // console.log(err);
+            if (err.response.status) {
+                alert("Login Gagal")
+            }
+        }).finally(() => setLoading(false))
+
 
     }
     return (
@@ -23,16 +39,17 @@ const Login = () => {
                 {/* Input Email */}
                 <div className="relative mb-8">
                     <input id='email' type="text" className='focus:outline-none bg-transparent p-1 focus:rounded
-                                    border-b border-b-slate-400 w-full text-slate-400 focus:text-slate-600 peer ' placeholder=" " />
+                    border-b border-b-slate-400 w-full text-slate-400 focus:text-slate-600 peer '
+                        placeholder=" " ref={emailInput} />
                     <div className='absolute bottom-0 duration-300 w-0 peer-focus:w-full h-[2px] bg-light-green'></div>
                     <label htmlFor="email" className="floating-label font-medium">Email</label>
                 </div>
                 {/* Input Password */}
-                <PasswordInput id="password" className="mb-3">Password</PasswordInput>
+                <PasswordInput id="password" className="mb-3" refrence={passwordInput}>Password</PasswordInput>
                 {/* Forgot Password */}
-                <button className='text-sm font-medium text-slate-400 block mb-8 hover:text-light-green'>
+                <span className='cursor-pointer text-sm font-medium text-slate-400 block mb-8 hover:text-light-green'>
                     forgot password?
-                </button>
+                </span>
                 {/* Login Button */}
                 <button className='bg-light-green hover:bg-green-600 active:ring-4 active:ring-green-300 focus:ring-4 focus:ring-green-300
                 rounded py-2 px-4 text-white font-medium tracking-[.25em]'>

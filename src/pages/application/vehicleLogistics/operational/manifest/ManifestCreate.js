@@ -39,12 +39,12 @@ const ManifestCreate = () => {
     // ====================== Template Object ==============================
     //  Plan Armada
     const planArmadaObject = useCallback(data => {
-        const { oid, policenumber, status } = data;
+        const { oid, policenumber, hullnumber } = data;
         return {
             oid, planarmada: (
-                <div className="flex justify-between pr-4">
+                <div className="grid grid-cols-2">
                     <span>{policenumber}</span>
-                    <span className={`${status.toLowerCase() === 'ready' ? 'text-light-green' : ''} font-medium`}>{status}</span>
+                    <span >{hullnumber}</span>
                 </div>
             )
         };
@@ -130,7 +130,6 @@ const ManifestCreate = () => {
             })
             return;
         }
-        // console.log(dataCreate);
         setLoading(true);
         api.post('/manifest', dataCreate).then(res => {
             console.log(res);
@@ -234,9 +233,19 @@ const ManifestCreate = () => {
             <div className="p-4">
                 <div className="card drop-shadow-lg bg-white p-6">
                     {/* Title */}
-                    <div className="flex px-2 pb-4 gap-x-2 items-center divider-bottom mb-12">
-                        <Icon icon="bi:stack" className={`text-2xl text-gold `} />
-                        <span className="text-lg text-dark-green font-medium">Manifest Create</span>
+                    <div className="flex justify-between items-center divider-bottom mb-12">
+                        <div className="flex px-2 py-4 gap-x-2 items-center">
+                            <Icon icon="fa-solid:truck-loading" className={`text-xl text-gold `} />
+                            <span className="text-lg text-dark-green font-medium">Manifest Create</span>
+                        </div>
+                        <div>
+                            <button onClick={() => navigate(-1)} className="bg-slate-400 shadow-inner hover:bg-slate-500
+                             text-white rounded flex 
+                                items-center gap-x-1 py-[2px] px-4" >
+                                <Icon icon="ph:skip-back-fill" className="text-base" />
+                                <span className='text-base'>Back</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-3 gap-6 mb-6">

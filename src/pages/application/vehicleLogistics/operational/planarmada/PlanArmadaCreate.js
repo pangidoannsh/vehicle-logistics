@@ -5,13 +5,12 @@ import { api } from '../../../../../config';
 import { UserContext } from '../../../../../config/User';
 
 const PlanArmadaCreate = (props) => {
-    const user = useContext(UserContext);
+    const [user] = useContext(UserContext);
     const { setIsOpen, options, alert, setAlert, setLoadingPage, fetchPlanArmada } = props;
 
     const refPlanDate = useRef();
     const refPayload = useRef();
 
-    const [valueBranch, setValueBranch] = useState({ oid: null, branchname: "nothing selected" });
     const [valueModa, setValueModa] = useState({ id: null, name: "nothing selected" });
     const [valueArmada, setValueArmada] = useState({ hullnumber: null, armadaname: "nothing selected" });
     const [valueDestination, setValueDestination] = useState({ key: null, name: "nothing selected" });
@@ -26,16 +25,15 @@ const PlanArmadaCreate = (props) => {
         const valuePayload = refPayload.current.value.toUpperCase();
         const valuePlanDate = refPlanDate.current.value.toUpperCase();
 
-        if (valueBranch && valueDestinantion && valuePlanDate && valuePayload && valueArmada && valueModa) {
+        if (valueDestinantion && valuePlanDate && valuePayload && valueArmada && valueModa) {
             setLoadingPage(true);
             const postValue = {
-                branchoid: valueBranch.oid,
+                branchoid: user.branch,
                 moda: valueModa.id,
                 hullnumber: valueArmada.hullnumber,
                 destination: valueDestinantion,
                 payloadcomposition: valuePayload,
-                plandate: valuePlanDate,
-                user: user.id
+                plandate: valuePlanDate
             };
             // console.log(postValue);
             api.post('/planarmada', postValue).then(response => {
@@ -63,7 +61,8 @@ const PlanArmadaCreate = (props) => {
 
     return <form onSubmit={handleClickCreate}>
         <div className="flex flex-col gap-y-6 pb-2">
-            <Select label={"Branch"} useSelect={[valueBranch, setValueBranch]} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
+            <Select label={"Branch"} useSelect={[{ oid: user.branch, branchname: user.branchname }]}
+                keyId={"oid"} keyName={"branchname"} disabled />
             <Select label={"Moda"} useSelect={[valueModa, setValueModa]} keyId={"id"} keyName={"name"} options={optionsModa} />
             <Select label={"Vihcle Armada"} useSelect={[valueArmada, setValueArmada]} keyId={"hullnumber"} keyName={"armadaname"} options={optionsVehicleArmada} />
             <Select label={"Destination"} useSelect={[valueDestination, setValueDestination]} keyId={"key"} keyName={"name"}
@@ -74,7 +73,7 @@ const PlanArmadaCreate = (props) => {
             <FormInput label="Payload Composition" tagId="payload" refrence={refPayload} />
         </div>
         <div className="flex justify-end gap-4 px-4 pt-6">
-            <button className="text-green-600 py-2 px-4" onClick={() => props.setIsOpen(false)}>Close</button>
+            <div className="text-green-600 py-2 px-4 cursor-pointer" onClick={() => props.setIsOpen(false)}>Close</div>
             <button type="Submit"
                 className={`bg-light-green hover:bg-green-700 text-white rounded flex items-center gap-x-1 py-2 px-4 `}>
                 Save

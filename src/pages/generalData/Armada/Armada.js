@@ -9,6 +9,7 @@ import ArmadaCreate from './ArmadaCreate';
 import { useCallback } from 'react';
 import Alert from '../../../components/Alert';
 import Loading from '../../../components/Loading';
+import { useFetch } from '../../../hooks';
 const columnTable = [
     { field: "branch", header: "Branch" },
     { field: "hullnumber", header: "Hull Number" },
@@ -50,10 +51,9 @@ export default function Armada() {
 
     const [loadingPage, setLoadingPage] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [dataBody, setDataBody] = useState([]);
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({ url: "/vehiclearmada", setLoading })
     const [dataShow, setDataShow] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
-    const [isErrorNetwork, setIsErrorNetwork] = useState(false);
     const [optionsBranch, setOptionsBranch] = useState([]);
     const [optionsType, setOptionsType] = useState([]);
     const [optionsBrand, setOptionsBrand] = useState([]);
@@ -103,23 +103,6 @@ export default function Armada() {
         }
         setOpenModalCreate(true)
     }
-    const fetchArmada = () => {
-        api.get('/vehiclearmada').then(res => {
-            setDataBody(res.data.map(data => {
-                return howDataGet(data);
-            }));
-            setLoading(false)
-        })
-            .catch(error => {
-                if (error.code === "ERR_NETWORK") {
-                    setIsErrorNetwork(true)
-                }
-            })
-    }
-    // use effect untuk consume API
-    useEffect(() => {
-        fetchArmada();
-    }, []);
 
     // pemberian isi dari data show
     useEffect(() => {
@@ -168,7 +151,7 @@ export default function Armada() {
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={"New Vehicle Unit"} size={1000}>
                 <ArmadaCreate setIsOpen={setOpenModalCreate} alert={alert} setAlert={setAlert} options={{
                     optionsBranch, optionsType, optionsModel, optionsBrand
-                }} setLoadingPage={setLoadingPage} fetchArmada={fetchArmada} />
+                }} setLoadingPage={setLoadingPage} fetchArmada={fetchDataBody} />
             </Modal>
             <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork}
                 title="Network Error!" message="Please check your network and Reload your browser" />

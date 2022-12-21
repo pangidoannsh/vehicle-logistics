@@ -1,5 +1,4 @@
-import { useContext, useRef } from "react";
-import { useState } from "react";
+import { useContext, useRef, useState } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
 import Select from "../../../../../components/inputs/Select";
 import { api } from "../../../../../config";
@@ -7,57 +6,74 @@ import { UserContext } from "../../../../../config/User";
 
 
 const POCustomerCreate = (props) => {
-    const user = useContext(UserContext);
-    const { setIsOpen, setSuccessCreate, setFailCreate, setMsgAlert, fetchPoCustomer, options, setLoadingPage } = props
-    const { optionsBranch, setOptionsBranch } = options.branch
-    const { optionsContract, setOptionsContract } = options.contract
-    const [valueBranch, setValueBranch] = useState({ oid: null, branchname: "nothing selected" });
+    const [user] = useContext(UserContext);
+    const { setIsOpen, setAlert, fetchPoCustomer, options, setLoadingPage } = props
+    const { optionsContract } = options.contract;
     const refPoNumber = useRef();
     const [valueContract, setValueContract] = useState({ oid: null, contractname: "nothing selected" });
     // function yang akan dijalankan ketika menekan button create
     const handleClickCreate = e => {
         e.preventDefault()
-        setFailCreate(false);
+        setAlert(prev => ({ ...prev, isActive: false }))
         const valuePoNumber = refPoNumber.current.value.toUpperCase()
-        if (valueBranch && valuePoNumber && valueContract) {
+        if (valuePoNumber && valueContract) {
             setLoadingPage(true)
             // POST untuk /pocustomer
             api.post('/pocustomer', {
-                branchoid: valueBranch.oid,
+                branchoid: user.branch,
                 ponumber: valuePoNumber,
-                contractoid: valueContract.oid,
-                user: user.id
+                contractoid: valueContract.oid
             }).then(response => {
                 setLoadingPage(false)
-                if (response.status === 201) {
-                    fetchPoCustomer();
-                    setSuccessCreate(true);
-                    setLoadingPage(false)
-                    setMsgAlert(["Success", "New Data Created"]);
-                    setIsOpen(false);
-                    setTimeout(() => {
-                        setSuccessCreate(false)
-                    }, 3000);
-                }
+                fetchPoCustomer();
+                setLoadingPage(false)
+                setAlert({
+                    isActive: true,
+                    code: 1,
+                    title: "Success",
+                    message: "New Data PO Customer Created"
+                });
+                setIsOpen(false);
+                setTimeout(() => {
+                    setAlert(prev => ({ ...prev, isActive: false }));
+                }, 3000);
             }).catch(error => {
                 setLoadingPage(false)
-                if (error.status !== 422) {
+                if (error.response.status !== 422) {
+                    if (error.response.status >= 500) {
+                        setAlert({
+                            isActive: true,
+                            code: 0,
+                            title: `Error ${error.response.status}`,
+                            message: "Server Error"
+                        })
+                    }
                     console.log(error.response);
+                } else {
+                    const message = Object.values(error.response.data)[0][0]
+                    setAlert({
+                        isActive: true,
+                        code: 0,
+                        title: `Error ${error.response.status}`,
+                        message: message
+                    })
                 }
-                const message = Object.values(error.response.data)[0][0]
-                setFailCreate(true);
-                setMsgAlert([`Error ${error.response.status}`, message]);
             })
         } else {
-            setFailCreate(true)
-            setMsgAlert(["Can't Create", "There is an empty field input"])
+            setAlert({
+                isActive: true,
+                code: 0,
+                title: "Can't Create",
+                message: "There is an empty field input"
+            })
         }
     }
 
     return <>
         <div className="flex flex-col gap-y-6 pb-2">
             <FormInput label="PO Number" tagId="ponumber" refrence={refPoNumber} />
-            <Select label={"Branch"} useSelect={[valueBranch, setValueBranch]} keyId={"oid"} keyName={"branchname"} options={optionsBranch} />
+            <Select label={"Branch"} useSelect={[{ oid: user.branch, branchname: user.branchname }]}
+                keyId={"oid"} keyName={"branchname"} disabled />
             <Select label={"Contract Name"} useSelect={[valueContract, setValueContract]} keyId={"oid"} keyName={"contractname"}
                 options={optionsContract.map(opt => {
                     const name = opt.contractno + " - " + opt.contractname;

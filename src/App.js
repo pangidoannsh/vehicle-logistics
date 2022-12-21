@@ -1,10 +1,13 @@
 import './App.css';
 import { Authentication, Routers } from './config';
+import User from './config/User';
 
 function App() {
   return (
     <Authentication>
-      <Routers />
+      <User>
+        <Routers />
+      </User>
     </Authentication>
   );
 }

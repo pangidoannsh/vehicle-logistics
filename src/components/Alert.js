@@ -2,8 +2,7 @@ import { Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react';
 import { Fragment } from 'react'
 
-const Alert = props => {
-    const { isOpen, setIsOpen, title, codeAlert } = props;
+const Alert = ({ isOpen, setIsOpen, title, codeAlert, children }) => {
     let color = "";
     let icon = ""
     if (codeAlert === 0) {
@@ -36,7 +35,7 @@ const Alert = props => {
                                 <div className="flex gap-x-2 items-center">
                                     <Icon icon={icon} className="text-2xl" />
                                     <div className='text-start'>
-                                        <span className="font-medium">{title}: </span> {props.children}
+                                        <span className="font-medium">{title}: </span> {children}
                                     </div>
                                 </div>
                                 <button onClick={closeModal}>

@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useContext } from 'react';
 import Alert from '../../../../../components/Alert';
 import Loading from '../../../../../components/Loading';
 import Modal from '../../../../../components/Modal';
@@ -11,6 +11,8 @@ import POCustomerCreate from './POCustomerCreate';
 import POCustomerDetail from './POCustomerDetail';
 import { useFetch } from '../../../../../hooks'
 import ErrorNetwork from '../../../../../components/ErrorNetwork';
+import { UserContext } from '../../../../../config/User';
+import POCustomerEdit from './POCustomerEdit';
 const columnTable = [
     { field: "branch", header: "branch" },
     { field: "ponumber", header: "PO Number" },
@@ -28,6 +30,8 @@ const dataDisplay = data => {
     }
 }
 const POCustomer = () => {
+
+    const [user] = useContext(UserContext);
 
     const [loadingPage, setLoadingPage] = useState(false)
     const [loadingTable, setLoadingTable] = useState(true);
@@ -54,25 +58,23 @@ const POCustomer = () => {
     // untuk data yang akan ditampilkan Modal -> ModalContent
     const [dataModalDetail, setDataModalDetail] = useState(null);//object
 
-    // untuk menampung kondisi berhasil
-    const [isSuccessAlert, setIsSuccessAlert] = useState(false);
-    // untuk menampung kondisi gagal
-    const [isFailAlert, setIsFailAlert] = useState(false);
-    // message alert
-    const [msgAlert, setMsgAlert] = useState(['title', 'message'])
+    const [alert, setAlert] = useState({
+        isActive: false,
+        code: 0,
+        title: "title",
+        message: "message"
+    })
+    const setIsActiveAlert = isActive => setAlert({ ...alert, isActive });
 
     // option branch untuk select pada create po customer
     const [optionsBranch, setOptionsBranch] = useState([]);
     const [optionsContract, setOptionsContract] = useState([]);
     const [optionsBrand, setOptionsBrand] = useState([]);
 
-    const [dataEdit, setDataEdit] = useState({
-        valuePoNumber: "",
-        currentBranch: { oid: "", branchname: "" },
-        currentContract: { oid: "", contractname: "" }
-    })
+    const [editPoNumber, setEditPoNumber] = useState("");
+    const [editBranch, setEditBranch] = useState({ oid: null, branchname: "nothing selected" });
+    const [editContract, setEditContract] = useState({ oid: null, contractname: "nothing selected" });
 
-    // untuk handle Open dari Modal PO Customer Detail
     const handleOpenModalDetail = useCallback(id => {
         api.get('/vehiclebrand').then(res => {
             setOptionsBrand(res.data.map(data => {
@@ -80,8 +82,12 @@ const POCustomer = () => {
             }))
         }).catch(error => {
             console.log(error.response);
-            isFailAlert(true);
-            setMsgAlert('error');
+            setAlert({
+                isActive: true,
+                code: 0,
+                title: `Error ${error.response.status}`,
+                message: "Cant Connect to Server"
+            })
         })
         const fetchDataUnit = () => {
             api.get(`/vehiclepo/${id}`).then(res => {
@@ -111,9 +117,6 @@ const POCustomer = () => {
 
     const handleOpenModalCreate = e => {
         e.preventDefault()
-        if (optionsBranch.length === 0) {
-            fetchOption("/branchlist", setOptionsBranch);
-        }
         if (optionsContract.length === 0) {
             fetchOption("/contractlist", setOptionsContract);
         }
@@ -122,7 +125,23 @@ const POCustomer = () => {
 
     const handleOpenModalEdit = oid => {
         setLoadingPage(true);
-        setOpenModalEdit(true)
+        idToBeEdit.current = oid;
+        try {
+            api.get(`/pocustomer/${oid}`).then(res => {
+                // setDataEdit(res)
+                // console.log(res.data);
+                const data = res.data;
+                setEditPoNumber(data.ponumber);
+                setEditBranch({ oid: data.branchoid, branchname: data.branchname });
+                setEditContract({ oid: data.contractoid, contractname: data.contractname });
+            })
+        } catch (error) {
+
+            console.log(error);
+        } finally {
+            setLoadingPage(false)
+            setOpenModalEdit(true)
+        }
     }
     // function untuk menampilkan modal konfirmasi delete ketika mengklik action trash/delete pada table
     const handleOpenModalDelete = useCallback(oid => {
@@ -133,25 +152,32 @@ const POCustomer = () => {
     // function untuk meng-handle ketika mengklik button delete pada modal konfirmasi delete
     const handleDelete = e => {
         e.preventDefault()
-        setIsFailAlert(false);
+        setIsActiveAlert(false)
         setLoadingPage(true);
         api.delete(`/pocustomer/${idToBeDelete.current}`)
             .then(response => {
-                console.log(response.data);
-                setMsgAlert(["Success", response.data])
+                setAlert({
+                    isActive: true,
+                    code: 1,
+                    title: "Success",
+                    message: "Data PO Customer Deleted"
+                })
                 setDataBody(dataBody.filter(data => data.oid !== idToBeDelete.current).map(filter => filter))
-                setIsSuccessAlert(true)
                 setOpenModalDelete(false)
                 setLoadingPage(false)
                 setTimeout(() => {
-                    setIsSuccessAlert(false);
+                    setIsActiveAlert(false)
                 }, 3000);
             })
             .catch(error => {
                 console.log(error.response);
-                setLoadingPage(false)
-                setIsFailAlert(true)
-                setMsgAlert(["Failed", error.response.data])
+                setLoadingPage(false);
+                setAlert({
+                    isActive: true,
+                    code: 0,
+                    title: "Failed",
+                    message: "Something Wrong Check Console Or Reload"
+                })
             })
     }
 
@@ -162,12 +188,12 @@ const POCustomer = () => {
         }));
     }, [dataBody])
 
-    // penonaktifan fail alert ketika modal create tertutup
+    // penonaktifan fail alert ketika modal create atau edit tertutup
     useEffect(() => {
-        if (!openModalCreate) {
-            setIsFailAlert(false)
+        if ((!openModalCreate || !openModalEdit) && (alert.code === 0)) {
+            setIsActiveAlert(false)
         }
-    }, [openModalCreate]);
+    }, [openModalCreate, openModalEdit]);
     return (
         <>
 
@@ -199,27 +225,27 @@ const POCustomer = () => {
             </div>
 
             {/* Modal Detail */}
-            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title={"PO Customer Detail"} iconTitle={"ooui:view-details-ltr"}>
+            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="PO Customer Detail" iconTitle="ooui:view-details-ltr">
                 <POCustomerDetail data={dataModalDetail} dataUnitPo={dataUnitPo} setDataUnitPo={setDataUnitPo}
-                    setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert} setMsgAlert={setMsgAlert}
-                    setLoadingPage={setLoadingPage} optionsBrand={optionsBrand} />
+                    setAlert={setAlert} setLoadingPage={setLoadingPage} optionsBrand={optionsBrand} />
             </Modal>
 
             {/* Modal Create */}
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title={'New PO Customer'} size={700}>
-                <POCustomerCreate setIsOpen={setOpenModalCreate} setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert}
-                    setMsgAlert={setMsgAlert} fetchPoCustomer={fetchDataBody} options={{
-                        branch: { optionsBranch, setOptionsBranch },
-                        contract: { optionsContract, setOptionsContract }
-                    }} setLoadingPage={setLoadingPage} />
+                <POCustomerCreate setIsOpen={setOpenModalCreate} setAlert={setAlert} fetchPoCustomer={fetchDataBody} options={{
+                    contract: { optionsContract, setOptionsContract }
+                }} setLoadingPage={setLoadingPage} />
             </Modal>
 
             {/* Modal Edit */}
-            <Modal dataEdit={dataEdit} isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title={'Edit PO Customer'} size={700}>
-                {/* <MarketingEdit oid={idToBeEdit.current} setIsOpen={setOpenModalEdit} setLoadingPage={setLoadingPage} options={{
-                    branch: { optionsBranch, setOptionsBranch },
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title={'Edit PO Customer'} size={700}>
+                <POCustomerEdit setIsOpen={setOpenModalEdit} fetchPoCustomer={fetchDataBody} oid={idToBeEdit.current} options={{
                     contract: { optionsContract, setOptionsContract }
-                }} setSuccessCreate={setIsSuccessAlert} setFailCreate={setIsFailAlert} setMsgAlert={setMsgAlert} /> */}
+                }} setLoading={setLoadingPage} currentData={{
+                    ponumber: [editPoNumber, setEditPoNumber],
+                    branch: [editBranch, setEditBranch],
+                    contract: [editContract, setEditContract]
+                }} setAlert={setAlert} />
             </Modal>
 
             {/* Modal Delete */}
@@ -239,13 +265,13 @@ const POCustomer = () => {
             {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
             <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
             {/* Notifikasi Ketika Berhasil Create Data */}
-            <Alert isOpen={isSuccessAlert} setIsOpen={setIsSuccessAlert} codeAlert={1} title={msgAlert[0]}>
-                {msgAlert[1]}
+            <Alert isOpen={alert.isActive} setIsOpen={setIsActiveAlert} codeAlert={alert.code} title={alert.title}>
+                {alert.message}
             </Alert>
             {/* Notifikasi Ketika Gagal Create Data */}
-            <Alert isOpen={isFailAlert} setIsOpen={setIsFailAlert} codeAlert={0} title={msgAlert[0]}>
+            {/* <Alert isOpen={isFailAlert} setIsOpen={setIsFailAlert} codeAlert={0} title={msgAlert[0]}>
                 {msgAlert[1]}
-            </Alert>
+            </Alert> */}
             <Loading isLoading={loadingPage} />
         </>
     )

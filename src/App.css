@@ -145,6 +145,13 @@ input:placeholder-shown~.floating-label {
   transform: scale(1, 1);
 }
 
+.can-see-password {
+  position: absolute;
+  right: 0;
+  text-align: center;
+  padding: 8px 16px 8px 8px;
+  cursor: pointer;
+}
 
 .floating-label {
   position: absolute;
@@ -162,6 +169,13 @@ input:placeholder-shown~.floating-label {
   bottom: 36px;
   color: var(--light-green);
   transform: scale(.8, .8);
+}
+
+.btn-raised {
+  border-radius: 4px;
+  /* background: linear-gradient(145deg, #01964C, #01964C); */
+  box-shadow: 21px 21px 42px #bebebe,
+    -21px -21px 42px #ffffff;
 }
 
 /* .password:focus~.floating-label {

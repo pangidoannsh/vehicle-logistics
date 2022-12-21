@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import React from 'react';
 
 const TableSelect = (props) => {
-    const { dataBody, column, handleAdd, handleDelete } = props
+    const { dataBody, column, handleAdd, handleDelete, keyId } = props
     return (
         <table className="table-auto w-full">
             <thead>
@@ -28,7 +28,7 @@ const TableSelect = (props) => {
                         ))}
                         {handleDelete ? (
                             <td className='px-4 py-2 text-center'>
-                                <button className='rounded border border-[#AF183C] p-1' onClick={() => handleDelete(dataSelect.oid)}>
+                                <button className='rounded border border-[#AF183C] p-1' onClick={() => handleDelete(dataSelect[keyId])}>
                                     <Icon icon="bxs:trash-alt" className=' text-[#AF183C]' />
                                 </button>
                             </td>

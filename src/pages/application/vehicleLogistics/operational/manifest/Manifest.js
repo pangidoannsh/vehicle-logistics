@@ -8,6 +8,7 @@ import Modal from "../../../../../components/Modal";
 import Alert from "../../../../../components/Alert";
 import ErrorNetwork from "../../../../../components/ErrorNetwork";
 import { useFetch } from "../../../../../hooks";
+import ManifestDetail from "./ManifestDetail";
 
 const columnTable = [
     { field: 'oid', header: 'Manifest Number' },
@@ -17,21 +18,21 @@ const columnTable = [
     { field: 'status', header: 'Status' },
 ]
 // Bagaimana data diambil
-const templateData = data => {
+const howDataGet = data => {
     return { ...data, deliverydate: data.deliverydate.split(' ')[0] };
 }
 // Bagaimana data ditampilkan
 const displayData = data => {
     return {
         ...data,
-        status: data.status.toLowerCase() === 'ready' ? (
+        status: data.status.toLowerCase() === 'create' ? (
             <div className="flex gap-x-1 py-1 items-center bg-light-green rounded-sm text-white justify-center">
-                <Icon icon="akar-icons:check" className="text-base" />
+                {/* <Icon icon="akar-icons:check" className="text-base" /> */}
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
-        ) : data.status.toLowerCase() === 'manifest' ? (
+        ) : data.status.toLowerCase() === 'bast' ? (
             <div className="flex gap-x-1 py-1 items-center bg-[#0092E4] rounded-sm text-white justify-center">
-                <Icon icon="bi:stack" className="text-base" />
+                {/* <Icon icon="bi:stack" className="text-base" /> */}
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
         ) : data.status.toLowerCase() === 'closed' ? (
@@ -47,7 +48,9 @@ const Manifest = () => {
     let navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
-    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({ url: "/manifest", setLoading });
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
+        url: "/manifest", setLoading, howDataGet
+    });
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
     // untuk data yang akan ditampilkan Modal -> ModalContent
@@ -61,6 +64,11 @@ const Manifest = () => {
         title: "title",
         message: "message"
     })
+    const [dataUnit, setDataUnit] = useState([]);
+
+    const fetchDataDetail = () => {
+
+    }
     const setActivedAlert = isActived => {
         setAlert({ ...alert, isActived });
     }
@@ -110,7 +118,11 @@ const Manifest = () => {
                     </Table>
                 </div>
             </div>
-            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Manifest Detail" ></Modal>
+            {/* Modal Detail */}
+            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Manifest Detail"
+                iconTitle={"ooui:view-details-ltr"}>
+                <ManifestDetail />
+            </Modal>
             <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} title="Delete Manifest" ></Modal>
             <Alert isOpen={alert.isActived} setIsOpen={setActivedAlert} codeAlert={alert.code} title={alert.title}>
                 {alert.message}

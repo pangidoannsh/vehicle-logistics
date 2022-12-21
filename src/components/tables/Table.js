@@ -4,7 +4,8 @@ import Action from './Action';
 import LoadingTable from './LoadingTable';
 import PaginationTable from './PaginationTable';
 
-const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleClickField, id, clickField, loading, pagination, children }) => {
+const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleClickField, id,
+    clickField, loading, pagination, children }) => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     if (pagination) {

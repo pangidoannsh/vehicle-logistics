@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import { api } from "../config"
+import { useContext, useEffect, useState } from "react";
+import { api, AuthContext } from "../config"
 
 const useFetch = ({ url, setLoading, howDataGet }) => {
+    const [isLogged, setIsLogged] = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [error, setError] = useState(false);
     const fetchData = () => {
@@ -16,6 +17,10 @@ const useFetch = ({ url, setLoading, howDataGet }) => {
         }).catch(err => {
             if (err.code === "ERR_NETWORK") {
                 setError(true);
+            }
+            if (err.response.status === 401) {
+                localStorage.clear();
+                setIsLogged(false);
             }
         }).finally(() => setLoading(false))
     }

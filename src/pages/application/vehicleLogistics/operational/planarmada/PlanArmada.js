@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import Modal from '../../../../../components/Modal';
 import SearchTable from '../../../../../components/tables/SearchTable';
 import Table from '../../../../../components/tables/Table';
 import { api } from '../../../../../config';
 import PlanArmadaCreate from './PlanArmadaCreate';
 import Alert from '../../../../../components/Alert';
-import { fetchOption } from '../../../../../utils';
 import { Icon } from '@iconify/react';
 import Loading from '../../../../../components/Loading';
 import ErrorNetwork from '../../../../../components/ErrorNetwork';
 import { useFetch } from '../../../../../hooks';
+import PlanArmadaEdit from './PlanArmadaEdit';
 
 const columnTable = [
     { field: "branch", header: "Branch" },
@@ -19,7 +19,17 @@ const columnTable = [
     { field: "policenumber", header: "Police Number" },
     { field: "status", header: "Status" },
 ]
-
+const vehicleArmadaGet = data => {
+    const { hullnumber, unittype, policenumber } = data;
+    return {
+        hullnumber, armadaname: (
+            <div className='grid grid-cols-2'>
+                <span>{unittype}</span>
+                <span>{policenumber}</span>
+            </div>
+        )
+    };
+}
 const PlanArmada = () => {
     const howDataGet = useCallback(data => {
         const { branch, moda, destination, plandate, payloadcomposition, policenumber, status } = data;
@@ -44,6 +54,7 @@ const PlanArmada = () => {
             ) : data.status
         }
     }, []);
+    const idToBeEdit = useRef("");
     const [loadingPage, setLoadingPage] = useState(false)
     const [loading, setLoading] = useState(true);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
@@ -52,10 +63,10 @@ const PlanArmada = () => {
     });
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
-    // untuk membuka dan menutup modal detail
+    // untuk membuka dan menutup modal Create
     const [openModalCreate, setOpenModalCreate] = useState(false);
-    // untuk menampung kondisi berhasil create data
-    const [isSuccessCreated, setIsSuccessCreated] = useState(false);
+    // untuk membuka dan menutup modal Edit
+    const [openModalEdit, setOpenModalEdit] = useState(false);
 
     // option branch untuk select pada create po customer
     const [optionsBranch, setOptionsBranch] = useState([]);
@@ -63,8 +74,12 @@ const PlanArmada = () => {
         { id: "TOWING", name: 'TOWING' },
         { id: "CAR CARRIER", name: 'CAR CARRIER' },
     ]);
-    const [optionsVehicleArmada, setOptionsVehicleArmada] = useState([]);
-    const [optionsDestination, setOptionsDestination] = useState([]);
+    const [optionsVehicleArmada, setOptionsVehicleArmada] = useFetch({
+        url: "vehiclearmada", howDataGet: vehicleArmadaGet, setLoading: setLoadingPage,
+    });
+    const [optionsDestination, setOptionsDestination] = useFetch({
+        url: "destination", setLoading: setLoadingPage
+    });
 
     const [alert, setAlert] = useState({
         isActived: false,
@@ -73,59 +88,53 @@ const PlanArmada = () => {
         message: "message"
     })
     const setAlertActive = active => setAlert({ ...alert, isActived: active });
+    const [editModa, setEditModa] = useState({ id: null, name: "nothing to selected" });
+    const [editArmada, setEditArmada] = useState({ hullnumber: null, armadaname: "nothing selected" });
+    const [editDestination, setEditDestination] = useState({ key: null, name: "nothing selected" });
+    const [editPlanDate, setEditPlanDate] = useState("");
+    const [editPayLoad, setEditPayLoad] = useState("");
 
-    const handleOpenModalCreate = async e => {
+    const handleOpenModalCreate = e => {
         e.preventDefault();
-        try {
-            if (optionsBranch.length === 0) {
-                fetchOption('/branch', setOptionsBranch);
-            }
-            if (optionsVehicleArmada.length === 0) {
-                await api.get('/vehiclearmada').then(res => {
-                    setOptionsVehicleArmada(res.data.map(data => {
-                        const { hullnumber, unittype, policenumber } = data;
-                        return {
-                            hullnumber, armadaname: (
-                                <div className='grid grid-cols-2'>
-                                    <span>{unittype}</span>
-                                    <span>{policenumber}</span>
-                                </div>
-                            )
-                        };
-                    }))
-                })
-            }
-            if (optionsDestination.length === 0) {
-                fetchOption('/destination', setOptionsDestination);
-            }
-        } catch (err) {
-            console.log(err);
-        }
         setOpenModalCreate(true)
     }
-    // const fetchPlanArmada = () => {
-    //     api.get('/planarmada').then(res => {
-    //         setDataBody(res.data.map(data => {
-    //             return howDataGet(data);
-    //         }));
-    //         setLoading(false)
-    //     }).catch(error => {
-    //         console.log(error.response);
-    //         if (error.code === "ERR_NETWORK") {
-    //             setAlert({
-    //                 isActived: true,
-    //                 code: 0,
-    //                 title: "Error Network",
-    //                 message: "Please Check Your Connection and Reload the Browser!"
-    //             })
-    //         }
-    //     })
-    // }
-    // // use effect untuk consume API
-    // useEffect(() => {
-    //     fetchPlanArmada();
-    // }, []);
 
+    const handleOpenModalEdit = oid => {
+        setLoadingPage(true);
+        idToBeEdit.current = oid;
+        try {
+            api.get(`/planarmada/${oid}`).then(res => {
+                const data = res.data;
+                setEditModa({ id: data.moda, name: data.moda });
+                setEditArmada({
+                    hullnumber: data.hullnumber, armadaname: (
+                        <div className='grid grid-cols-2'>
+                            <span>{data.unittype}</span>
+                            <span>{data.policenumber}</span>
+                        </div>
+                    )
+                });
+                setEditDestination({ key: data.destination, name: data.destination });
+                setEditPlanDate(data.plandate.split(" ")[0]);
+                setEditPayLoad(data.payloadcomposition);
+                setOpenModalEdit(true);
+            })
+        } catch (err) {
+            setAlert({
+                isActived: true,
+                code: 0,
+                title: "Error",
+                message: "Server Error"
+            })
+            console.log(err);
+        } finally {
+            setLoadingPage(false);
+        }
+    }
+
+    const handleOpenModalDelete = e => {
+        e.preventDefault();
+    }
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
         setDataShow(dataBody.map(data => {
@@ -134,12 +143,12 @@ const PlanArmada = () => {
     }, [dataBody])
 
     useEffect(() => {
-        if (!openModalCreate) {
+        if (!openModalCreate || !openModalEdit) {
             if (alert.code === 0) {
                 setAlert({ ...alert, isActived: false });
             }
         }
-    }, [openModalCreate]);
+    }, [openModalCreate, openModalEdit]);
     return (
         <>
             {/* Content */}
@@ -160,7 +169,8 @@ const PlanArmada = () => {
                         </div>
                     </div>
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading} pagination>
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading} pagination
+                        handleActionEdit={handleOpenModalEdit} handleActionDelete={handleOpenModalDelete}>
                         {/* Search */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
                     </Table>
@@ -171,6 +181,18 @@ const PlanArmada = () => {
                 <PlanArmadaCreate setIsOpen={setOpenModalCreate} fetchPlanArmada={fetchDataBody} options={{
                     optionsBranch, optionsModa, optionsVehicleArmada, optionsDestination
                 }} setAlert={setAlert} setLoadingPage={setLoadingPage} alert={alert} />
+            </Modal>
+            {/* Modal Edit */}
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Plan Armada" size={700}>
+                <PlanArmadaEdit setIsOpen={setOpenModalEdit} fetchPlanArmada={fetchDataBody} oid={idToBeEdit.current} options={{
+                    optionsModa, optionsVehicleArmada, optionsDestination
+                }} setAlert={setAlert} setLoadingPage={setLoadingPage} currentData={{
+                    moda: [editModa, setEditModa],
+                    armada: [editArmada, setEditArmada],
+                    destination: [editDestination, setEditDestination],
+                    plandate: [editPlanDate, setEditPlanDate],
+                    payload: [editPayLoad, setEditPayLoad]
+                }} />
             </Modal>
             {/* Alert */}
             <Alert isOpen={alert.isActived} setIsOpen={setAlertActive} codeAlert={alert.code} title={alert.title}>

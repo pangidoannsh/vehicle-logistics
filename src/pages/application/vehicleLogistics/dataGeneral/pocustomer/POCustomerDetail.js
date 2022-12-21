@@ -20,16 +20,10 @@ const columnTable = [
 
 const POCustomerDetail = (props) => {
     const user = useContext(UserContext);
-    const { dataUnitPo, setDataUnitPo, setSuccessCreate, setFailCreate, setMsgAlert, setLoadingPage, optionsBrand } = props
-    const [valueBrand, setValueBrand] = useState("");
-    // const [valueEngineNumber, setValueEngineNumber] = useState("");
-    // const [valueFrameNumber, setValueFrameNumber] = useState("");
-    // const [valueType, setValueType] = useState("");
-    // const [valueColor, setValueColor] = useState("");
-    // const [valueYear, setValueYear] = useState("");
-    // const [valueAmount, setValueAmount] = useState("");
+    const { dataUnitPo, setDataUnitPo, setAlert, setLoadingPage, optionsBrand } = props
     const [totalPrice, setTotalPrice] = useState(props.data.value);
 
+    const [valueBrand, setValueBrand] = useState({ oid: null, name: "nothing selected" });
     const refEngineNumber = useRef();
     const refFrameNumber = useRef();
     const refType = useRef();
@@ -61,40 +55,56 @@ const POCustomerDetail = (props) => {
         e.preventDefault()
         // refresh alert dan loading
         setLoadingPage(true);
-        setFailCreate(false);
-        setSuccessCreate(false);
+        setAlert(prev => ({ ...prev, isActive: false }));
         // menampung data baru
         const newData = {
             user: user.id,
             pocustomeroid: oid,
             enginenumber: refEngineNumber.current.value.toUpperCase(),
             framenumber: refFrameNumber.current.value.toUpperCase(),
-            unitbrand: valueBrand,
+            unitbrand: valueBrand.oid,
             type: refType.current.value.toUpperCase(),
             color: refColor.current.value.toUpperCase(),
             year: refYear.current.value.toUpperCase(),
-            amount: refAmount.current.value,
+            amount: Number(refAmount.current.value),
         };
         api.post("/vehiclepo", newData).then(response => {
             if (response.status === 201) {
                 console.log(response);
                 setTotalPrice(Number(totalPrice) + Number(refAmount.current.value));
                 setLoadingPage(false)
-                setSuccessCreate(true);
                 resetInput();
-                setMsgAlert(["Success", "Data Unit PO Created"]);
+                setAlert({
+                    isActive: true,
+                    code: 1,
+                    title: "Success",
+                    message: "Data Unit PO Created"
+                })
                 setDataUnitPo([...dataUnitPo, newData]);
                 setTimeout(() => {
-                    setSuccessCreate(false)
+                    setAlert(prev => ({ ...prev, isActive: false }))
                 }, 3000);
             }
         }).catch(error => {
             setLoadingPage(false);
-            setFailCreate(true);
-            const message = Object.values(error.response.data)[0][0];
-            setMsgAlert([`Error ${error.response.status}`, message]);
             if (error.response.status !== 422) {
+                if (error.response.status >= 500) {
+                    setAlert({
+                        isActive: true,
+                        code: 0,
+                        title: `Error ${error.response.status}`,
+                        message: "Server Error"
+                    })
+                }
                 console.log(error.response);
+            } else {
+                const message = Object.values(error.response.data)[0][0];
+                setAlert({
+                    isActive: true,
+                    code: 0,
+                    title: `Error ${error.response.status}`,
+                    message: message
+                })
             }
         })
     }
@@ -139,10 +149,6 @@ const POCustomerDetail = (props) => {
                                 <td className='py-4'>Value</td>
                                 <td className='pr-2 py-4'>Rp {moneyFormat(totalPrice)}</td>
                             </tr>
-                            {/* <tr >
-                                <td className='py-4'>Quantity</td>
-                                <td className='pr-2 py-4'>{dataUnitPo.length}</td>
-                            </tr> */}
                         </tbody>
                     </table>
                 </div>
@@ -152,7 +158,7 @@ const POCustomerDetail = (props) => {
                             <FormInput sizeLabel="text-base" label="Engine Number" tagId="enginenumber" refrence={refEngineNumber} />
                             <FormInput sizeLabel="text-base" label="Frame Number" tagId="framenumber" refrence={refFrameNumber} />
                             <div className="grid grid-cols-2 gap-x-2">
-                                <Select label="Brand" setValue={setValueBrand} keyId="oid" keyName="name" options={optionsBrand} />
+                                <Select label="Brand" useSelect={[valueBrand, setValueBrand]} keyId="oid" keyName="name" options={optionsBrand} />
                                 <FormInput sizeLabel="text-base" label="Type" tagId="type" refrence={refType} />
                             </div>
                             <div className="grid grid-cols-3 gap-x-2">
@@ -161,8 +167,11 @@ const POCustomerDetail = (props) => {
                                 <FormInput sizeLabel="text-base" label="Amount" tagId="amount" refrence={refAmount} />
                             </div>
                         </div>
-                        <button className={`bg-light-green hover:bg-green-700 text-white rounded flex active:ring active:ring-green-200
-                        focus:ring focus:ring-green-200 items-center gap-x-1 py-1 px-4 mt-6`} onClick={handleCreateUnit}>Save</button>
+                        <button className={`bg-light-green hover:bg-green-700 text-white rounded 
+                        flex active:ring active:ring-green-200 focus:ring focus:ring-green-200 items-center 
+                        gap-x-1 py-1 px-4 mt-6`} onClick={handleCreateUnit}>
+                            Save
+                        </button>
                     </form>
                 </div>
             </div>

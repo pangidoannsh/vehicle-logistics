@@ -55,7 +55,7 @@ export default function Sign(props) {
             onceEffect = true
         };
     }, []);
-    // if (isLogged) return <Navigate to="/" />;
+    if (isLogged) return <Navigate to="/" />;
     return (
         <div className='bg-no-repeat bg-center bg-cover overflow-hidden'
             style={{ backgroundImage: `url(${Background})` }}>

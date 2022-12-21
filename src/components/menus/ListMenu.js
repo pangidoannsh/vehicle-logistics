@@ -80,35 +80,17 @@ const application = [
                         "path": "/plan-armada"
                     },
                     {
-                        "title": "Loading",
-                        "path": "/loading"
-                    }
-                ]
-            },
-            {
-                "title": "Administration",
-                "icon": "dashicons:admin-settings",
-                "sub": [
-                    {
                         "title": "Manifest",
                         "path": "/manifest"
+                    },
+                    {
+                        "title": "Loading",
+                        "path": "/loading"
                     },
                     {
                         "title": "B.A.S.T",
                         "path": "/bast"
                     },
-                    {
-                        "title": "Delivery Order",
-                        "path": "/delivery-order"
-                    },
-                    {
-                        "title": "Receipt Update",
-                        "path": "/receipt-update"
-                    },
-                    {
-                        "title": "Handover",
-                        "path": "/handover"
-                    }
                 ]
             },
             {
