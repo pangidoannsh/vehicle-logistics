@@ -1,35 +1,26 @@
-import { Icon } from "@iconify/react";
 import { useCallback } from "react";
 import { useState, useRef, useContext } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
+import MoneyInput from "../../../../../components/inputs/MoneyInput";
 import Select from "../../../../../components/inputs/Select";
-import Table from "../../../../../components/tables/Table";
 import { api } from "../../../../../config";
 import { UserContext } from "../../../../../config/User";
 import { moneyFormat } from "../../../../../utils";
-
-const columnTable = [
-    { field: 'enginenumber', header: 'Engine Number' },
-    { field: 'framenumber', header: 'Frame Number' },
-    { field: 'unitbrand', header: 'Brand' },
-    { field: 'type', header: 'Type' },
-    { field: 'color', header: 'Color' },
-    { field: 'year', header: 'Year' },
-    { field: 'amount', header: 'Amount (Rp)' },
-]
+import DataUnitPO from "./DataUnitPO";
 
 const POCustomerDetail = (props) => {
     const user = useContext(UserContext);
-    const { dataUnitPo, setDataUnitPo, setAlert, setLoadingPage, optionsBrand } = props
+    const { dataUnitPo, setDataUnitPo, setAlert, setLoadingPage, optionsBrand, fetchPoCustomer } = props
     const [totalPrice, setTotalPrice] = useState(props.data.value);
 
     const [valueBrand, setValueBrand] = useState({ oid: null, name: "nothing selected" });
+    const [valueAmount, setValueAmount] = useState("");
     const refEngineNumber = useRef();
     const refFrameNumber = useRef();
     const refType = useRef();
     const refColor = useRef();
     const refYear = useRef();
-    const refAmount = useRef();
+    // const refAmount = useRef();
 
     const {
         oid,
@@ -48,7 +39,8 @@ const POCustomerDetail = (props) => {
         refType.current.value = "";
         refColor.current.value = "";
         refYear.current.value = "";
-        refAmount.current.value = "";
+        // refAmount.current.value = "";
+        setValueAmount("");
     }, []);
 
     const handleCreateUnit = e => {
@@ -66,12 +58,12 @@ const POCustomerDetail = (props) => {
             type: refType.current.value.toUpperCase(),
             color: refColor.current.value.toUpperCase(),
             year: refYear.current.value.toUpperCase(),
-            amount: Number(refAmount.current.value),
+            amount: Number(valueAmount),
         };
         api.post("/vehiclepo", newData).then(response => {
             if (response.status === 201) {
                 console.log(response);
-                setTotalPrice(Number(totalPrice) + Number(refAmount.current.value));
+                setTotalPrice(Number(totalPrice) + Number(valueAmount));
                 setLoadingPage(false)
                 resetInput();
                 setAlert({
@@ -109,12 +101,6 @@ const POCustomerDetail = (props) => {
         })
     }
 
-    const handleEditUnit = oid => {
-        console.log(oid);
-    }
-    const handleDeleteUnit = oid => {
-        console.log(oid);
-    }
     return (
         <>
             <div className='grid grid-cols-12 px-2'>
@@ -164,7 +150,8 @@ const POCustomerDetail = (props) => {
                             <div className="grid grid-cols-3 gap-x-2">
                                 <FormInput sizeLabel="text-base" label="Color" tagId="color" refrence={refColor} />
                                 <FormInput sizeLabel="text-base" label="Year" tagId="year" refrence={refYear} />
-                                <FormInput sizeLabel="text-base" label="Amount" tagId="amount" refrence={refAmount} />
+                                <MoneyInput sizeLabel="text-base" label="Amount" tagId="amount"
+                                    value={valueAmount} setValue={setValueAmount} />
                             </div>
                         </div>
                         <button className={`bg-light-green hover:bg-green-700 text-white rounded 
@@ -176,20 +163,8 @@ const POCustomerDetail = (props) => {
                 </div>
             </div>
             {/* Title */}
-            <div className="flex justify-between px-2 py-4 items-center divider-bottom mb-6">
-                <div className="flex gap-x-2 items-center">
-                    <Icon icon="fa6-solid:car-side" className={`text-2xl text-gold `} />
-                    <span className='text-lg text-dark-green font-medium'>Data Unit</span>
-                </div>
-                <button className={`bg-custom-blue hover:bg-blue-700 text-white rounded flex
-                                items-center gap-x-1 py-1 px-4 `}>
-                    <Icon icon="file-icons:microsoft-excel" className="text-base" />
-                    <span className='text-base'>Upload</span>
-                </button>
-            </div>
-            <Table dataBody={dataUnitPo.map(data => { return { ...data, amount: moneyFormat(data.amount) } })}
-                column={columnTable} id="oid" loading={false} handleActionEdit={handleEditUnit}
-                handleActionDelete={handleDeleteUnit} />
+            <DataUnitPO data={dataUnitPo} setData={setDataUnitPo} setTotalPrice={setTotalPrice}
+                fetchPoCustomer={fetchPoCustomer} setLoadingPage={setLoadingPage} />
         </>
     )
 }

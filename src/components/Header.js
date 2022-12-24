@@ -2,19 +2,11 @@ import { Menu, Transition } from '@headlessui/react';
 import { Icon } from '@iconify/react'
 import React from 'react'
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../config/User';
+import Logout from '../pages/Logout';
 
 function Header({ setIsLogged }) {
     const [user, setUser] = useContext(UserContext);
-    let navigate = useNavigate();
-    const handleLogout = e => {
-        e.preventDefault();
-        localStorage.clear();
-        setIsLogged(false);
-        navigate('/login');
-        window.location.reload();
-    }
     return (
         <>
             <div className='flex justify-end p-4 h-[72px] bg-white'>
@@ -34,12 +26,12 @@ function Header({ setIsLogged }) {
                         leaveTo="transform scale-95 opacity-0"
                     >
                         <Menu.Items as='div' className={`absolute z-30 left-0 bg-white rounded shadow-md`}>
-                            {/* <Menu.Item as='div' className='flex flex-col gap-y-3'>
-                                <div className='hover:bg-green-400 px-3 py-2 hover:text-white'>testing</div>
-                            </Menu.Item> */}
                             <Menu.Item as='div' className='flex flex-col gap-y-3'>
-                                <button className='w-full hover:bg-red-400 px-3 py-2 hover:text-white'
-                                    onClick={handleLogout}>Logout</button>
+
+                            </Menu.Item>
+                            <div className='divider-bottom my-1'></div>
+                            <Menu.Item as='div' s>
+                                <Logout setIsLogged={setIsLogged} />
                             </Menu.Item>
                         </Menu.Items>
                     </Transition>

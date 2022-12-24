@@ -3,6 +3,7 @@ import { api } from "../config";
 const moneyFormat = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
+
 const fetchOption = (url, setOption) => {
     api.get(url).then(res => {
         setOption(res.data)
@@ -13,4 +14,13 @@ const fetchOption = (url, setOption) => {
         }
     })
 }
-export { moneyFormat, fetchOption };
+
+const unformat = x => {
+    const temp = x.split(".");
+    let result = ""
+    temp.forEach(element => {
+        result += element
+    });
+    return result
+}
+export { moneyFormat, fetchOption, unformat };

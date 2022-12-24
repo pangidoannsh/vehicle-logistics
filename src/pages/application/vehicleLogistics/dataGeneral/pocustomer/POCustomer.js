@@ -227,7 +227,7 @@ const POCustomer = () => {
             {/* Modal Detail */}
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="PO Customer Detail" iconTitle="ooui:view-details-ltr">
                 <POCustomerDetail data={dataModalDetail} dataUnitPo={dataUnitPo} setDataUnitPo={setDataUnitPo}
-                    setAlert={setAlert} setLoadingPage={setLoadingPage} optionsBrand={optionsBrand} />
+                    setAlert={setAlert} setLoadingPage={setLoadingPage} optionsBrand={optionsBrand} fetchPoCustomer={fetchDataBody} />
             </Modal>
 
             {/* Modal Create */}
@@ -268,10 +268,6 @@ const POCustomer = () => {
             <Alert isOpen={alert.isActive} setIsOpen={setIsActiveAlert} codeAlert={alert.code} title={alert.title}>
                 {alert.message}
             </Alert>
-            {/* Notifikasi Ketika Gagal Create Data */}
-            {/* <Alert isOpen={isFailAlert} setIsOpen={setIsFailAlert} codeAlert={0} title={msgAlert[0]}>
-                {msgAlert[1]}
-            </Alert> */}
             <Loading isLoading={loadingPage} />
         </>
     )
