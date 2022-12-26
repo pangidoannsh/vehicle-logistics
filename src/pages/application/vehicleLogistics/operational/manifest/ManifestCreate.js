@@ -21,7 +21,7 @@ const columnTableModal = [
     { field: "type", header: "Type" },
     { field: "color", header: "Color" },
     { field: "year", header: "Year" },
-    { field: "amount", header: "Amount" },
+    { field: "amount", header: "Amount (Rp)" },
     { field: "action", header: "#" }
 ]
 const columnSelectUnit = [
@@ -30,7 +30,7 @@ const columnSelectUnit = [
     { field: "type", header: "Type" },
     { field: "color", header: "Color" },
     { field: "year", header: "Year" },
-    { field: "amount", header: "Amount" }
+    { field: "amount", header: "Amount (Rp)" }
 ]
 
 const ManifestCreate = () => {
@@ -55,7 +55,7 @@ const ManifestCreate = () => {
         return { oid, enginenumber, framenumber, type, color, year, amount };
     })
     // ========================== END Template Object =======================
-    const templateUnitSelect = useCallback(data => {
+    const templateUnitSelect = data => {
         const action = (
             <div className="text-center w-6">
                 <button className="px-2 py-1 bg-light-green rounded-sm hover:bg-green-800
@@ -66,7 +66,8 @@ const ManifestCreate = () => {
             </div>
         )
         return { ...data, action };
-    });
+    };
+
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState({
         isActived: false,
@@ -162,7 +163,7 @@ const ManifestCreate = () => {
 
     const handlePoCustomerInput = id => {
         if (id !== null) {
-            // sourceDataUnit.current = [];
+            sourceDataUnit.current = [];
             idUnitSelected.current = [];
             setUnitSelect([]);
             setOptionsDataUnit([]);
@@ -187,15 +188,16 @@ const ManifestCreate = () => {
         setOptionsDataUnit(optionsDataUnit.filter(data => data.oid !== oidunit).map(filter => filter));
     })
 
-    const handleDeleteUnit = useCallback(oidunit => {
-        // console.log(oidunit);
+    const handleDeleteUnit = oidunit => {
         idUnitSelected.current = idUnitSelected.current.filter(id => id !== oidunit).map(filter => filter)
         // mengurangi data terpilih dari list unit select
         setOptionsDataUnit([...optionsDataUnit, sourceDataUnit.current.filter(data => data.oid === oidunit).map(filter => filter)[0]])
+        // mengurangi data unit yang sudah selected
         setUnitSelect(unitSelect.filter(data => data.oid !== oidunit).map(filter => filter))
-    })
+    }
 
     const loadData = async () => {
+        setLoading(true);
         await api.get('/planarmadalist').then(res => {
             setOptionsPlanArmada(res.data.map(data => {
                 return planArmadaObject(data);
@@ -206,26 +208,32 @@ const ManifestCreate = () => {
         });
         fetchOption('/driver', setOptionsDriver);
         fetchOption('/pocustomerlist', setOptionsPoCustomer);
-        api.get('/origin').then(res => {
+        await api.get('/origin').then(res => {
             setOptionsOrigin(res.data.map(data => {
                 return { key: data.origin, name: data.origin };
             }))
         }).catch(error => {
             console.log(error.response);
-            alert(error);
+            window.alert(error);
         })
-        api.get('/destination').then(res => {
+        await api.get('/destination').then(res => {
             setOptionsDestination(res.data.map(data => {
                 return { key: data.destination, name: data.destination };
             }))
         }).catch(error => {
             console.log(error.response);
             alert(error);
-        })
+        }).finally(() => setLoading(false))
     }
     // get all data
+    let mount = true;
     useEffect(() => {
-        loadData()
+        if (mount) {
+            loadData()
+        }
+        return () => {
+            mount = false;
+        }
     }, []);
     // render JSX
     return (
@@ -279,7 +287,7 @@ const ManifestCreate = () => {
                         </div>
                     </div>
                     <TableSelect dataBody={unitSelect} handleAdd={handleOpenModalSelectUnit}
-                        handleDelete={handleDeleteUnit} column={columnSelectUnit} />
+                        handleDelete={handleDeleteUnit} column={columnSelectUnit} keyId="oid" />
                     <div className="flex justify-end pr-6 mx-auto mt-10">
                         <button className={`bg-light-green hover:bg-green-700 text-white flex active:ring active:ring-green-300
                                focus:ring focus:ring-green-300 items-center gap-x-1 py-2 px-8 font-medium rounded`}

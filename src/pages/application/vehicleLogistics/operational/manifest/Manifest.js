@@ -2,7 +2,6 @@ import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import SearchTable from "../../../../../components/tables/SearchTable";
 import Table from "../../../../../components/tables/Table";
-import { api } from "../../../../../config";
 import { NavLink, useNavigate } from "react-router-dom";
 import Modal from "../../../../../components/Modal";
 import Alert from "../../../../../components/Alert";
