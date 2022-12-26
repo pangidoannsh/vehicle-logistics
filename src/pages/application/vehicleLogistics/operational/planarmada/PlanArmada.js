@@ -30,12 +30,13 @@ const vehicleArmadaGet = data => {
         )
     };
 }
+const howDataGet = data => {
+    const { oid, branch, moda, destination, plandate, payloadcomposition, policenumber, status } = data;
+    const date = plandate.split(" ")[0].split("-").reverse();
+    return { oid, branch, moda, destination, plandate: `${date[0]}-${date[1]}-${date[2]}`, payloadcomposition, policenumber, status };
+}
 const PlanArmada = () => {
-    const howDataGet = useCallback(data => {
-        const { branch, moda, destination, plandate, payloadcomposition, policenumber, status } = data;
-        const date = plandate.split(" ")[0].split("-").reverse();
-        return { branch, moda, destination, plandate: `${date[0]}-${date[1]}-${date[2]}`, payloadcomposition, policenumber, status };
-    })
+
     const displayData = useCallback(data => {
         return {
             ...data,
@@ -55,11 +56,13 @@ const PlanArmada = () => {
         }
     }, []);
     const idToBeEdit = useRef("");
+    const idToBeDelete = useRef("");
+
     const [loadingPage, setLoadingPage] = useState(false)
     const [loading, setLoading] = useState(true);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
     const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
-        url: '/planarmada', setLoading
+        url: '/planarmada', setLoading, howDataGet
     });
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
@@ -67,6 +70,8 @@ const PlanArmada = () => {
     const [openModalCreate, setOpenModalCreate] = useState(false);
     // untuk membuka dan menutup modal Edit
     const [openModalEdit, setOpenModalEdit] = useState(false);
+    // untuk membuka dan menutup modal Edit
+    const [openModalDelete, setOpenModalDelete] = useState(false);
 
     // option branch untuk select pada create po customer
     const [optionsBranch, setOptionsBranch] = useState([]);
@@ -75,10 +80,10 @@ const PlanArmada = () => {
         { id: "CAR CARRIER", name: 'CAR CARRIER' },
     ]);
     const [optionsVehicleArmada, setOptionsVehicleArmada] = useFetch({
-        url: "vehiclearmada", howDataGet: vehicleArmadaGet, setLoading: setLoadingPage,
+        url: "vehiclearmada", howDataGet: vehicleArmadaGet,
     });
     const [optionsDestination, setOptionsDestination] = useFetch({
-        url: "destination", setLoading: setLoadingPage
+        url: "destination"
     });
 
     const [alert, setAlert] = useState({
@@ -132,8 +137,43 @@ const PlanArmada = () => {
         }
     }
 
-    const handleOpenModalDelete = e => {
-        e.preventDefault();
+    const handleOpenModalDelete = oid => {
+        idToBeDelete.current = oid;
+        setOpenModalDelete(true);
+    }
+
+    const handleDelete = e => {
+        setAlertActive(false);
+        setLoadingPage(true);
+        api.delete(`/planarmada/${idToBeDelete.current}`).then(res => {
+            setAlert({
+                isActived: true,
+                code: 1,
+                title: "Success",
+                message: "Plan Armada Success Deleted"
+            });
+            fetchDataBody();
+            setTimeout(() => {
+                setAlertActive(false);
+            }, 2000)
+        }).catch(err => {
+            if (err.response.status < 500) {
+                setAlert({
+                    isActived: true,
+                    code: 1,
+                    title: `Error ${err.response.status}`,
+                    message: "Client Error"
+                });
+            }
+            else {
+                setAlert({
+                    isActived: true,
+                    code: 1,
+                    title: `Error ${err.response.status}`,
+                    message: "Server Error"
+                });
+            }
+        }).finally(() => { setLoadingPage(false); setOpenModalDelete(false) })
     }
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
@@ -193,6 +233,22 @@ const PlanArmada = () => {
                     plandate: [editPlanDate, setEditPlanDate],
                     payload: [editPayLoad, setEditPayLoad]
                 }} />
+            </Modal>
+            {/* Modal Delete */}
+            <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} size={500} >
+                <div className='text-slate-600 text-xl font-medium'>
+                    Are you sure want to Delete Data Plan Armada ?
+                </div>
+                <div className="flex justify-end gap-x-4 mt-4">
+                    <button className={`text-slate-500 hover:text-slate-600 items-center gap-x-1 py-2 px-4 `}
+                        onClick={() => setOpenModalDelete(false)}>
+                        Cancel
+                    </button>
+                    <button type="Submit" className={`border border-red-600 text-red-600 rounded flex items-center gap-x-1 py-2 px-4 
+                            focus:ring focus:ring-red-200 active:ring active:ring-red-200`} onClick={handleDelete}>
+                        Delete
+                    </button>
+                </div>
             </Modal>
             {/* Alert */}
             <Alert isOpen={alert.isActived} setIsOpen={setAlertActive} codeAlert={alert.code} title={alert.title}>

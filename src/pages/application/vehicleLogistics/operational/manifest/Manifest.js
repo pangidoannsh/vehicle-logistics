@@ -33,7 +33,7 @@ const displayData = data => {
         ) : data.status.toLowerCase() === 'bast' ? (
             <div className="flex gap-x-1 py-1 items-center bg-[#0092E4] rounded-sm text-white justify-center">
                 {/* <Icon icon="bi:stack" className="text-base" /> */}
-                <span className="text-sm capitalize">{data.status}</span>
+                <span className="text-sm capitalize">B.A.S.T</span>
             </div>
         ) : data.status.toLowerCase() === 'closed' ? (
             <div className="flex gap-x-1 py-1 items-center bg-[#A90101] rounded-sm text-white justify-center">

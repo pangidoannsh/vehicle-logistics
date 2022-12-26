@@ -1,0 +1,24 @@
+=== FITUR EDIT VEHICLE PO atau DATA UNIT pada PO CUSTOMER DETAIL ===
+
+requirement: 
+
+- edit selain amount
+- edit amount
+- edit brand
+- auto update data po customer
+- auto update table unit po
+- auto update value po customer
+- auto update vehicel po history
+
+==========================  DONE  ==========================
+
+=== DELETE PLAN ARMADA ===
+
+requirement: 
+- modal konfirmasi
+- update GCRecord to 1
+- get data only when GCRecord is NULL or 0
+
+==========================  DONE  ==========================
+
+================================================= SUNDAY, 25/12/2022 ================================================= 

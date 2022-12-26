@@ -6,7 +6,9 @@ const useFetch = ({ url, setLoading, howDataGet }) => {
     const [data, setData] = useState([]);
     const [error, setError] = useState(false);
     const fetchData = () => {
-        setLoading(true);
+        if (setLoading) {
+            setLoading(true);
+        }
         api.get(url).then(res => {
             setData(res.data.map(data => {
                 if (howDataGet) {
@@ -22,7 +24,7 @@ const useFetch = ({ url, setLoading, howDataGet }) => {
                 localStorage.clear();
                 setIsLogged(false);
             }
-        }).finally(() => setLoading(false))
+        }).finally(() => setLoading ? setLoading(false) : '')
     }
     let mount = true;
     useEffect(() => {

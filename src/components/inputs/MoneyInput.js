@@ -4,8 +4,7 @@ import { moneyFormat, unformat } from '../../utils';
 const Input = ({ label, tagId, setValue, value }) => {
     const handleChange = e => {
         e.preventDefault();
-        setValue(unformat(e.target.value))
-        console.log(unformat(e.target.value));
+        setValue(unformat(e.target.value));
     }
     return (
         <div className="flex flex-col gap-y-2 text-slate-700 relative">

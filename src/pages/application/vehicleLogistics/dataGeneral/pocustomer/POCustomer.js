@@ -69,26 +69,17 @@ const POCustomer = () => {
     // option branch untuk select pada create po customer
     const [optionsBranch, setOptionsBranch] = useState([]);
     const [optionsContract, setOptionsContract] = useState([]);
-    const [optionsBrand, setOptionsBrand] = useState([]);
+    const [optionsBrand, setOptionsBrand] = useFetch({
+        url: "/vehiclebrand", howDataGet: (data => {
+            return { oid: data.brand, name: data.brand };
+        })
+    });
 
     const [editPoNumber, setEditPoNumber] = useState("");
     const [editBranch, setEditBranch] = useState({ oid: null, branchname: "nothing selected" });
     const [editContract, setEditContract] = useState({ oid: null, contractname: "nothing selected" });
 
     const handleOpenModalDetail = useCallback(id => {
-        api.get('/vehiclebrand').then(res => {
-            setOptionsBrand(res.data.map(data => {
-                return { oid: data.brand, name: data.brand };
-            }))
-        }).catch(error => {
-            console.log(error.response);
-            setAlert({
-                isActive: true,
-                code: 0,
-                title: `Error ${error.response.status}`,
-                message: "Cant Connect to Server"
-            })
-        })
         const fetchDataUnit = () => {
             api.get(`/vehiclepo/${id}`).then(res => {
                 setDataUnitPo(res.data)
@@ -100,6 +91,7 @@ const POCustomer = () => {
                 console.log(err.message)
             })
         }
+
         if (dataModalDetail === null) {
             setDataModalDetail(dataBody.filter(data => data.oid === id).map(filter => filter)[0]);
             setLoadingPage(true);
@@ -125,6 +117,7 @@ const POCustomer = () => {
 
     const handleOpenModalEdit = oid => {
         setLoadingPage(true);
+        setDataModalDetail([]);
         idToBeEdit.current = oid;
         try {
             api.get(`/pocustomer/${oid}`).then(res => {
@@ -217,7 +210,7 @@ const POCustomer = () => {
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable}
                         handleActionDelete={handleOpenModalDelete} handleActionEdit={handleOpenModalEdit}
-                        handleClickField={handleOpenModalDetail} clickField={clickFieldTable} pagination>
+                        handleClickField={handleOpenModalDetail} clickField={clickFieldTable} pagination center={["quantity"]}>
                         {/* Search */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} dataSkipSearch={0} customDisplay={dataDisplay} />
                     </Table>
@@ -249,13 +242,17 @@ const POCustomer = () => {
             </Modal>
 
             {/* Modal Delete */}
-            <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} size={500}>
+            <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} size={500} >
                 <div className='text-slate-600 text-xl font-medium'>
                     Are you sure want to Delete Data with PO Number <span className='text-gold'>{
                         dataBody.filter(data => data.oid === idToBeDelete.current).map(filter => filter.ponumber)[0]
                     }</span> ?
                 </div>
-                <div className="flex justify-end mt-4">
+                <div className="flex justify-end gap-x-4 mt-4">
+                    <button className={`text-slate-500 hover:text-slate-600 items-center gap-x-1 py-2 px-4 `}
+                        onClick={() => setOpenModalDelete(false)}>
+                        Cancel
+                    </button>
                     <button type="Submit" className={`border border-red-600 text-red-600 rounded flex items-center gap-x-1 py-2 px-4 
                             focus:ring focus:ring-red-200 active:ring active:ring-red-200`} onClick={handleDelete}>
                         Delete

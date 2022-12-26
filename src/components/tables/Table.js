@@ -5,7 +5,7 @@ import LoadingTable from './LoadingTable';
 import PaginationTable from './PaginationTable';
 
 const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleClickField, id,
-    clickField, loading, pagination, children }) => {
+    clickField, loading, pagination, children, center = [] }) => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     if (pagination) {
@@ -62,12 +62,12 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                                                 </Action>
                                             </td> : ''
                                         }
-                                        <td className="p-4 text-sm text-slate-700 text-center w-14  selection:bg-light-green selection:text-white">
+                                        <td className="p-4 text-sm text-slate-700 text-center w-14">
                                             {index + 1 + (limit * (page - 1))}
                                         </td>
                                         {column.map(col => (
-                                            <td key={col.field} className="p-4 text-sm text-slate-600
-                                            selection:bg-light-green selection:text-white">
+                                            <td key={col.field} className={`p-4 text-sm text-slate-600
+                                            ${center.findIndex(data => data === col.field) !== -1 ? 'text-center' : ''}`}>
                                                 {handleClickField && (col.field === clickField || col.field === id) ? (
                                                     <button onClick={() => { handleClickField(dataRow[id]) }}
                                                         className="text-gold hover:underline">
@@ -138,12 +138,11 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                                         </Action>
                                     </td> : ''
                                 }
-                                <td className="p-4 text-sm text-slate-700 text-center w-14  selection:bg-light-green selection:text-white">
+                                <td className="p-4 text-sm text-slate-700 text-center w-14">
                                     {index + 1}
                                 </td>
                                 {column.map(col => (
-                                    <td key={col.field} className="p-4 text-sm text-slate-600
-                            selection:bg-light-green selection:text-white">
+                                    <td key={col.field} className="p-4 text-sm text-slate-600">
                                         {handleClickField && (col.field === clickField || col.field === id) ? (
                                             <button onClick={() => { handleClickField(dataRow[id]) }}
                                                 className="text-gold hover:underline">

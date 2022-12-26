@@ -6,7 +6,7 @@ import { api } from '../../../../../config';
 import { UserContext } from '../../../../../config/User';
 
 const POCustomerEdit = ({ setIsOpen, currentData, fetchPoCustomer, options, oid, setLoading, setAlert }) => {
-    const { optionsContract, setOptionsContract } = options.contract;
+    const { optionsContract } = options.contract;
     const [valuePoNumber, setValuePoNumber] = currentData.ponumber ? currentData.ponumber : "";
     const [valueContract, setValueContract] = currentData.contract ? currentData.contract : { oid: null, contractname: "nothing selected" };
     const [user] = useContext(UserContext);
