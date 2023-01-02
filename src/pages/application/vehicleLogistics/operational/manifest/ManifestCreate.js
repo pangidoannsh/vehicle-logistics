@@ -13,7 +13,7 @@ import Alert from "../../../../../components/Alert";
 import Loading from "../../../../../components/Loading";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchOption } from "../../../../../utils";
+import { fetchOption, moneyFormat } from "../../../../../utils";
 
 const columnTableModal = [
     { field: "enginenumber", header: "Engine Number" },
@@ -32,19 +32,27 @@ const columnSelectUnit = [
     { field: "year", header: "Year" },
     { field: "amount", header: "Amount (Rp)" }
 ]
-
+const dummy = [
+    {
+        enginenumber: "2435435",
+        framenumber: "2435435",
+        type: "type",
+        color: "type",
+    }
+]
 const ManifestCreate = () => {
     let navigate = useNavigate();
     const user = useContext(UserContext);
     // ====================== Template Object ==============================
     //  Plan Armada
     const planArmadaObject = useCallback(data => {
-        const { oid, policenumber, hullnumber } = data;
+        const { oid, policenumber, hullnumber, moda } = data;
         return {
             oid, planarmada: (
-                <div className="grid grid-cols-2">
+                <div className="grid grid-cols-3 text-sm">
+                    <span>{hullnumber}</span>
                     <span>{policenumber}</span>
-                    <span >{hullnumber}</span>
+                    <span>{moda}</span>
                 </div>
             )
         };
@@ -65,10 +73,11 @@ const ManifestCreate = () => {
                 </button>
             </div>
         )
-        return { ...data, action };
+        return { ...data, amount: moneyFormat(data.amount), action };
     };
-
+    const [btnDisable, setBtnDisable] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [loadingTableUnit, setLoadingTableUnit] = useState(false);
     const [alert, setAlert] = useState({
         isActived: false,
         code: 0,
@@ -133,7 +142,8 @@ const ManifestCreate = () => {
         }
         setLoading(true);
         api.post('/manifest', dataCreate).then(res => {
-            console.log(res);
+            // console.log(res);
+            setBtnDisable(true);
             setLoading(false);
             setAlert({
                 isActived: true,
@@ -141,6 +151,7 @@ const ManifestCreate = () => {
                 title: "Success",
                 message: "Success Create Manifest"
             })
+
             setTimeout(() => {
                 navigate('/manifest');
             }, 2000);
@@ -167,7 +178,8 @@ const ManifestCreate = () => {
             idUnitSelected.current = [];
             setUnitSelect([]);
             setOptionsDataUnit([]);
-            api.get(`/vehiclepo/${id}`).then(res => {
+            setLoadingTableUnit(true);
+            api.get(`/vehiclepo/${id}?filter=po`).then(res => {
                 sourceDataUnit.current = res.data.map(data => {
                     return dataUnitObject(data);
                 })
@@ -176,7 +188,7 @@ const ManifestCreate = () => {
                 }))
             }).catch(error => {
                 console.log(error.response);
-            })
+            }).finally(() => setLoadingTableUnit(false))
         }
     }
     const handleSelectUnit = useCallback(oidunit => {
@@ -214,7 +226,7 @@ const ManifestCreate = () => {
             }))
         }).catch(error => {
             console.log(error.response);
-            window.alert(error);
+            // window.alert(error);
         })
         await api.get('/destination').then(res => {
             setOptionsDestination(res.data.map(data => {
@@ -243,7 +255,7 @@ const ManifestCreate = () => {
                     {/* Title */}
                     <div className="flex justify-between items-center divider-bottom mb-12">
                         <div className="flex px-2 py-4 gap-x-2 items-center">
-                            <Icon icon="fa-solid:truck-loading" className={`text-xl text-gold `} />
+                            <Icon icon="bi:stack" className={`text-xl text-gold `} />
                             <span className="text-lg text-dark-green font-medium">Manifest Create</span>
                         </div>
                         <div>
@@ -286,12 +298,12 @@ const ManifestCreate = () => {
                             <span className='text-lg text-dark-green font-medium'>Data Unit</span>
                         </div>
                     </div>
-                    <TableSelect dataBody={unitSelect} handleAdd={handleOpenModalSelectUnit}
-                        handleDelete={handleDeleteUnit} column={columnSelectUnit} keyId="oid" />
+                    <TableSelect dataBody={unitSelect} handleAdd={handleOpenModalSelectUnit} loading={loadingTableUnit}
+                        handleDelete={handleDeleteUnit} column={columnSelectUnit} keyId="oid" dataStart={dummy} />
                     <div className="flex justify-end pr-6 mx-auto mt-10">
                         <button className={`bg-light-green hover:bg-green-700 text-white flex active:ring active:ring-green-300
                                focus:ring focus:ring-green-300 items-center gap-x-1 py-2 px-8 font-medium rounded`}
-                            onClick={handleCreate}>
+                            onClick={handleCreate} disabled={btnDisable}>
                             Save
                         </button>
                     </div>

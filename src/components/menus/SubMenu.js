@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useContext, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom';
 
 function SubMenu(props) {
@@ -19,14 +19,6 @@ function SubMenu(props) {
         else {
             return false;
         }
-    });
-    const [childHeight, setChildHeight] = useState(() => {
-        if (menu.sub) {
-            const height = menu.sub.length * 38
-            // handleHeight(height)
-            return height;
-        }
-        return 0
     });
     const handleDropDown = () => {
         setDrop(!drop)
@@ -52,7 +44,7 @@ function SubMenu(props) {
                     </div>
                 </button>
                 <div className={`overflow-hidden duration-300`}
-                    style={{ height: drop ? `${childHeight}px` : '0' }}>
+                    style={{ height: drop ? `${menu.sub.length * 38}px` : '0' }}>
                     {menu.sub.map((submenu, index) => (
                         <SubMenu key={index} open={open} show={show} menu={submenu} location={location} />
                     ))}

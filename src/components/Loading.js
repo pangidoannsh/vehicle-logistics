@@ -1,7 +1,7 @@
-const Loading = (props) => {
+const Loading = ({ isLoading }) => {
     return (
         <>
-            {props.isLoading ? (
+            {isLoading ? (
                 <div className='fixed flex items-center justify-center inset-0 z-50 bg-black/25'>
                     <div className="flex justify-center">
                         <button type="button" className="block text-center rounded bg-dark-green p-6 text-white" disabled>

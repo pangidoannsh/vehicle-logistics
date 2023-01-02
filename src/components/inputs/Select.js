@@ -18,8 +18,8 @@ const Select = ({ label, keyId, keyName, options, setTop, catchSelect, className
                 <label className={`text-sm font-medium text-light-green`}>{label}</label>
                 <Listbox value={selected} onChange={handleSelect} disabled>
                     <div className="relative">
-                        <Listbox.Button className={`relative w-full rounded bg-white py-2 px-4 bg-gradient-to-t
-                         from-green-50 to-green-100 ${selected[keyId] === null ? 'text-slate-400' : 'text-slate-600'}
+                        <Listbox.Button className={`relative w-full rounded  py-2 px-4 bg-green-100 
+                        ${selected[keyId] === null ? 'text-slate-400' : 'text-slate-600'}
                      text-left border border-light-green focus:outline-none sm:text-sm`} >
                             <span className="block truncate text-light-green">{selected[keyName]}</span>
                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -78,7 +78,7 @@ const Select = ({ label, keyId, keyName, options, setTop, catchSelect, className
 
                             ) :
                                 <div className="relative cursor-default select-none py-2 px-4 text-center text-slate-400">
-                                    nothing data to select
+                                    no data to select
                                 </div>
                             }
                         </Listbox.Options>

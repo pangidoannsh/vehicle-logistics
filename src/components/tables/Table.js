@@ -92,6 +92,7 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
             </>
         )
     }
+
     return (
         <table className='table-auto w-full'>
             <thead>
@@ -142,7 +143,8 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                                     {index + 1}
                                 </td>
                                 {column.map(col => (
-                                    <td key={col.field} className="p-4 text-sm text-slate-600">
+                                    <td key={col.field} className={`p-4 text-sm text-slate-600
+                                            ${center.findIndex(data => data === col.field) !== -1 ? 'text-center' : ''}`}>
                                         {handleClickField && (col.field === clickField || col.field === id) ? (
                                             <button onClick={() => { handleClickField(dataRow[id]) }}
                                                 className="text-gold hover:underline">

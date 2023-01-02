@@ -20,6 +20,7 @@ const useFetch = ({ url, setLoading, howDataGet }) => {
             if (err.code === "ERR_NETWORK") {
                 setError(true);
             }
+            // console.log(err);
             if (err.response.status === 401) {
                 localStorage.clear();
                 setIsLogged(false);

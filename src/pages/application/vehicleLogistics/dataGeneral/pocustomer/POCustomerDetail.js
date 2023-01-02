@@ -9,7 +9,6 @@ import { moneyFormat } from "../../../../../utils";
 import UnitPO from "./UnitPO";
 
 const POCustomerDetail = (props) => {
-    const user = useContext(UserContext);
     const { dataUnitPo, setDataUnitPo, setAlert, setLoadingPage, optionsBrand, fetchPoCustomer } = props
     const [totalPrice, setTotalPrice] = useState(props.data.value);
     const [valueBrand, setValueBrand] = useState({ oid: null, name: "nothing selected" });
@@ -74,7 +73,7 @@ const POCustomerDetail = (props) => {
         };
         api.post("/vehiclepo", newData).then(response => {
             if (response.status === 201) {
-                console.log(response);
+                // console.log(response);
                 setTotalPrice(Number(totalPrice) + Number(valueAmount));
                 setLoadingPage(false)
                 resetInput();

@@ -13,6 +13,7 @@ import { useFetch } from '../../../../../hooks'
 import ErrorNetwork from '../../../../../components/ErrorNetwork';
 import { UserContext } from '../../../../../config/User';
 import POCustomerEdit from './POCustomerEdit';
+
 const columnTable = [
     { field: "branch", header: "branch" },
     { field: "ponumber", header: "PO Number" },
@@ -30,34 +31,17 @@ const dataDisplay = data => {
     }
 }
 const POCustomer = () => {
-
+    // ============= CONTEXT ======================
     const [user] = useContext(UserContext);
-
-    const [loadingPage, setLoadingPage] = useState(false)
-    const [loadingTable, setLoadingTable] = useState(true);
-    // dataBody merupakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
-    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
-        url: '/pocustomer', setLoading: setLoadingTable
-    });
-
-    // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
-    const [dataShow, setDataShow] = useState([]);
-    // dataUnitPo berfungsi sebagai data yang akan ditampilkan ketika masuk ke modal detail pada bagian table vehicle unit
-    const [dataUnitPo, setDataUnitPo] = useState([]);
-    // untuk membuka dan menutup modal detail
-    const [openModalDetail, setOpenModalDetail] = useState(false)
-    // untuk membuka dan menutup modal Create
-    const [openModalCreate, setOpenModalCreate] = useState(false)
-    // untuk membuka dan menutup modal Edit
-    const [openModalEdit, setOpenModalEdit] = useState(false)
-    // untuk membuka dan menutup modal delete
-    const [openModalDelete, setOpenModalDelete] = useState(false)
-    // const [idToBeDelete, setIdToBeDelete] = useState("")
+    // =============================================
+    // ========================== USE REF ==========================
     const idToBeDelete = useRef("");
     const idToBeEdit = useRef("");
-    // untuk data yang akan ditampilkan Modal -> ModalContent
-    const [dataModalDetail, setDataModalDetail] = useState(null);//object
+    // ========================================================================
 
+    // =================================== USE STATE ===================================
+    const [loadingPage, setLoadingPage] = useState(false)
+    const [loadingTable, setLoadingTable] = useState(true);
     const [alert, setAlert] = useState({
         isActive: false,
         code: 0,
@@ -66,20 +50,51 @@ const POCustomer = () => {
     })
     const setIsActiveAlert = isActive => setAlert({ ...alert, isActive });
 
-    // option branch untuk select pada create po customer
-    const [optionsBranch, setOptionsBranch] = useState([]);
+    // databody merupakan variable untuk menampung data dari api
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
+        url: '/pocustomer', setLoading: setLoadingTable
+    });
+
+    // data yang akan ditampilkan pada table UTAMA
+    const [dataShow, setDataShow] = useState([]);
+
+    // data yang akan ditampilkan pada table DATA UNIT
+    const [dataUnitPo, setDataUnitPo] = useState([]);
+
+    // ======================= STATE MODAL ===========================
+    // untuk membuka dan menutup modal detail
+    const [openModalDetail, setOpenModalDetail] = useState(false);
+    // untuk membuka dan menutup modal Create
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+    // untuk membuka dan menutup modal Edit
+    const [openModalEdit, setOpenModalEdit] = useState(false);
+    // untuk membuka dan menutup modal delete
+    const [openModalDelete, setOpenModalDelete] = useState(false);
+    // ===============================================================
+
+    // data yang tampil ketika membuka DETAIL
+    const [dataModalDetail, setDataModalDetail] = useState(null);//object
+
+    // ============================= OPTIONS =============================
     const [optionsContract, setOptionsContract] = useState([]);
     const [optionsBrand, setOptionsBrand] = useFetch({
         url: "/vehiclebrand", howDataGet: (data => {
             return { oid: data.brand, name: data.brand };
         })
     });
+    // ========================================================================
 
+    // ==================== DATA EDIT ====================
     const [editPoNumber, setEditPoNumber] = useState("");
     const [editBranch, setEditBranch] = useState({ oid: null, branchname: "nothing selected" });
     const [editContract, setEditContract] = useState({ oid: null, contractname: "nothing selected" });
+    // ========================================================================
 
+    // =================================== HANDLE FUNCTION ===================================
+
+    // TO OPEN MODAL DETAIL
     const handleOpenModalDetail = useCallback(id => {
+
         const fetchDataUnit = () => {
             api.get(`/vehiclepo/${id}`).then(res => {
                 setDataUnitPo(res.data)
@@ -105,8 +120,9 @@ const POCustomer = () => {
                 setOpenModalDetail(true)
             }
         }
-    }, [dataBody])
+    }, [dataBody, dataModalDetail])
 
+    // TO OPEN MODAL CREATE
     const handleOpenModalCreate = e => {
         e.preventDefault()
         if (optionsContract.length === 0) {
@@ -115,14 +131,13 @@ const POCustomer = () => {
         setOpenModalCreate(true)
     }
 
+    // TO OPEN MODAL EDIT
     const handleOpenModalEdit = oid => {
         setLoadingPage(true);
         setDataModalDetail([]);
         idToBeEdit.current = oid;
         try {
             api.get(`/pocustomer/${oid}`).then(res => {
-                // setDataEdit(res)
-                // console.log(res.data);
                 const data = res.data;
                 setEditPoNumber(data.ponumber);
                 setEditBranch({ oid: data.branchoid, branchname: data.branchname });
@@ -136,13 +151,29 @@ const POCustomer = () => {
             setOpenModalEdit(true)
         }
     }
-    // function untuk menampilkan modal konfirmasi delete ketika mengklik action trash/delete pada table
-    const handleOpenModalDelete = useCallback(oid => {
-        idToBeDelete.current = oid
-        setOpenModalDelete(true)
-    }, []);
 
-    // function untuk meng-handle ketika mengklik button delete pada modal konfirmasi delete
+    // TO OPEN MODAL DELETE CONFIRMATION
+    const handleOpenModalDelete = useCallback(oid => {
+        idToBeDelete.current = oid;
+        const dataPO = dataBody.find(data => data.oid === oid);
+        if (dataPO) {
+            if (dataPO.status.toUpperCase() !== "CREATE") {
+                setAlert({
+                    isActive: true,
+                    code: 2,
+                    title: "Warning! ",
+                    message: "PO Customer Status is already Manifested"
+                })
+                setTimeout(() => {
+                    setAlert(current => ({ ...current, isActive: false }))
+                }, 2000);
+            } else {
+                setOpenModalDelete(true)
+            }
+        }
+    }, [dataBody]);
+
+    // TO DELETE DATA
     const handleDelete = e => {
         e.preventDefault()
         setIsActiveAlert(false)
@@ -173,6 +204,9 @@ const POCustomer = () => {
                 })
             })
     }
+    // =================================== END HANDLE FUNCTION ===================================
+
+    // =================================== USE EFFECT ===================================
 
     // pemberian isi dari data show
     useEffect(() => {
@@ -187,9 +221,11 @@ const POCustomer = () => {
             setIsActiveAlert(false)
         }
     }, [openModalCreate, openModalEdit]);
+
+    // =================================== END USE EFFECT ===================================
+
     return (
         <>
-
             {/* Content */}
             <div className="p-4">
                 <div className="card bg-white p-6">

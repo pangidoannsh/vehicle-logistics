@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { NavLink } from "react-router-dom"
 import SubMenu from "./SubMenu";
 
@@ -7,26 +7,16 @@ export const MenuContext = React.createContext()
 
 function Menu(props) {
     const { menu, open, show, handleMenu, location } = props
-
-    //variabel untuk menampung bahwa menu ini memiliki sub sub menu yang aktif (child dari chikl menu ini sedang aktif)
-    let subSubMenuActived = false;
-    // mengecek apakah sub sub menu sedang aktif
-    if (menu.sub) {
-        if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
-            subSubMenuActived = menu.sub.findIndex(subMenu => {
-                if (subMenu.sub) {
-                    return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
-                }
-                return subMenu.path === location.pathname
-            }) !== -1;
-        }
-    }
-
     // state untuk mengaktifkan efek Menu ACTIVED
     const [actived, setActived] = useState(() => {
         if (menu.sub) {
             if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
-                return subSubMenuActived
+                return menu.sub.findIndex(subMenu => {
+                    if (subMenu.sub) {
+                        return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                    }
+                    return subMenu.path === location.pathname
+                }) !== -1;
             }
             return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1;
         }
@@ -39,7 +29,12 @@ function Menu(props) {
     const [drop, setDrop] = useState(() => {
         if (menu.sub) {
             if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
-                return subSubMenuActived
+                return menu.sub.findIndex(subMenu => {
+                    if (subMenu.sub) {
+                        return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                    }
+                    return subMenu.path === location.pathname
+                }) !== -1;
             }
             return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1;
         }
@@ -55,7 +50,12 @@ function Menu(props) {
         }
         setDrop(!drop)
         if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
-            if (!subSubMenuActived) {
+            if (!(menu.sub.findIndex(subMenu => {
+                if (subMenu.sub) {
+                    return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                }
+                return subMenu.path === location.pathname
+            }) !== -1)) {
                 setActived(!actived)
             }
         }

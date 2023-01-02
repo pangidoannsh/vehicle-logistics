@@ -80,7 +80,7 @@ const PlanArmada = () => {
         { id: "CAR CARRIER", name: 'CAR CARRIER' },
     ]);
     const [optionsVehicleArmada, setOptionsVehicleArmada] = useFetch({
-        url: "vehiclearmada", howDataGet: vehicleArmadaGet,
+        url: "vehiclearmadalist", howDataGet: vehicleArmadaGet,
     });
     const [optionsDestination, setOptionsDestination] = useFetch({
         url: "destination"

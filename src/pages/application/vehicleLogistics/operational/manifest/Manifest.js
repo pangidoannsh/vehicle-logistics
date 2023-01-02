@@ -2,12 +2,16 @@ import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import SearchTable from "../../../../../components/tables/SearchTable";
 import Table from "../../../../../components/tables/Table";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Modal from "../../../../../components/Modal";
 import Alert from "../../../../../components/Alert";
 import ErrorNetwork from "../../../../../components/ErrorNetwork";
 import { useFetch } from "../../../../../hooks";
 import ManifestDetail from "./ManifestDetail";
+import Loading from "../../../../../components/Loading";
+import { api } from "../../../../../config";
+import ManifestEdit from "./ManifestEdit";
+import { useRef } from "react";
 
 const columnTable = [
     { field: 'oid', header: 'Manifest Number' },
@@ -18,12 +22,17 @@ const columnTable = [
 ]
 // Bagaimana data diambil
 const howDataGet = data => {
-    return { ...data, deliverydate: data.deliverydate.split(' ')[0] };
+    return {
+        ...data, deliverydate: data.deliverydate.split(" ")[0],
+        origin: data.origin.toUpperCase(), destination: data.destination.toUpperCase()
+    };
 }
 // Bagaimana data ditampilkan
 const displayData = data => {
+    const date = data.deliverydate.split("-").reverse();
     return {
         ...data,
+        deliverydate: `${date[0]}-${date[1]}-${date[2]}`,
         status: data.status.toLowerCase() === 'create' ? (
             <div className="flex gap-x-1 py-1 items-center bg-light-green rounded-sm text-white justify-center">
                 {/* <Icon icon="akar-icons:check" className="text-base" /> */}
@@ -44,8 +53,8 @@ const displayData = data => {
 }
 
 const Manifest = () => {
-    let navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [loadingPage, setLoadingPage] = useState(false);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
     const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
         url: "/manifest", setLoading, howDataGet
@@ -53,35 +62,91 @@ const Manifest = () => {
     // dataShow berfungsi sebagai data yang akan ditampilkan pada table, dapat berubah seperti untuk searcing dll
     const [dataShow, setDataShow] = useState([]);
     // untuk data yang akan ditampilkan Modal -> ModalContent
-    const [dataModal, setDataModal] = useState({});
+    const [dataDetail, setDataDetail] = useState({});
+    const oidDetaoManifest = useRef(null);
+    const oidDataEdit = useRef(null);
+    const oidDataDelete = useRef(null);
+    const [editOrigin, setEditOrigin] = useState({ oid: -1, origin: "nothing selected" });
+    const [editDestination, setEditDestination] = useState({ oid: -1, destination: "nothing selected" });
+    const [editDeliverydate, setEditDeliverydate] = useState("");
+
+    const [optionsOrigin] = useFetch({ url: "/origin" })
+    const [optionsDestination] = useFetch({ url: "/destination" })
+    // data unit di dalam manifest
+    const [dataUnitManifest, setDataUnitManifest] = useState([]);
     // untuk membuka dan menutup modal
     const [openModalDetail, setOpenModalDetail] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
+    const [openModalEdit, setOpenModalEdit] = useState(false);
+
     const [alert, setAlert] = useState({
         isActived: false,
         code: 0,
         title: "title",
         message: "message"
     })
-    const [dataUnit, setDataUnit] = useState([]);
 
-    const fetchDataDetail = () => {
-
-    }
     const setActivedAlert = isActived => {
-        setAlert({ ...alert, isActived });
+        setAlert(current => ({ ...current, isActived }));
     }
     const handleOpenModalDetail = oid => {
-        setOpenModalDetail(true);
-
+        if (oidDetaoManifest.current !== oid) {
+            oidDetaoManifest.current = oid;
+            setLoadingPage(true);
+            setDataDetail(dataBody.find(data => data.oid === oid));
+            api.get(`/manifestdetail/${oid}`).then(res => {
+                setDataUnitManifest(res.data);
+            }).catch(err => {
+                console.log(err.response);
+            }).finally(() => {
+                setLoadingPage(false);
+                setOpenModalDetail(true);
+            })
+        } else {
+            setOpenModalDetail(true);
+        }
     }
+
     const handleEdit = oid => {
-        navigate(`/manifest/${oid}/edit`);
+        oidDataEdit.current = oid;
+        if (oid) {
+            const dataCurrent = dataBody.find(data => data.oid === oid);
+
+            setEditOrigin(curr => ({ ...curr, origin: dataCurrent.origin }));
+            setEditDestination(curr => ({ ...curr, destination: dataCurrent.destination }));
+            setEditDeliverydate(dataCurrent.deliverydate);
+            setOpenModalEdit(true);
+        }
     }
     const handleOpenModalDelete = oid => {
+        oidDataDelete.current = oid;
         setOpenModalDelete(true);
     }
-
+    const handleDelete = () => {
+        setLoadingPage(true);
+        setActivedAlert(false);
+        api.delete(`/manifest/${oidDataDelete.current}`).then(res => {
+            setDataBody(dataBody.filter(data => data.oid !== oidDataDelete.current).map(filter => filter));
+            setOpenModalDelete(false);
+            setAlert({
+                isActived: true,
+                code: 1,
+                title: "Success",
+                message: "Data Manifest Deleted"
+            })
+            setTimeout(() => {
+                setActivedAlert(false);
+            }, 3000);
+        }).catch(err => {
+            setAlert({
+                isActived: true,
+                code: 0,
+                title: "Error " + err.response.status,
+                message: "Delete data failed"
+            })
+            console.log(err.response);
+        }).finally(() => setLoadingPage(false))
+    }
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
         setDataShow(dataBody.map(data => {
@@ -119,15 +184,42 @@ const Manifest = () => {
             </div>
             {/* Modal Detail */}
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Manifest Detail"
-                iconTitle={"ooui:view-details-ltr"}>
-                <ManifestDetail />
+                iconTitle="ooui:view-details-ltr">
+                <ManifestDetail dataDetail={dataDetail} dataUnitManifest={dataUnitManifest}
+                    setDataUnitManifest={setDataUnitManifest} setAlert={setAlert} />
             </Modal>
-            <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} title="Delete Manifest" ></Modal>
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Manifest" size={500}>
+                <ManifestEdit setIsOpen={setOpenModalEdit} setLoadinPage={setLoadingPage} dataCurrent={{
+                    origin: [editOrigin, setEditOrigin],
+                    destination: [editDestination, setEditDestination],
+                    deliverydate: [editDeliverydate, setEditDeliverydate]
+                }} options={{ origin: optionsOrigin, destination: optionsDestination }} id={oidDataEdit.current}
+                    fetchManifest={fetchDataBody} setAlert={setAlert} />
+            </Modal>
+
+            {/* Modal Konfirmasi Delete Manifest */}
+            <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} title="Delete Manifest" size={500}>
+                <div className='text-slate-600 text-xl font-medium'>
+                    Are you sure want to <span className="text-red-600">Delete</span> this Data Manifest ?
+                </div>
+                <div className="flex justify-end gap-x-4 mt-4">
+                    <button className={`text-slate-500 hover:text-slate-600 items-center gap-x-1 py-2 px-4 `}
+                        onClick={() => setOpenModalDelete(false)}>
+                        Cancel
+                    </button>
+                    <button type="Submit" className={`border border-red-600 text-red-600 rounded flex items-center gap-x-1 py-2 px-4 
+                            focus:ring focus:ring-red-200 active:ring active:ring-red-200`} onClick={handleDelete}>
+                        Delete
+                    </button>
+                </div>
+            </Modal>
+
             <Alert isOpen={alert.isActived} setIsOpen={setActivedAlert} codeAlert={alert.code} title={alert.title}>
                 {alert.message}
             </Alert>
             {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
             <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
+            <Loading isLoading={loadingPage} />
         </>
     );
 }

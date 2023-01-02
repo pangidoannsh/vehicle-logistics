@@ -1,3 +1,3 @@
 import useFetch from './useFetch'
-
-export { useFetch };
+import useAlert from './useAlert';
+export { useFetch, useAlert };

@@ -2,10 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 import React, { Fragment } from 'react'
 
-const Modal = (props) => {
-    // yang wajib dibuatkan props nya isOpen, setIsOpen, ModalContent
-    const { isOpen, setIsOpen, title, iconTitle, size } = props
-
+const Modal = ({ isOpen, setIsOpen, title, iconTitle, size, children, onFront }) => {
     function closeModal() {
         setIsOpen(false)
     }
@@ -13,7 +10,7 @@ const Modal = (props) => {
     return (
         <>
             <Transition appear show={isOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={closeModal} >
+                <Dialog as="div" className={`relative ${onFront ? 'z-50' : 'z-10'}`} onClose={closeModal} >
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -53,7 +50,7 @@ const Modal = (props) => {
                                         </div>
                                     ) : ''}
                                     {/* Content dari Modal */}
-                                    {props.children}
+                                    {children}
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>

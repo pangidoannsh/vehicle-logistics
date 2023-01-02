@@ -1,6 +1,5 @@
 import React from 'react';
-const FormInput = (props) => {
-    const { label, tagId, refrence, type, setValue, defaultValue } = props
+const FormInput = ({ label, tagId, refrence, type, setValue, defaultValue }) => {
     if (setValue) {
         return (
             <div className="flex flex-col gap-y-2 text-slate-700 relative">

@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import React from 'react';
+import LoadingTable from '../tables/LoadingTable';
 
-const TableSelect = (props) => {
-    const { dataBody, column, handleAdd, handleDelete, keyId } = props
+const TableSelect = ({ dataBody, column, handleAdd, handleDelete, keyId, loading, dataStart = [] }) => {
     return (
         <table className="table-auto w-full">
             <thead>
@@ -20,9 +20,18 @@ const TableSelect = (props) => {
                 </tr>
             </thead>
             <tbody>
+                {dataStart.length > 0 ? dataStart.map((data, index) => (
+                    <tr key={`row ${index}`} className="hover:bg-light-green/10 ">
+                        <td className="text-center text-slate-600 ">{index + 1}</td>
+                        {column.map(col => (
+                            <td key={col.field} className="p-4 text-sm text-slate-700">{data[col.field]}</td>
+                        ))}
+                        {/* <td className='text-sm text-slate-700 text-center'>no action</td> */}
+                    </tr>
+                )) : ''}
                 {dataBody.map((dataSelect, index) => (
-                    <tr key={`row ${index}`}>
-                        <td className="text-center text-slate-600">{index + 1}</td>
+                    <tr key={`row ${index}`} className="hover:bg-light-green/10 ">
+                        <td className="text-center text-slate-600 ">{index + dataStart.length + 1}</td>
                         {column.map(col => (
                             <td key={col.field} className="p-4 text-sm text-slate-700">{dataSelect[col.field]}</td>
                         ))}
@@ -35,16 +44,19 @@ const TableSelect = (props) => {
                         ) : ''}
                     </tr>
                 ))}
-                <tr className=" bg-dark-green/10 w-full">
-                    <td className="text-center text-slate-600">{dataBody.length + 1}</td>
-                    <td className="text-end py-2 px-4">
-                        <button className="p-1 rounded border border-light-green"
-                            onClick={handleAdd}>
-                            <Icon icon="akar-icons:more-horizontal" className=" text-light-green" />
-                        </button>
-                    </td>
-                    <td colSpan={'100%'}></td>
-                </tr>
+                {!loading ? (
+                    <tr className=" bg-dark-green/10 w-full">
+                        <td className="text-center text-slate-600">{dataBody.length + dataStart.length + 1}</td>
+                        <td className="text-end py-2 px-4">
+                            <button className="p-1 rounded border border-light-green"
+                                onClick={handleAdd}>
+                                <Icon icon="akar-icons:more-horizontal" className=" text-light-green" />
+                            </button>
+                        </td>
+                        <td colSpan={'100%'}></td>
+                    </tr>
+                ) : <LoadingTable />}
+
             </tbody>
         </table>
     );

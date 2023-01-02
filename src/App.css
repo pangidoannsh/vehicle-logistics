@@ -177,10 +177,3 @@ input:placeholder-shown~.floating-label {
   box-shadow: 21px 21px 42px #bebebe,
     -21px -21px 42px #ffffff;
 }
-
-/* .password:focus~.floating-label {
-  left: 4px;
-  bottom: 36px;
-  color: var(--light-green);
-  transform: scale(.8, .8);
-} */

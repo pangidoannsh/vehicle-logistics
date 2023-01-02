@@ -1,7 +1,8 @@
+================================================= SUNDAY, 25/12/2022 ================================================= 
+
 === FITUR EDIT VEHICLE PO atau DATA UNIT pada PO CUSTOMER DETAIL ===
 
-requirement: 
-
+requirtmen :
 - edit selain amount
 - edit amount
 - edit brand
@@ -14,11 +15,33 @@ requirement:
 
 === DELETE PLAN ARMADA ===
 
-requirement: 
+requirtmen :
 - modal konfirmasi
 - update GCRecord to 1
 - get data only when GCRecord is NULL or 0
 
 ==========================  DONE  ==========================
+================================================= CLOSE ================================================= 
 
-================================================= SUNDAY, 25/12/2022 ================================================= 
+================================================= SATURDAY, 30/12/2022 ================================================= 
+
+=== MODAL DETAIL MANIFEST ===
+
+requirtmen :
+- open modal with button
+- display data header detail manifest and table data unit manifest (manifest detail), (fetch api: /manifestdetail/{oid_manifst})
+
+==========================  DONE  ==========================
+
+================================================= SATURDAY, 30/12/2022 ================================================= 
+
+
+=== FITUR EDIT & DELETE MANIFEST ,DELETE MANIFEST DETAIL (DATA UNIT MANIFEST), AND PO CUSTOMER LIST API ===
+
+requirtmen :
+- change filter of api /pocustomerlist (dont filter by status)
+- delete manifest and edit status data unit manfiested to PO
+- edit header manifest
+- delete data manifest detail (data unit manifest) and edit status data unit manfiested to PO
+
+==========================  NOT YET ==========================

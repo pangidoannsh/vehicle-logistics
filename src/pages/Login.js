@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import PasswordInput from '../components/inputs/PasswordInput';
 import Sign from '../layouts/Sign';
 import Loading from "../components/Loading";
-import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { api, AuthContext } from '../config';
-import { useContext } from 'react';
 
 const Login = () => {
     const [loading, setLoading] = useState(false);

@@ -4,13 +4,16 @@ import { Fragment } from 'react'
 
 const Alert = ({ isOpen, setIsOpen, title, codeAlert, children }) => {
     let color = "";
-    let icon = ""
+    let icon = "";
     if (codeAlert === 0) {
         color = "red";
         icon = "jam:triangle-danger-f";
     } else if (codeAlert === 1) {
         color = "green";
         icon = "material-symbols:check"
+    } else if (codeAlert === 2) {
+        color = "yellow";
+        icon = "mdi:warning-circle"
     }
     function closeModal() {
         setIsOpen(false)
