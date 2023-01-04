@@ -11,6 +11,7 @@ const amountDisplay = data => {
     return `Rp ${moneyFormat(data)}`;
 }
 const ManifestDetail = ({ dataDetail, dataUnitManifest, setDataUnitManifest, setAlert }) => {
+
     return (
         <>
             {headerDisplay.map(data => (
@@ -21,7 +22,8 @@ const ManifestDetail = ({ dataDetail, dataUnitManifest, setDataUnitManifest, set
                     </div>
                 </div>
             ))}
-            <UnitManifest data={dataUnitManifest} setData={setDataUnitManifest} setAlert={setAlert} />
+            <UnitManifest data={dataUnitManifest} setData={setDataUnitManifest} setAlert={setAlert}
+                oidPo={dataDetail.oidpocustomer} oidManifest={dataDetail.oid} />
         </>
     );
 }

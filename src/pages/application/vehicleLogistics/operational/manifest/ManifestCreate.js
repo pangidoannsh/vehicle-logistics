@@ -1,29 +1,16 @@
 import { Icon } from "@iconify/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import FormInput from "../../../../../components/inputs/FormInput";
-import Modal from "../../../../../components/Modal";
 import Select from "../../../../../components/inputs/Select";
-import Table from "../../../../../components/tables/Table";
 import { api } from "../../../../../config";
 import TableSelect from "../../../../../components/inputs/TableSelect";
 import { UserContext } from "../../../../../config/User";
-import { useRef } from "react";
-import { useCallback } from "react";
 import Alert from "../../../../../components/Alert";
 import Loading from "../../../../../components/Loading";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchOption, moneyFormat } from "../../../../../utils";
+import { fetchOption } from "../../../../../utils";
 
-const columnTableModal = [
-    { field: "enginenumber", header: "Engine Number" },
-    { field: "framenumber", header: "Frame Number" },
-    { field: "type", header: "Type" },
-    { field: "color", header: "Color" },
-    { field: "year", header: "Year" },
-    { field: "amount", header: "Amount (Rp)" },
-    { field: "action", header: "#" }
-]
 const columnSelectUnit = [
     { field: "enginenumber", header: "Engine Number" },
     { field: "framenumber", header: "Frame Number" },
@@ -32,49 +19,25 @@ const columnSelectUnit = [
     { field: "year", header: "Year" },
     { field: "amount", header: "Amount (Rp)" }
 ]
-const dummy = [
-    {
-        enginenumber: "2435435",
-        framenumber: "2435435",
-        type: "type",
-        color: "type",
-    }
-]
+const planArmadaObject = data => {
+    const { oid, policenumber, hullnumber, moda } = data;
+    return {
+        oid, planarmada: (
+            <div className="grid grid-cols-3 text-sm">
+                <span>{hullnumber}</span>
+                <span>{policenumber}</span>
+                <span>{moda}</span>
+            </div>
+        )
+    };
+};
+const dataUnitObject = data => {
+    const { oid, enginenumber, framenumber, type, color, year, amount } = data;
+    return { oid, enginenumber, framenumber, type, color, year, amount };
+}
 const ManifestCreate = () => {
     let navigate = useNavigate();
     const user = useContext(UserContext);
-    // ====================== Template Object ==============================
-    //  Plan Armada
-    const planArmadaObject = useCallback(data => {
-        const { oid, policenumber, hullnumber, moda } = data;
-        return {
-            oid, planarmada: (
-                <div className="grid grid-cols-3 text-sm">
-                    <span>{hullnumber}</span>
-                    <span>{policenumber}</span>
-                    <span>{moda}</span>
-                </div>
-            )
-        };
-    })
-    //  Data Unit
-    const dataUnitObject = useCallback(data => {
-        const { oid, enginenumber, framenumber, type, color, year, amount } = data;
-        return { oid, enginenumber, framenumber, type, color, year, amount };
-    })
-    // ========================== END Template Object =======================
-    const templateUnitSelect = data => {
-        const action = (
-            <div className="text-center w-6">
-                <button className="px-2 py-1 bg-light-green rounded-sm hover:bg-green-800
-                                 active:bg-green-700 text-white"
-                    onClick={() => handleSelectUnit(data.oid)}>
-                    Select
-                </button>
-            </div>
-        )
-        return { ...data, amount: moneyFormat(data.amount), action };
-    };
     const [btnDisable, setBtnDisable] = useState(false);
     const [loading, setLoading] = useState(false);
     const [loadingTableUnit, setLoadingTableUnit] = useState(false);
@@ -85,16 +48,13 @@ const ManifestCreate = () => {
         message: ""
     });
     // data unit selected
-    const sourceDataUnit = useRef([])
-    const [unitSelect, setUnitSelect] = useState([]);
+    const [sourceDataUnit, setSourceDataUnit] = useState([]);
     const idUnitSelected = useRef([]);
 
     // options input
     const [optionsOrigin, setOptionsOrigin] = useState([]);
     const [optionsDestination, setOptionsDestination] = useState([]);
     const [optionsPlanArmada, setOptionsPlanArmada] = useState([]);
-    const [optionsDataUnit, setOptionsDataUnit] = useState([]);
-    const [openModalSelectUnit, setOpenModalSelectUnit] = useState(false);
     const [optionsDriver, setOptionsDriver] = useState([]);
     const [optionsPoCustomer, setOptionsPoCustomer] = useState([]);
 
@@ -130,7 +90,7 @@ const ManifestCreate = () => {
             pocustomeroid: value.pocustomer.oid,
             vehiclepooid: idUnitSelected.current
         }
-        // console.log(dataCreate);
+        // console.log(dataCreate.vehiclepooid);
         if (Object.values(dataCreate).findIndex(data => (data === "" || data === null)) !== -1) {
             setAlert({
                 isActived: true,
@@ -167,45 +127,19 @@ const ManifestCreate = () => {
         })
     }
 
-    const handleOpenModalSelectUnit = e => {
-        e.preventDefault();
-        setOpenModalSelectUnit(true);
-    }
-
     const handlePoCustomerInput = id => {
         if (id !== null) {
-            sourceDataUnit.current = [];
+            setSourceDataUnit([]);
             idUnitSelected.current = [];
-            setUnitSelect([]);
-            setOptionsDataUnit([]);
             setLoadingTableUnit(true);
             api.get(`/vehiclepo/${id}?filter=po`).then(res => {
-                sourceDataUnit.current = res.data.map(data => {
-                    return dataUnitObject(data);
-                })
-                setOptionsDataUnit(res.data.map(data => {
+                setSourceDataUnit(res.data.map(data => {
                     return dataUnitObject(data);
                 }))
             }).catch(error => {
                 console.log(error.response);
             }).finally(() => setLoadingTableUnit(false))
         }
-    }
-    const handleSelectUnit = useCallback(oidunit => {
-        // memasukan oidunit terpilih ke dalam list unit terpilih
-        idUnitSelected.current = [...idUnitSelected.current, oidunit];
-        // menambahkan data terpilih ke list unit select
-        setUnitSelect([...unitSelect, sourceDataUnit.current.filter(data => data.oid === oidunit).map(filter => filter)[0]])
-        // mengurangi data terpilih dari list option data unit
-        setOptionsDataUnit(optionsDataUnit.filter(data => data.oid !== oidunit).map(filter => filter));
-    })
-
-    const handleDeleteUnit = oidunit => {
-        idUnitSelected.current = idUnitSelected.current.filter(id => id !== oidunit).map(filter => filter)
-        // mengurangi data terpilih dari list unit select
-        setOptionsDataUnit([...optionsDataUnit, sourceDataUnit.current.filter(data => data.oid === oidunit).map(filter => filter)[0]])
-        // mengurangi data unit yang sudah selected
-        setUnitSelect(unitSelect.filter(data => data.oid !== oidunit).map(filter => filter))
     }
 
     const loadData = async () => {
@@ -248,6 +182,7 @@ const ManifestCreate = () => {
         }
     }, []);
     // render JSX
+
     return (
         <>
             <div className="p-4">
@@ -298,8 +233,8 @@ const ManifestCreate = () => {
                             <span className='text-lg text-dark-green font-medium'>Data Unit</span>
                         </div>
                     </div>
-                    <TableSelect dataBody={unitSelect} handleAdd={handleOpenModalSelectUnit} loading={loadingTableUnit}
-                        handleDelete={handleDeleteUnit} column={columnSelectUnit} keyId="oid" dataStart={dummy} />
+                    <TableSelect sourceDataOptions={sourceDataUnit} selectedData={idUnitSelected}
+                        loading={loadingTableUnit} column={columnSelectUnit} keyId="oid" />
                     <div className="flex justify-end pr-6 mx-auto mt-10">
                         <button className={`bg-light-green hover:bg-green-700 text-white flex active:ring active:ring-green-300
                                focus:ring focus:ring-green-300 items-center gap-x-1 py-2 px-8 font-medium rounded`}
@@ -309,13 +244,6 @@ const ManifestCreate = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Modal Sleect Data Unit*/}
-            <Modal isOpen={openModalSelectUnit} setIsOpen={setOpenModalSelectUnit} title="Select Data Unit" >
-                <Table dataBody={optionsDataUnit.map(option => {
-                    return templateUnitSelect(option);
-                })} column={columnTableModal} />
-            </Modal>
             <Alert isOpen={alert.isActived} setIsOpen={isActived => setAlert({ ...alert, isActived })}
                 title={alert.title} codeAlert={alert.code}>
                 {alert.message}

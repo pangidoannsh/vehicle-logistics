@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import React, { useState, useEffect, useCallback, useRef, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Alert from '../../../../../components/Alert';
 import Loading from '../../../../../components/Loading';
 import Modal from '../../../../../components/Modal';
@@ -11,7 +11,6 @@ import POCustomerCreate from './POCustomerCreate';
 import POCustomerDetail from './POCustomerDetail';
 import { useFetch } from '../../../../../hooks'
 import ErrorNetwork from '../../../../../components/ErrorNetwork';
-import { UserContext } from '../../../../../config/User';
 import POCustomerEdit from './POCustomerEdit';
 
 const columnTable = [
@@ -31,8 +30,6 @@ const dataDisplay = data => {
     }
 }
 const POCustomer = () => {
-    // ============= CONTEXT ======================
-    const [user] = useContext(UserContext);
     // =============================================
     // ========================== USE REF ==========================
     const idToBeDelete = useRef("");
@@ -77,7 +74,7 @@ const POCustomer = () => {
 
     // ============================= OPTIONS =============================
     const [optionsContract, setOptionsContract] = useState([]);
-    const [optionsBrand, setOptionsBrand] = useFetch({
+    const [optionsBrand] = useFetch({
         url: "/vehiclebrand", howDataGet: (data => {
             return { oid: data.brand, name: data.brand };
         })
