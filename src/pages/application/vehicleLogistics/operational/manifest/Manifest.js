@@ -63,7 +63,7 @@ const Manifest = () => {
     const [dataShow, setDataShow] = useState([]);
     // untuk data yang akan ditampilkan Modal -> ModalContent
     const [dataDetail, setDataDetail] = useState({});
-    const oidDetaoManifest = useRef(null);
+    const oidDetailManifest = useRef(null);
     const oidDataEdit = useRef(null);
     const oidDataDelete = useRef(null);
     const [editOrigin, setEditOrigin] = useState({ oid: -1, origin: "nothing selected" });
@@ -89,9 +89,17 @@ const Manifest = () => {
     const setActivedAlert = isActived => {
         setAlert(current => ({ ...current, isActived }));
     }
+    const setTotalAmountDetailManifest = newAmount => {
+        setDataBody(dataBody.map(data => {
+            if (data.oid === oidDetailManifest.current) {
+                return { ...data, totalamount: newAmount }
+            }
+            return data;
+        }))
+    }
     const handleOpenModalDetail = oid => {
-        if (oidDetaoManifest.current !== oid) {
-            oidDetaoManifest.current = oid;
+        if (oidDetailManifest.current !== oid) {
+            oidDetailManifest.current = oid;
             setLoadingPage(true);
             setDataDetail(dataBody.find(data => data.oid === oid));
             api.get(`/manifestdetail/${oid}`).then(res => {
@@ -185,8 +193,9 @@ const Manifest = () => {
             {/* Modal Detail */}
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Manifest Detail"
                 iconTitle="ooui:view-details-ltr">
-                <ManifestDetail dataDetail={dataDetail} dataUnitManifest={dataUnitManifest}
-                    setDataUnitManifest={setDataUnitManifest} setAlert={setAlert} setDataDetail={setDataDetail} />
+                <ManifestDetail dataDetail={dataDetail} dataUnitManifest={dataUnitManifest} setAlert={setAlert}
+                    setDataUnitManifest={setDataUnitManifest} setDataDetail={setDataDetail}
+                    setTotalAmountManifest={setTotalAmountDetailManifest} />
             </Modal>
             <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Manifest" size={500}>
                 <ManifestEdit setIsOpen={setOpenModalEdit} setLoadinPage={setLoadingPage} dataCurrent={{

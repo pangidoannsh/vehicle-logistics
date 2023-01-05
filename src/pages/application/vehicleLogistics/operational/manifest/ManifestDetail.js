@@ -10,9 +10,10 @@ const headerDisplay = [
 const amountDisplay = data => {
     return `Rp ${moneyFormat(data)}`;
 }
-const ManifestDetail = ({ dataDetail, setDataDetail, dataUnitManifest, setDataUnitManifest, setAlert }) => {
+const ManifestDetail = ({ dataDetail, setDataDetail, dataUnitManifest, setDataUnitManifest, setAlert, setTotalAmountManifest }) => {
     const setTotalAmount = (newTotalAmount) => {
         setDataDetail(current => ({ ...current, totalamount: newTotalAmount }));
+        setTotalAmountManifest(newTotalAmount)
     };
     return (
         <>
