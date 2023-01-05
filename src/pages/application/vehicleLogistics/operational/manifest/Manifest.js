@@ -186,7 +186,7 @@ const Manifest = () => {
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Manifest Detail"
                 iconTitle="ooui:view-details-ltr">
                 <ManifestDetail dataDetail={dataDetail} dataUnitManifest={dataUnitManifest}
-                    setDataUnitManifest={setDataUnitManifest} setAlert={setAlert} />
+                    setDataUnitManifest={setDataUnitManifest} setAlert={setAlert} setDataDetail={setDataDetail} />
             </Modal>
             <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Manifest" size={500}>
                 <ManifestEdit setIsOpen={setOpenModalEdit} setLoadinPage={setLoadingPage} dataCurrent={{

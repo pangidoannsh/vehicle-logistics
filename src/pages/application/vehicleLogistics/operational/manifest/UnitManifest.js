@@ -21,15 +21,21 @@ const displayData = datas => {
         return { ...data, amount: moneyFormat(data.amount) };
     });
 }
-const UnitManifest = ({ data, setData, setAlert, oidPo, oidManifest }) => {
+
+const UnitManifest = ({ data, setData, setAlert, oidPo, oidManifest, setTotalAmount }) => {
     const oidDelete = useRef(null);
     const selectedData = useRef([]);
 
     const [loading, setLoading] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
     const [isUpdate, setIsUpdate] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [optionsUnit, setOptionsUnit] = useState([]);
 
+    const reset = () => {
+        selectedData.current = [];
+        setOptionsUnit([]);
+    }
     const handleDeleteUnit = oid => {
         if (oid) {
             oidDelete.current = oid;
@@ -38,6 +44,7 @@ const UnitManifest = ({ data, setData, setAlert, oidPo, oidManifest }) => {
     }
     const handleDelete = () => {
         if (oidDelete.current) {
+            setLoadingDelete(true);
             setAlert(current => ({ ...current, isActived: false }))
             api.delete(`manifestdetail/${oidDelete.current}`).then(res => {
                 setAlert({
@@ -50,6 +57,7 @@ const UnitManifest = ({ data, setData, setAlert, oidPo, oidManifest }) => {
                     setAlert(current => ({ ...current, isActived: false }))
                 }, 2000)
                 setData(data.filter(unit => unit.oidunitpo !== oidDelete.current).map(filter => filter));
+                setTotalAmount(data.reduce((total, unit) => total + (unit.oidunitpo !== oidDelete.current ? unit.amount : 0), 0));
             }).catch(err => {
                 console.log(err.response);
                 setAlert({
@@ -58,7 +66,7 @@ const UnitManifest = ({ data, setData, setAlert, oidPo, oidManifest }) => {
                     title: "Error " + err.response.status,
                     message: "Failed Delete Data Unit Manifest"
                 })
-            }).finally(() => setOpenModalDelete(false))
+            }).finally(() => { setOpenModalDelete(false); setLoadingDelete(false) })
         }
     }
     const handleAdd = e => {
@@ -78,10 +86,12 @@ const UnitManifest = ({ data, setData, setAlert, oidPo, oidManifest }) => {
     const handleUpdate = e => {
         e.preventDefault();
         if (selectedData.current.length > 0) {
+
             const dataPost = {
                 vehiclepooid: selectedData.current,
                 manifestoid: oidManifest
             }
+
             setLoading(true);
             api.post("/manifestdetail", dataPost).then(res => {
                 setAlert({
@@ -94,8 +104,15 @@ const UnitManifest = ({ data, setData, setAlert, oidPo, oidManifest }) => {
                     setAlert(current => ({ ...current, isActived: false }))
                 }, 2000)
                 setData(current => [...current, ...res.data]);
-                setIsUpdate(false)
+                let totalAmount = data.reduce((total, unit) => total + unit.amount, 0);
+                selectedData.current.forEach(unitOid => {
+                    totalAmount += optionsUnit.find(unit => unit.oid === unitOid).amount;
+                });
+                setTotalAmount(totalAmount);
+                setIsUpdate(false);
+                reset();
             }).catch(err => {
+                console.log(err);
                 const status = err.response.status;
                 if (status >= 500) {
                     setAlert({
@@ -159,8 +176,9 @@ const UnitManifest = ({ data, setData, setAlert, oidPo, oidManifest }) => {
                         Cancel
                     </button>
                     <button type="Submit" className="border border-red-600 text-red-600 rounded flex items-center gap-x-1 py-2 px-4 
-                            focus:ring focus:ring-red-200 active:ring active:ring-red-200" onClick={handleDelete}>
-                        Delete
+                            focus:ring focus:ring-red-200 active:ring active:ring-red-200" onClick={handleDelete}
+                        disabled={loadingDelete}>
+                        {!loadingDelete ? "Delete" : <div className='px-4'><Icon icon="eos-icons:loading" /></div>}
                     </button>
                 </div>
             </Modal>
