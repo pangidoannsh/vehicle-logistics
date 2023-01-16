@@ -1,5 +1,5 @@
 import React from 'react';
-import { moneyFormat } from '../../../../../utils';
+import { moneyFormat } from '../../../../utils';
 import UnitManifest from './UnitManifest';
 
 const headerDisplay = [

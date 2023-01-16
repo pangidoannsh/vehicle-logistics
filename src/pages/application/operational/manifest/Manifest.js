@@ -1,15 +1,15 @@
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
-import SearchTable from "../../../../../components/tables/SearchTable";
-import Table from "../../../../../components/tables/Table";
+import SearchTable from "../../../../components/tables/SearchTable";
+import Table from "../../../../components/tables/Table";
 import { NavLink } from "react-router-dom";
-import Modal from "../../../../../components/Modal";
-import Alert from "../../../../../components/Alert";
-import ErrorNetwork from "../../../../../components/ErrorNetwork";
-import { useFetch } from "../../../../../hooks";
+import Modal from "../../../../components/Modal";
+import Alert from "../../../../components/Alert";
+import ErrorNetwork from "../../../../components/ErrorNetwork";
+import { useFetch } from "../../../../hooks";
 import ManifestDetail from "./ManifestDetail";
-import Loading from "../../../../../components/Loading";
-import { api } from "../../../../../config";
+import Loading from "../../../../components/Loading";
+import { api } from "../../../../config";
 import ManifestEdit from "./ManifestEdit";
 import { useRef } from "react";
 

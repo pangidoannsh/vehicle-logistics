@@ -84,6 +84,10 @@ const application = [
                         "path": "/manifest"
                     },
                     {
+                        "title": "Transit Out",
+                        "path": "/transit-out"
+                    },
+                    {
                         "title": "Loading",
                         "path": "/loading"
                     },

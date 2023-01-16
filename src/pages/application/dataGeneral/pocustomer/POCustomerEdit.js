@@ -1,9 +1,9 @@
 import React from 'react';
 import { useContext } from 'react';
-import FormInput from '../../../../../components/inputs/FormInput';
-import Select from '../../../../../components/inputs/Select';
-import { api } from '../../../../../config';
-import { UserContext } from '../../../../../config/User';
+import FormInput from '../../../../components/inputs/FormInput';
+import Select from '../../../../components/inputs/Select';
+import { api } from '../../../../config';
+import { UserContext } from '../../../../config/User';
 
 const POCustomerEdit = ({ setIsOpen, currentData, fetchPoCustomer, options, oid, setLoading, setAlert }) => {
     const { optionsContract } = options.contract;

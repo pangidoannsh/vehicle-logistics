@@ -1,10 +1,10 @@
 import { Icon } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import ErrorNetwork from '../../../../../components/ErrorNetwork'
-import SearchTable from '../../../../../components/tables/SearchTable'
-import Table from '../../../../../components/tables/Table'
-import { useFetch } from '../../../../../hooks'
+import ErrorNetwork from '../../../../components/ErrorNetwork'
+import SearchTable from '../../../../components/tables/SearchTable'
+import Table from '../../../../components/tables/Table'
+import { useFetch } from '../../../../hooks'
 
 const columnTable = [
     { field: 'oid', header: 'BAST Number' },

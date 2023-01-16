@@ -1,8 +1,8 @@
 import { useContext, useRef, useState } from "react";
-import FormInput from "../../../../../components/inputs/FormInput";
-import Select from "../../../../../components/inputs/Select";
-import { api } from "../../../../../config";
-import { UserContext } from "../../../../../config/User";
+import FormInput from "../../../../components/inputs/FormInput";
+import Select from "../../../../components/inputs/Select";
+import { api } from "../../../../config";
+import { UserContext } from "../../../../config/User";
 
 
 const POCustomerCreate = (props) => {

@@ -1,16 +1,16 @@
 import { Icon } from '@iconify/react';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import Alert from '../../../../../components/Alert';
-import Loading from '../../../../../components/Loading';
-import Modal from '../../../../../components/Modal';
-import SearchTable from '../../../../../components/tables/SearchTable';
-import Table from '../../../../../components/tables/Table';
-import { api } from '../../../../../config';
-import { moneyFormat, fetchOption } from '../../../../../utils';
+import Alert from '../../../../components/Alert';
+import Loading from '../../../../components/Loading';
+import Modal from '../../../../components/Modal';
+import SearchTable from '../../../../components/tables/SearchTable';
+import Table from '../../../../components/tables/Table';
+import { api } from '../../../../config';
+import { moneyFormat, fetchOption } from '../../../../utils';
 import POCustomerCreate from './POCustomerCreate';
 import POCustomerDetail from './POCustomerDetail';
-import { useFetch } from '../../../../../hooks'
-import ErrorNetwork from '../../../../../components/ErrorNetwork';
+import { useFetch } from '../../../../hooks'
+import ErrorNetwork from '../../../../components/ErrorNetwork';
 import POCustomerEdit from './POCustomerEdit';
 
 const columnTable = [

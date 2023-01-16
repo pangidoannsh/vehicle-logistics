@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react'
-import Modal from '../../../../../components/Modal';
-import SearchTable from '../../../../../components/tables/SearchTable';
-import Table from '../../../../../components/tables/Table';
-import { api } from '../../../../../config';
+import Modal from '../../../../components/Modal';
+import SearchTable from '../../../../components/tables/SearchTable';
+import Table from '../../../../components/tables/Table';
+import { api } from '../../../../config';
 import PlanArmadaCreate from './PlanArmadaCreate';
-import Alert from '../../../../../components/Alert';
+import Alert from '../../../../components/Alert';
 import { Icon } from '@iconify/react';
-import Loading from '../../../../../components/Loading';
-import ErrorNetwork from '../../../../../components/ErrorNetwork';
-import { useFetch } from '../../../../../hooks';
+import Loading from '../../../../components/Loading';
+import ErrorNetwork from '../../../../components/ErrorNetwork';
+import { useFetch } from '../../../../hooks';
 import PlanArmadaEdit from './PlanArmadaEdit';
 
 const columnTable = [

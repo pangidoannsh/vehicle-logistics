@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Table from '../../../../../components/tables/Table';
-import { api } from '../../../../../config';
-import { moneyFormat } from '../../../../../utils';
+import Table from '../../../../components/tables/Table';
+import { api } from '../../../../config';
+import { moneyFormat } from '../../../../utils';
 
 const columnTable = [
     { field: 'enginenumber', header: 'Engine Number' },

@@ -1,11 +1,11 @@
 import { Icon } from '@iconify/react';
 import React, { useState } from 'react';
 import { useRef } from 'react';
-import TableSelect from '../../../../../components/inputs/TableSelect';
-import Modal from '../../../../../components/Modal';
-import Table from '../../../../../components/tables/Table';
-import { api } from '../../../../../config';
-import { moneyFormat } from '../../../../../utils';
+import TableSelect from '../../../../components/inputs/TableSelect';
+import Modal from '../../../../components/Modal';
+import Table from '../../../../components/tables/Table';
+import { api } from '../../../../config';
+import { moneyFormat } from '../../../../utils';
 
 const columnTable = [
     { field: 'enginenumber', header: 'Engine Number' },

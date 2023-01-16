@@ -1,7 +1,7 @@
 import React from 'react';
-import FormInput from '../../../../../components/inputs/FormInput';
-import Select from '../../../../../components/inputs/Select';
-import { api } from '../../../../../config';
+import FormInput from '../../../../components/inputs/FormInput';
+import Select from '../../../../components/inputs/Select';
+import { api } from '../../../../config';
 
 const ManifestEdit = ({ setIsOpen, dataCurrent, options, id, setLoadinPage, fetchManifest, setAlert }) => {
 

@@ -1,12 +1,11 @@
 import { Icon, _api } from '@iconify/react'
 import React, { useEffect, useState } from 'react'
-import Alert from '../../../../../components/Alert'
-import ErrorNetwork from '../../../../../components/ErrorNetwork'
-import SearchTable from '../../../../../components/tables/SearchTable'
-import Table from '../../../../../components/tables/Table'
-import { api } from '../../../../../config/Api'
-import { useFetch } from '../../../../../hooks'
-import { moneyFormat } from '../../../../../utils'
+import ErrorNetwork from '../../../../components/ErrorNetwork'
+import SearchTable from '../../../../components/tables/SearchTable'
+import Table from '../../../../components/tables/Table'
+import { api } from '../../../../config/Api'
+import { useFetch } from '../../../../hooks'
+import { moneyFormat } from '../../../../utils'
 
 const columnTable = [
     { field: "branch", header: "Branch" },

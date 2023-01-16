@@ -1,9 +1,9 @@
 import React from 'react';
 import { useContext } from 'react';
-import FormInput from '../../../../../components/inputs/FormInput';
-import Select from '../../../../../components/inputs/Select';
-import { api } from '../../../../../config';
-import { UserContext } from '../../../../../config/User';
+import FormInput from '../../../../components/inputs/FormInput';
+import Select from '../../../../components/inputs/Select';
+import { api } from '../../../../config';
+import { UserContext } from '../../../../config/User';
 
 const PlanArmadaEdit = ({ setIsOpen, options, setAlert, setLoadingPage, fetchPlanArmada, currentData, oid }) => {
     const [user] = useContext(UserContext);
