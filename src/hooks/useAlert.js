@@ -9,7 +9,6 @@ const useAlert = () => {
     });
 
     const handleSetAlert = (props) => {
-
         setAlert(current => ({ ...current, ...props }))
     }
     return [alert, handleSetAlert];

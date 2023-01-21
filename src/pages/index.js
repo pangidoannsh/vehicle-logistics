@@ -16,9 +16,10 @@ import Branch from "./generalData/branch/Branch"
 import Customers from "./generalData/customers/Customers"
 import Contract from "./application/dataGeneral/contract/Contract"
 import PoUnit from "./monitoringPoUnit/PoUnit";
+import TransitOut from "./application/operational/transitOut/TransitOut";
 
 export {
     Dashboard, Armada, Login, FinanceAr, PlanArmada, Common,
     NotFound, Revenue, Manifest, Register, ManifestCreate, Bast, BastCreate,
-    POCustomer, Branch, Customers, Contract, PoUnit
+    POCustomer, Branch, Customers, Contract, PoUnit, TransitOut
 };

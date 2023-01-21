@@ -12,6 +12,7 @@ import POCustomerDetail from './POCustomerDetail';
 import { useFetch } from '../../../../hooks'
 import ErrorNetwork from '../../../../components/ErrorNetwork';
 import POCustomerEdit from './POCustomerEdit';
+import ButtonCreate from '../../../../components/ButtonCreate';
 
 const columnTable = [
     { field: "branch", header: "branch" },
@@ -37,6 +38,7 @@ const POCustomer = () => {
     // ========================================================================
 
     // =================================== USE STATE ===================================
+    const [loadingCreate, setLoadingCreate] = useState(false);
     const [loadingPage, setLoadingPage] = useState(false)
     const [loadingTable, setLoadingTable] = useState(true);
     const [alert, setAlert] = useState({
@@ -123,9 +125,22 @@ const POCustomer = () => {
     const handleOpenModalCreate = e => {
         e.preventDefault()
         if (optionsContract.length === 0) {
+            setLoadingCreate(true);
             fetchOption("/contractlist", setOptionsContract);
+            api.get("/contractlist").then(res => {
+                setOptionsContract(res.data);
+                setOpenModalCreate(true)
+            }).catch(err => {
+                setAlert({
+                    isActive: true,
+                    code: 0,
+                    message: "Failed Get Data contract",
+                    title: err.response.status
+                })
+            }).finally(() => setLoadingCreate(false))
+        } else {
+            setOpenModalCreate(true)
         }
-        setOpenModalCreate(true)
     }
 
     // TO OPEN MODAL EDIT
@@ -233,11 +248,7 @@ const POCustomer = () => {
                             <span className='text-lg text-dark-green font-medium'>PO Customer</span>
                         </div>
                         <div>
-                            <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `} onClick={handleOpenModalCreate}>
-                                <Icon icon="fluent:add-12-filled" className="text-base" />
-                                <span className='text-base'>Create</span>
-                            </button>
+                            <ButtonCreate onClick={handleOpenModalCreate} loading={loadingCreate} />
                         </div>
                     </div>
                     {/* Table */}

@@ -10,6 +10,7 @@ import Loading from '../../../../components/Loading';
 import ErrorNetwork from '../../../../components/ErrorNetwork';
 import { useFetch } from '../../../../hooks';
 import PlanArmadaEdit from './PlanArmadaEdit';
+import ButtonCreate from '../../../../components/ButtonCreate';
 
 const columnTable = [
     { field: "branch", header: "Branch" },
@@ -60,6 +61,7 @@ const PlanArmada = () => {
 
     const [loadingPage, setLoadingPage] = useState(false)
     const [loading, setLoading] = useState(true);
+    const [loadingCreate, setLoadingCreate] = useState(false);
     // dataBody meruoakan data asli yang didapatkan dari consume API dan tidak diganggu gugat
     const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
         url: '/planarmada', setLoading, howDataGet
@@ -79,12 +81,8 @@ const PlanArmada = () => {
         { id: "TOWING", name: 'TOWING' },
         { id: "CAR CARRIER", name: 'CAR CARRIER' },
     ]);
-    const [optionsVehicleArmada, setOptionsVehicleArmada] = useFetch({
-        url: "vehiclearmadalist", howDataGet: vehicleArmadaGet,
-    });
-    const [optionsDestination, setOptionsDestination] = useFetch({
-        url: "destination"
-    });
+    const [optionsVehicleArmada, setOptionsVehicleArmada] = useState([]);
+    const [optionsDestination, setOptionsDestination] = useState([]);
 
     const [alert, setAlert] = useState({
         isActived: false,
@@ -99,9 +97,34 @@ const PlanArmada = () => {
     const [editPlanDate, setEditPlanDate] = useState("");
     const [editPayLoad, setEditPayLoad] = useState("");
 
-    const handleOpenModalCreate = e => {
+    const handleOpenModalCreate = async e => {
         e.preventDefault();
-        setOpenModalCreate(true)
+        if (optionsVehicleArmada.length === 0 || optionsDestination.length === 0) {
+            setLoadingCreate(true);
+            try {
+                await api.get("vehiclearmadalist").then(res => {
+                    setOptionsVehicleArmada(res.data.map(data => {
+                        return vehicleArmadaGet(data);
+                    }))
+                })
+                await api.get("destination").then(res => {
+                    setOptionsDestination(res.data)
+                })
+                setOpenModalCreate(true)
+            } catch (error) {
+                setAlert({
+                    isActived: true,
+                    code: 0,
+                    message: "Failed Open Create Form",
+                    title: "Error"
+                })
+            } finally {
+                setLoadingCreate(false)
+            }
+        }
+        else {
+            setOpenModalCreate(true)
+        }
     }
 
     const handleOpenModalEdit = oid => {
@@ -201,11 +224,7 @@ const PlanArmada = () => {
                             <span className='text-lg text-dark-green font-medium'>Plan Armada</span>
                         </div>
                         <div>
-                            <button className={`bg-light-green hover:bg-green-700 text-white rounded flex
-                                items-center gap-x-1 py-[2px] px-4 `} onClick={handleOpenModalCreate}>
-                                <Icon icon="fluent:add-12-filled" className="text-base" />
-                                <span className='text-base'>Create</span>
-                            </button>
+                            <ButtonCreate loading={loadingCreate} onClick={handleOpenModalCreate} />
                         </div>
                     </div>
                     {/* Table */}

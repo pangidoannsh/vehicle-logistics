@@ -35,9 +35,8 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
                     <tbody>
                         {!loading ?
                             dataBody.length !== 0 ?
-                                // slice(0,)
                                 dataBody.slice((limit * (page - 1)), limit * page).map((dataRow, index) => (
-                                    <tr key={index} className=" even:bg-dark-green even:bg-opacity-10" draggable>
+                                    <tr key={index} className=" even:bg-dark-green even:bg-opacity-10">
                                         {(handleActionDelete || handleActionEdit) ?
                                             <td>
                                                 <Action>

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Main from '../layouts/Main'
 import {
-    Dashboard, Login, FinanceAr, PlanArmada, NotFound,
+    Dashboard, Login, FinanceAr, PlanArmada, NotFound, TransitOut,
     Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract, PoUnit, BastCreate
 } from '../pages';
 
@@ -27,6 +27,7 @@ const Routers = () => {
                 <Route path='/customers' element={<Main><Customers /></Main>} />
                 <Route path='/contract' element={<Main><Contract /></Main>} />
                 <Route path='/pounit' element={<Main><PoUnit /></Main>} />
+                <Route path='/transit-out' element={<Main><TransitOut /></Main>} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

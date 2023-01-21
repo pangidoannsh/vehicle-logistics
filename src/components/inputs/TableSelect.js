@@ -76,7 +76,6 @@ const TableSelect = ({ dataStart = [], sourceDataOptions, selectedData, column, 
                         {column.map(col => (
                             <td key={col.field} className="p-4 text-sm text-slate-700">{data[col.field]}</td>
                         ))}
-                        {/* <td className='text-sm text-slate-700 text-center'></td> */}
                     </tr>
                 )) : ''}
 

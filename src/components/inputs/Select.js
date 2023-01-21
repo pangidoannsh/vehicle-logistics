@@ -12,6 +12,7 @@ const Select = ({ label, keyId, keyName, options, setTop, catchSelect, className
             catchSelect(select[keyId]);
         }
     }
+
     if (disabled) {
         return (
             <div className='flex flex-col gap-y-2'>
