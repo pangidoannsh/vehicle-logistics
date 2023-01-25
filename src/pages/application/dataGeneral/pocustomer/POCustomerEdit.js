@@ -25,19 +25,19 @@ const POCustomerEdit = ({ setIsOpen, currentData, fetchPoCustomer, options, oid,
                 fetchPoCustomer();
                 setIsOpen(false);
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 1,
                     title: "Success",
                     message: "Data PO Customer Updated"
                 })
                 setTimeout(() => {
-                    setAlert(prev => ({ ...prev, isActive: false }))
+                    setAlert(prev => ({ ...prev, isActived: false }))
                 }, 2000)
             }).catch(err => {
                 if (err.response.status !== 422) {
                     if (err.response.status >= 500) {
                         setAlert({
-                            isActive: true,
+                            isActived: true,
                             code: 0,
                             title: `Error ${err.response.status}`,
                             message: "Server Error"
@@ -46,7 +46,7 @@ const POCustomerEdit = ({ setIsOpen, currentData, fetchPoCustomer, options, oid,
                 } else {
                     const message = Object.values(err.response.data)[0][0];
                     setAlert({
-                        isActive: true,
+                        isActived: true,
                         code: 0,
                         title: `Error ${err.response.status}`,
                         message: message
@@ -57,7 +57,7 @@ const POCustomerEdit = ({ setIsOpen, currentData, fetchPoCustomer, options, oid,
         }
         else {
             setAlert({
-                isActive: true,
+                isActived: true,
                 code: 0,
                 title: "Can't Edit",
                 message: "There is an empty field input"

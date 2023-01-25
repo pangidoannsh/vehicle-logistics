@@ -6,7 +6,7 @@ import Table from '../../../../components/tables/Table';
 import { api } from '../../../../config';
 import { UserContext } from '../../../../config/User';
 
-const TransitOutCreate = ({ optionsManifest = [], columnTable, setLoadingPage }) => {
+const TransitOutCreate = ({ optionsManifest = [], columnTable, setOpenModalCreate, setLoadingPage, reFetch, setAlert }) => {
     const [user] = useContext(UserContext);
     const [loadingTable, setloadingTable] = useState(false);
     const [valueManifestNumber, setValueManifestNumber] = useState({ oidmanifest: null, manifest: "nothing selected" });
@@ -14,6 +14,12 @@ const TransitOutCreate = ({ optionsManifest = [], columnTable, setLoadingPage })
     const [selectedUnit, setSelectedUnit] = useState([]);
     const unitDeleted = useRef(0);
 
+    const resetinput = () => {
+        setValueManifestNumber({ oidmanifest: null, manifest: "nothing selected" });
+        toDateRef.current.value = "";
+        unitDeleted.current = 0;
+        setSelectedUnit([]);
+    }
     const handleselectManifest = oidmanifest => {
         setloadingTable(true)
         api.get(`/manifestdetail/${oidmanifest}`).then(res => {
@@ -27,8 +33,10 @@ const TransitOutCreate = ({ optionsManifest = [], columnTable, setLoadingPage })
                     )
                 }
             }));
+
         }).catch(err => {
             console.log(err);
+
         }).finally(() => setloadingTable(false))
     }
     const handleCreate = e => {
@@ -39,10 +47,45 @@ const TransitOutCreate = ({ optionsManifest = [], columnTable, setLoadingPage })
             transitoutdate: toDateRef.current.value,
             vehiclepooid: selectedUnit.map(unit => unit.oidunitpo)
         }
+
+        setAlert(current => ({ ...current, isActived: false }));
         api.post("/transitout", dataPost).then(res => {
             console.log(res);
+            reFetch();
+            setAlert({
+                isActived: true,
+                code: 1,
+                title: "Success",
+                message: "Data Transit Out Created"
+            });
+            resetinput();
+            setTimeout(() => {
+                setAlert(current => ({ ...current, isActived: false }));
+            }, 2000);
+            setOpenModalCreate(false);
         }).catch(err => {
             console.log(err);
+            if (err.response) {
+                if (err.response.status > 499) {
+                    setAlert({
+                        isActived: true,
+                        code: 0,
+                        title: "Error " + err.response.status,
+                        message: "Server Error"
+                    });
+                }
+                else if (err.response.status <= 499) {
+                    setAlert({
+                        isActived: true,
+                        code: 0,
+                        title: "Error " + err.response.status,
+                        message: "Client Error"
+                    });
+                    setTimeout(() => {
+                        setAlert(current => ({ ...current, isActived: false }));
+                    }, 500)
+                }
+            }
         }).finally(() => setLoadingPage(false));
     }
     const handleDelete = oidUnit => {

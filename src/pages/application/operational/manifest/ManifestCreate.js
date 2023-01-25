@@ -1,15 +1,14 @@
 import { Icon } from "@iconify/react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import FormInput from "../../../../components/inputs/FormInput";
 import Select from "../../../../components/inputs/Select";
 import { api } from "../../../../config";
 import TableSelect from "../../../../components/inputs/TableSelect";
 import { UserContext } from "../../../../config/User";
-import Alert from "../../../../components/Alert";
 import Loading from "../../../../components/Loading";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchOption } from "../../../../utils";
+import { AlertContext } from "../../../../layouts/Main";
 
 const columnSelectUnit = [
     { field: "enginenumber", header: "Engine Number" },
@@ -41,12 +40,7 @@ const ManifestCreate = () => {
     const [btnDisable, setBtnDisable] = useState(false);
     const [loading, setLoading] = useState(false);
     const [loadingTableUnit, setLoadingTableUnit] = useState(false);
-    const [alert, setAlert] = useState({
-        isActived: false,
-        code: 0,
-        title: "",
-        message: ""
-    });
+    const [alert, setAlert] = useContext(AlertContext);
     // data unit selected
     const [sourceDataUnit, setSourceDataUnit] = useState([]);
     const idUnitSelected = useRef([]);
@@ -244,10 +238,6 @@ const ManifestCreate = () => {
                     </div>
                 </div>
             </div>
-            <Alert isOpen={alert.isActived} setIsOpen={isActived => setAlert({ ...alert, isActived })}
-                title={alert.title} codeAlert={alert.code}>
-                {alert.message}
-            </Alert>
             <Loading isLoading={loading} />
         </>
     )

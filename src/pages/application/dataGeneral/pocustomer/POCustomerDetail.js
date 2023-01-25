@@ -58,7 +58,7 @@ const POCustomerDetail = (props) => {
         e.preventDefault()
         // refresh alert dan loading
         setLoadingPage(true);
-        setAlert(prev => ({ ...prev, isActive: false }));
+        setAlert(prev => ({ ...prev, isActived: false }));
         // menampung data baru
         const newData = {
             oidpocustomer: oid,
@@ -77,7 +77,7 @@ const POCustomerDetail = (props) => {
                 setLoadingPage(false)
                 resetInput();
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 1,
                     title: "Success",
                     message: "Data Unit PO Created"
@@ -85,7 +85,7 @@ const POCustomerDetail = (props) => {
                 fetchPoCustomer();
                 setDataUnitPo([...dataUnitPo, response.data]);
                 setTimeout(() => {
-                    setAlert(prev => ({ ...prev, isActive: false }))
+                    setAlert(prev => ({ ...prev, isActived: false }))
                 }, 3000);
             }
         }).catch(error => {
@@ -93,7 +93,7 @@ const POCustomerDetail = (props) => {
             if (error.response.status !== 422) {
                 if (error.response.status >= 500) {
                     setAlert({
-                        isActive: true,
+                        isActived: true,
                         code: 0,
                         title: `Error ${error.response.status}`,
                         message: "Server Error"
@@ -103,7 +103,7 @@ const POCustomerDetail = (props) => {
             } else {
                 const message = Object.values(error.response.data)[0][0];
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 0,
                     title: `Error ${error.response.status}`,
                     message: message
@@ -115,7 +115,7 @@ const POCustomerDetail = (props) => {
     const handleEditUnit = e => {
         e.preventDefault();
         setLoadingPage(true);
-        setAlert(prev => ({ ...prev, isActive: false }));
+        setAlert(prev => ({ ...prev, isActived: false }));
         // menampung data baru
         const dataUpdate = {
             old_framenumber: framenumberEdit.current,
@@ -130,7 +130,7 @@ const POCustomerDetail = (props) => {
 
         api.put(`/vehiclepo/${dataEditOid.current}`, dataUpdate).then(response => {
             setAlert({
-                isActive: true,
+                isActived: true,
                 code: 1,
                 title: "Success",
                 message: "Update Data Unit Success"
@@ -148,7 +148,7 @@ const POCustomerDetail = (props) => {
             setTotalPrice(dataUnitPo.filter(data => data.oid !== dataEditOid.current)
                 .reduce((total, unit) => total + unit.amount, 0) + dataUpdate.amount)
             setTimeout(() => {
-                setAlert(prev => ({ ...prev, isActive: false }))
+                setAlert(prev => ({ ...prev, isActived: false }))
             }, 3000);
             setIsCreate(true);
             resetInput();
@@ -156,14 +156,14 @@ const POCustomerDetail = (props) => {
             console.log(error.response);
             if (error.response.status < 500) {
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 0,
                     title: `Error ${error.response.status}`,
                     message: "Error User"
                 })
             } else {
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 0,
                     title: `Error ${error.response.status}`,
                     message: "Server Error"

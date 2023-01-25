@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import Table from '../../../../components/tables/Table';
 import { api } from '../../../../config';
 import { moneyFormat } from '../../../../utils';
@@ -30,25 +29,25 @@ const UnitPO = ({ data, setData, setTotalPrice, fetchPoCustomer, setLoadingPage,
             setTotalPrice(prev => Number(prev) - Number(data.filter(unit => unit.oid === oid).map(filter => filter.amount)[0]))
             fetchPoCustomer();
             setAlert({
-                isActive: true,
+                isActived: true,
                 code: 1,
                 title: "Success",
                 message: "Data Unit Success Deleted"
             });
             setTimeout(() => {
-                setAlert(prev => ({ ...prev, isActive: false }))
+                setAlert(prev => ({ ...prev, isActived: false }))
             }, 3000);
         }).catch(err => {
             if (err.response.status < 500) {
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 0,
                     title: `Error ${err.response.status}`,
                     message: "User Error"
                 })
             } else {
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 0,
                     title: `Error ${err.response.status}`,
                     message: "Server Error"

@@ -3,7 +3,7 @@ import PasswordInput from '../components/inputs/PasswordInput';
 import Sign from '../layouts/Sign';
 import Loading from "../components/Loading";
 import { useRef } from 'react';
-import { api, AuthContext } from '../config';
+import { api } from '../config';
 
 const Login = () => {
     const [loading, setLoading] = useState(false);

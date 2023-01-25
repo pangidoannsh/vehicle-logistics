@@ -1,6 +1,5 @@
 import { Icon } from '@iconify/react';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import Alert from '../../../../components/Alert';
+import React, { useState, useEffect, useCallback, useRef, useContext } from 'react';
 import Loading from '../../../../components/Loading';
 import Modal from '../../../../components/Modal';
 import SearchTable from '../../../../components/tables/SearchTable';
@@ -13,9 +12,10 @@ import { useFetch } from '../../../../hooks'
 import ErrorNetwork from '../../../../components/ErrorNetwork';
 import POCustomerEdit from './POCustomerEdit';
 import ButtonCreate from '../../../../components/ButtonCreate';
+import { AlertContext } from '../../../../layouts/Main';
 
 const columnTable = [
-    { field: "branch", header: "branch" },
+    { field: "branch", header: "Branch" },
     { field: "ponumber", header: "PO Number" },
     { field: "customer", header: "Customer" },
     { field: "contractno", header: "Contract No" },
@@ -41,13 +41,9 @@ const POCustomer = () => {
     const [loadingCreate, setLoadingCreate] = useState(false);
     const [loadingPage, setLoadingPage] = useState(false)
     const [loadingTable, setLoadingTable] = useState(true);
-    const [alert, setAlert] = useState({
-        isActive: false,
-        code: 0,
-        title: "title",
-        message: "message"
-    })
-    const setIsActiveAlert = isActive => setAlert({ ...alert, isActive });
+    const [alert, setAlert] = useContext(AlertContext);
+
+    const setIsActiveAlert = isActived => setAlert(prev => ({ ...prev, isActived }));
 
     // databody merupakan variable untuk menampung data dari api
     const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({
@@ -132,7 +128,7 @@ const POCustomer = () => {
                 setOpenModalCreate(true)
             }).catch(err => {
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 0,
                     message: "Failed Get Data contract",
                     title: err.response.status
@@ -171,13 +167,13 @@ const POCustomer = () => {
         if (dataPO) {
             if (dataPO.status.toUpperCase() !== "CREATE") {
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 2,
                     title: "Warning! ",
                     message: "PO Customer Status is already Manifested"
                 })
                 setTimeout(() => {
-                    setAlert(current => ({ ...current, isActive: false }))
+                    setAlert(current => ({ ...current, isActived: false }))
                 }, 2000);
             } else {
                 setOpenModalDelete(true)
@@ -193,7 +189,7 @@ const POCustomer = () => {
         api.delete(`/pocustomer/${idToBeDelete.current}`)
             .then(response => {
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 1,
                     title: "Success",
                     message: "Data PO Customer Deleted"
@@ -209,7 +205,7 @@ const POCustomer = () => {
                 console.log(error.response);
                 setLoadingPage(false);
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 0,
                     title: "Failed",
                     message: "Something Wrong Check Console Or Reload"
@@ -305,10 +301,6 @@ const POCustomer = () => {
             </Modal>
             {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
             <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
-            {/* Notifikasi Ketika Berhasil Create Data */}
-            <Alert isOpen={alert.isActive} setIsOpen={setIsActiveAlert} codeAlert={alert.code} title={alert.title}>
-                {alert.message}
-            </Alert>
             <Loading isLoading={loadingPage} />
         </>
     )

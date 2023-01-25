@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import ErrorNetwork from '../../../components/ErrorNetwork';
 import Modal from '../../../components/Modal';
 import SearchTable from '../../../components/tables/SearchTable';
@@ -7,9 +7,9 @@ import Table from '../../../components/tables/Table';
 import { api } from '../../../config';
 import ArmadaCreate from './ArmadaCreate';
 import { useCallback } from 'react';
-import Alert from '../../../components/Alert';
 import Loading from '../../../components/Loading';
 import { useFetch } from '../../../hooks';
+import { AlertContext } from '../../../layouts/Main';
 const columnTable = [
     { field: "branch", header: "Branch" },
     { field: "hullnumber", header: "Hull Number" },
@@ -58,12 +58,7 @@ export default function Armada() {
     const [optionsType, setOptionsType] = useState([]);
     const [optionsBrand, setOptionsBrand] = useState([]);
     const [optionsModel, setOptionsModel] = useState([]);
-    const [alert, setAlert] = useState({
-        isActived: false,
-        code: 0,
-        title: "title",
-        message: "message"
-    })
+    const [alert, setAlert] = useContext(AlertContext)
     const setAlertActive = active => setAlert({ ...alert, isActived: active });
 
     const handleOpenModalCreate = e => {
@@ -155,9 +150,6 @@ export default function Armada() {
             </Modal>
             <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork}
                 title="Network Error!" message="Please check your network and Reload your browser" />
-            <Alert isOpen={alert.isActived} setIsOpen={setAlertActive} codeAlert={alert.code} title={alert.title}>
-                {alert.message}
-            </Alert>
             <Loading isLoading={loadingPage} />
         </>
     );

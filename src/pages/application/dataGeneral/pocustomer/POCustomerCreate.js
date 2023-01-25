@@ -14,7 +14,7 @@ const POCustomerCreate = (props) => {
     // function yang akan dijalankan ketika menekan button create
     const handleClickCreate = e => {
         e.preventDefault()
-        setAlert(prev => ({ ...prev, isActive: false }))
+        setAlert(prev => ({ ...prev, isActived: false }))
         const valuePoNumber = refPoNumber.current.value.toUpperCase()
         if (valuePoNumber && valueContract) {
             setLoadingPage(true)
@@ -28,21 +28,21 @@ const POCustomerCreate = (props) => {
                 fetchPoCustomer();
                 setLoadingPage(false)
                 setAlert({
-                    isActive: true,
+                    isActived: true,
                     code: 1,
                     title: "Success",
                     message: "New Data PO Customer Created"
                 });
                 setIsOpen(false);
                 setTimeout(() => {
-                    setAlert(prev => ({ ...prev, isActive: false }));
+                    setAlert(prev => ({ ...prev, isActived: false }));
                 }, 3000);
             }).catch(error => {
                 setLoadingPage(false)
                 if (error.response.status !== 422) {
                     if (error.response.status >= 500) {
                         setAlert({
-                            isActive: true,
+                            isActived: true,
                             code: 0,
                             title: `Error ${error.response.status}`,
                             message: "Server Error"
@@ -52,7 +52,7 @@ const POCustomerCreate = (props) => {
                 } else {
                     const message = Object.values(error.response.data)[0][0]
                     setAlert({
-                        isActive: true,
+                        isActived: true,
                         code: 0,
                         title: `Error ${error.response.status}`,
                         message: message
@@ -61,7 +61,7 @@ const POCustomerCreate = (props) => {
             })
         } else {
             setAlert({
-                isActive: true,
+                isActived: true,
                 code: 0,
                 title: "Can't Create",
                 message: "There is an empty field input"

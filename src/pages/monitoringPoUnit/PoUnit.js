@@ -27,8 +27,12 @@ const displayData = data => {
             <div className="flex gap-x-1 py-1 px-2 items-center bg-custom-blue rounded-sm text-white justify-center">
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
+        ) : data.status.toLowerCase() === 'transitout' ? (
+            <div className="flex gap-x-1 py-1 px-2 items-center bg-gold rounded-sm text-white justify-center">
+                <span className="text-sm capitalize">{data.status}</span>
+            </div>
         ) : data.status.toLowerCase() === 'bast' ? (
-            <div className="flex gap-x-1 py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center">
+            <div className="flex gap-x-1 py-1 px-2 items-center bg-slate-300 rounded-sm text-slate-500 justify-center">
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
         ) : data.status

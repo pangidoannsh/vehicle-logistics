@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import React, { useEffect, useState, useCallback, useRef, useContext } from 'react'
 import Modal from '../../../../components/Modal';
 import SearchTable from '../../../../components/tables/SearchTable';
 import Table from '../../../../components/tables/Table';
@@ -11,6 +11,7 @@ import ErrorNetwork from '../../../../components/ErrorNetwork';
 import { useFetch } from '../../../../hooks';
 import PlanArmadaEdit from './PlanArmadaEdit';
 import ButtonCreate from '../../../../components/ButtonCreate';
+import { AlertContext } from '../../../../layouts/Main';
 
 const columnTable = [
     { field: "branch", header: "Branch" },
@@ -84,12 +85,7 @@ const PlanArmada = () => {
     const [optionsVehicleArmada, setOptionsVehicleArmada] = useState([]);
     const [optionsDestination, setOptionsDestination] = useState([]);
 
-    const [alert, setAlert] = useState({
-        isActived: false,
-        code: 0,
-        title: "title",
-        message: "message"
-    })
+    const [alert, setAlert] = useContext(AlertContext)
     const setAlertActive = active => setAlert({ ...alert, isActived: active });
     const [editModa, setEditModa] = useState({ id: null, name: "nothing to selected" });
     const [editArmada, setEditArmada] = useState({ hullnumber: null, armadaname: "nothing selected" });
@@ -269,10 +265,6 @@ const PlanArmada = () => {
                     </button>
                 </div>
             </Modal>
-            {/* Alert */}
-            <Alert isOpen={alert.isActived} setIsOpen={setAlertActive} codeAlert={alert.code} title={alert.title}>
-                {alert.message}
-            </Alert>
             {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
             <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
             <Loading isLoading={loadingPage} />

@@ -71,20 +71,24 @@ export default function Sign(props) {
                         <div className="absolute -top-[180px] -left-48">
                             <img src={TopShape} />
                         </div>
-                        <div className='absolute -bottom-60 -right-44'>
+                        <div className={`absolute ${isRegister ? '-bottom-64' : '-bottom-60'} -right-44`}>
                             <img src={BottomShape} />
                         </div>
                         <div className={`relative z-20 lg:px-16 md:px-10 px-4 h-full flex flex-col gap-y-6 justify-center 
-                            duration-100 origin-left ${!isOpen ? 'opacity-0' : 'opacity-1'} ${isRegister ? 'top-8' : ''}`}>
+                            duration-100 origin-left ${!isOpen ? 'opacity-0' : 'opacity-1'} ${isRegister ? 'top-10' : ''}`}>
                             <div className="flex gap-x-6 items-center">
                                 <button id="login" disabled={!isRegister}
-                                    className={`${!isRegister ? 'text-5xl text-dark-green' : 'text-3xl text-slate-400 hover:text-dark-green'} 
-                                    font-medium ${!isShow ? 'opacity-0' : 'opacity-100'}`} onClick={handleContent}>
+                                    className={`${!isRegister ? 'text-5xl text-dark-green' :
+                                        'text-3xl text-slate-400 hover:text-dark-green'} 
+                                        font-medium ${!isShow ? 'opacity-0' : 'opacity-100'}`}
+                                    onClick={handleContent}>
                                     Sign In
                                 </button>
                                 <button id="resgister" disabled={isRegister}
-                                    className={`${isRegister ? 'text-5xl text-dark-green' : 'text-3xl text-slate-400 hover:text-dark-green'} 
-                                    font-medium ${!isShow ? 'opacity-0' : 'opacity-100'}`} onClick={handleContent}>
+                                    className={`${isRegister ? 'text-5xl text-dark-green' :
+                                        'text-3xl text-slate-400 hover:text-dark-green'} 
+                                        font-medium ${!isShow ? 'opacity-0' : 'opacity-100'}`}
+                                    onClick={handleContent}>
                                     Sign Up
                                 </button>
                             </div>

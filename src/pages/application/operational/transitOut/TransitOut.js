@@ -1,16 +1,17 @@
 import { Icon } from '@iconify/react';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Loading from '../../../../components/Loading';
 import Modal from '../../../../components/Modal';
 import SearchTable from '../../../../components/tables/SearchTable';
 import Table from '../../../../components/tables/Table';
 import { api } from '../../../../config';
 import { useFetch } from '../../../../hooks';
+import { AlertContext } from '../../../../layouts/Main';
 import { moneyFormat } from '../../../../utils';
 import TransitOutCreate from './TransitOutCreate';
 
 const columnTable = [
+    // { field: 'transitdate', header: 'Transit Date' },
     { field: 'enginenumber', header: 'Engine Number' },
     { field: 'framenumber', header: 'Frame Number' },
     { field: 'unitbrand', header: 'Brand' },
@@ -20,7 +21,7 @@ const columnTable = [
 ];
 const displayData = data => {
     return {
-        ...data, amount: moneyFormat(data.amount),
+        ...data, amount: data.amount ? moneyFormat(data.amount) : data.amount,
         status: data.status.toLowerCase() === 'po' ? (
             <div className="flex gap-x-1 py-1 px-2 items-center bg-light-green rounded-sm text-white justify-center">
                 <span className="text-sm capitalize">{data.status}</span>
@@ -41,6 +42,8 @@ const TransitOut = () => {
     const [loadingCreate, setLoadingCreate] = useState(false);
     const [loadingTable, setLoadingTable] = useState(true);
     const [loadingPage, setLoadingPage] = useState(false);
+
+    const [alert, setAlert] = useContext(AlertContext);
 
     const [dataBody, setDataBody, fetchDataBody, errorNet] = useFetch({
         url: "transitoutdetail", setLoading: setLoadingTable
@@ -112,7 +115,8 @@ const TransitOut = () => {
             </div>
 
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title="Create Transit Out" size={1000}>
-                <TransitOutCreate optionsManifest={optionsManifest} columnTable={columnTable} setLoadingPage={setLoadingPage} />
+                <TransitOutCreate optionsManifest={optionsManifest} columnTable={columnTable} setLoadingPage={setLoadingPage}
+                    reFetch={fetchDataBody} setAlert={setAlert} setOpenModalCreate={setOpenModalCreate} />
             </Modal>
             <Loading isLoading={loadingPage} />
         </>

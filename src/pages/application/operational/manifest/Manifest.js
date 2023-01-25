@@ -1,17 +1,16 @@
 import { Icon } from "@iconify/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import SearchTable from "../../../../components/tables/SearchTable";
 import Table from "../../../../components/tables/Table";
 import { NavLink } from "react-router-dom";
 import Modal from "../../../../components/Modal";
-import Alert from "../../../../components/Alert";
 import ErrorNetwork from "../../../../components/ErrorNetwork";
 import { useFetch } from "../../../../hooks";
 import ManifestDetail from "./ManifestDetail";
 import Loading from "../../../../components/Loading";
 import { api } from "../../../../config";
 import ManifestEdit from "./ManifestEdit";
-import { useRef } from "react";
+import { AlertContext } from "../../../../layouts/Main";
 
 const columnTable = [
     { field: 'oid', header: 'Manifest Number' },
@@ -79,12 +78,7 @@ const Manifest = () => {
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [openModalEdit, setOpenModalEdit] = useState(false);
 
-    const [alert, setAlert] = useState({
-        isActived: false,
-        code: 0,
-        title: "title",
-        message: "message"
-    })
+    const [alert, setAlert] = useContext(AlertContext);
 
     const setActivedAlert = isActived => {
         setAlert(current => ({ ...current, isActived }));
@@ -222,10 +216,6 @@ const Manifest = () => {
                     </button>
                 </div>
             </Modal>
-
-            <Alert isOpen={alert.isActived} setIsOpen={setActivedAlert} codeAlert={alert.code} title={alert.title}>
-                {alert.message}
-            </Alert>
             {/* Notifikasi Error Ketika Tidak Ada Jaringan */}
             <ErrorNetwork isOpen={isErrorNetwork} setIsOpen={setIsErrorNetwork} />
             <Loading isLoading={loadingPage} />
