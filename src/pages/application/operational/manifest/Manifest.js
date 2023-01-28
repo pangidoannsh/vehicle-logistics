@@ -37,10 +37,15 @@ const displayData = data => {
                 {/* <Icon icon="akar-icons:check" className="text-base" /> */}
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
-        ) : data.status.toLowerCase() === 'bast' ? (
-            <div className="flex gap-x-1 py-1 items-center bg-[#0092E4] rounded-sm text-white justify-center">
+        ) : data.status.toLowerCase() === 'transitout' ? (
+            <div className="flex gap-x-1 py-1 items-center bg-gold rounded-sm text-white justify-center">
                 {/* <Icon icon="bi:stack" className="text-base" /> */}
-                <span className="text-sm capitalize">B.A.S.T</span>
+                <span className="text-sm capitalize">{data.status}</span>
+            </div>
+        ) : data.status.toLowerCase() === 'loading' ? (
+            <div className="flex gap-x-1 py-1 items-center bg-sky-500 rounded-sm text-white justify-center">
+                {/* <Icon icon="bi:stack" className="text-base" /> */}
+                <span className="text-sm capitalize">{data.status}</span>
             </div>
         ) : data.status.toLowerCase() === 'closed' ? (
             <div className="flex gap-x-1 py-1 items-center bg-[#A90101] rounded-sm text-white justify-center">
