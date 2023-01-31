@@ -11,21 +11,21 @@ const LoadingCreate = ({ optionsTransitout = [], columnTable, setLoadingPage, se
     const [loadingTable, setloadingTable] = useState(false);
 
     const [selectedUnit, setSelectedUnit] = useState([]);
-    const [valueTransitOut, setvalueTransitOut] = useState({ oidtransitout: null, transitout: "nothing selected" });
+    const [valueManifest, setvalueManifest] = useState({ oidmanifest: null, manifest: "nothing selected" });
     const loadingDateRef = useRef(null);
     const unitDeleted = useRef(0);
 
     const resetinput = () => {
-        setvalueTransitOut({ oid: null, transitout: "nothing selected" });
+        setvalueManifest({ oid: null, transitout: "nothing selected" });
         loadingDateRef.current.value = "";
         unitDeleted.current = 0;
         setSelectedUnit([]);
     }
 
-    const handleSelectTransitOut = oidTransitOut => {
+    const handleSelectManifest = oidmanifest => {
         setloadingTable(true);
-        if (oidTransitOut) {
-            api.get(`/transitoutdetail/${oidTransitOut}`).then(res => {
+        if (oidmanifest) {
+            api.get(`/transitoutdetail/${oidmanifest}`).then(res => {
                 unitDeleted.current = 0;
                 setSelectedUnit(res.data.map(data => {
                     return {
@@ -40,7 +40,12 @@ const LoadingCreate = ({ optionsTransitout = [], columnTable, setLoadingPage, se
                 console.log(err.response);
             }).finally(() => setloadingTable(false));
         } else {
-
+            setAlert({
+                isActived: true,
+                code: 0,
+                title: "Error",
+                message: "Something Error at Code"
+            })
         }
 
     }
@@ -48,7 +53,7 @@ const LoadingCreate = ({ optionsTransitout = [], columnTable, setLoadingPage, se
         e.preventDefault();
         setLoadingPage(true);
         const dataPost = {
-            oidtransitout: valueTransitOut.oidtransitout,
+            oidmanifest: valueManifest.oidmanifest,
             loadingdate: loadingDateRef.current.value,
             vehiclepooid: selectedUnit.map(unit => unit.oidunitpo)
         }
@@ -101,8 +106,8 @@ const LoadingCreate = ({ optionsTransitout = [], columnTable, setLoadingPage, se
                     keyId="oid" keyName="branchname" disabled />
                 <FormInput type="date" label="Loading Date" tagId="loadingdate" refrence={loadingDateRef} />
                 <div className="col-span-2">
-                    <Select label="Manifest Number" keyId="oidtransitout" keyName="transitout" catchSelect={handleSelectTransitOut}
-                        useSelect={[valueTransitOut, setvalueTransitOut]} options={optionsTransitout} />
+                    <Select label="Manifest Number" keyId="oidmanifest" keyName="manifest" catchSelect={handleSelectManifest}
+                        useSelect={[valueManifest, setvalueManifest]} options={optionsTransitout} />
                 </div>
             </div>
             <div className='flex flex-col gap-3'>

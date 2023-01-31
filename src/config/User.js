@@ -22,8 +22,8 @@ const User = (props) => {
                 setUser(res.data);
                 setIsLogged(true);
             }).catch(err => {
+                setIsLogged(false);
                 if (err.response.status === 401) {
-                    setIsLogged(false);
                 }
             })
         }

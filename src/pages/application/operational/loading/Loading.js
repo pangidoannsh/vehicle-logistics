@@ -35,11 +35,11 @@ const Loading = () => {
 
     const handleOpenModalCreate = () => {
         setLoadingCreate(true);
-        api.get("transitout").then(res => {
+        api.get("/manifestlist?filter=transitout").then(res => {
             setOptionsTransitout(res.data.map(data => {
                 return {
-                    oidtransitout: data.oid,
-                    transitout: (<div className='grid grid-cols-3'>
+                    oidmanifest: data.oid,
+                    manifest: (<div className='grid grid-cols-3'>
                         <span>{data.oid}</span>
                         <span className='text-center'>{data.transitoutdate}</span>
                         <span>{data.origin} - {data.destination}</span>

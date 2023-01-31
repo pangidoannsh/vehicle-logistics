@@ -56,7 +56,7 @@ const TransitOut = () => {
     const handleOpenModalCreate = e => {
         if (optionsManifest.length === 0) {
             setLoadingCreate(true);
-            api.get("manifestlist").then(res => {
+            api.get("/manifestlist?filter=CREATE").then(res => {
                 setOptionsManifest(res.data.map(data => {
                     return {
                         oidmanifest: data.oid,

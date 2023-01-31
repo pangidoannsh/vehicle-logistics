@@ -49,6 +49,9 @@ const Alert = ({ isOpen, setIsOpen, title, codeAlert, children }) => {
                     </div>
                 </div>
             </Transition>
+            <span className="text-red-700 bg-red-100"></span>
+            <span className="text-green-700 bg-green-100"></span>
+            <span className="text-yellow-700 bg-yellow-100"></span>
         </>
     )
 }
