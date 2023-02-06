@@ -17,6 +17,7 @@ const useFetch = ({ url, setLoading, howDataGet }) => {
                 return data;
             }))
         }).catch(err => {
+            // console.log(err.response);
             if (err.code === "ERR_NETWORK") {
                 setError(true);
             }

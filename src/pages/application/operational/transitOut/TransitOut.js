@@ -54,27 +54,22 @@ const TransitOut = () => {
     const [openModalCreate, setOpenModalCreate] = useState(false);
 
     const handleOpenModalCreate = e => {
-        if (optionsManifest.length === 0) {
-            setLoadingCreate(true);
-            api.get("/manifestlist?filter=CREATE").then(res => {
-                setOptionsManifest(res.data.map(data => {
-                    return {
-                        oidmanifest: data.oid,
-                        manifest: (<div className='grid grid-cols-3'>
-                            <span>{data.oid}</span>
-                            <span className='text-center'>{data.manifestdate}</span>
-                            <span>{data.origin} - {data.destination}</span>
-                        </div>)
-                    }
-                }));
-                setOpenModalCreate(true);
-            }).catch(err => {
-                console.log(err);
-            }).finally(() => setLoadingCreate(false));
-        }
-        else {
+        setLoadingCreate(true);
+        api.get("/manifestlist?filter=CREATE").then(res => {
+            setOptionsManifest(res.data.map(data => {
+                return {
+                    oidmanifest: data.oid,
+                    manifest: (<div className='grid grid-cols-3'>
+                        <span>{data.oid}</span>
+                        <span className='text-center'>{data.manifestdate}</span>
+                        <span>{data.origin} - {data.destination}</span>
+                    </div>)
+                }
+            }));
             setOpenModalCreate(true);
-        }
+        }).catch(err => {
+            console.log(err);
+        }).finally(() => setLoadingCreate(false));
     }
 
     useEffect(() => {

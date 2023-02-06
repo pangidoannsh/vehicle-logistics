@@ -38,7 +38,15 @@ const UnitPO = ({ data, setData, setTotalPrice, fetchPoCustomer, setLoadingPage,
                 setAlert(prev => ({ ...prev, isActived: false }))
             }, 3000);
         }).catch(err => {
-            if (err.response.status < 500) {
+            if (err.response.status == 406) {
+                setAlert({
+                    isActived: true,
+                    code: 2,
+                    title: "Warning",
+                    message: err.response.data.message
+                })
+            }
+            else if (err.response.status < 500) {
                 setAlert({
                     isActived: true,
                     code: 0,
@@ -53,6 +61,9 @@ const UnitPO = ({ data, setData, setTotalPrice, fetchPoCustomer, setLoadingPage,
                     message: "Server Error"
                 })
             }
+            setTimeout(() => {
+                setAlert(prev => ({ ...prev, isActived: false }))
+            }, 2000)
             console.log(err.response);
         }).finally(() => setLoadingPage(false))
     }

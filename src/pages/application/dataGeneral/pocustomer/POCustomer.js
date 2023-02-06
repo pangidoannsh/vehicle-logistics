@@ -236,7 +236,7 @@ const POCustomer = () => {
         <>
             {/* Content */}
             <div className="p-4">
-                <div className="card bg-white p-6">
+                <div className="card shadow-lg bg-white p-6">
                     {/* Title */}
                     <div className="flex justify-between items-center divider-bottom">
                         <div className="flex px-2 py-4 gap-x-2 items-center ">

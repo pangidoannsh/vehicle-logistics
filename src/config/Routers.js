@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Main from '../layouts/Main'
 import {
-    Dashboard, Login, FinanceAr, PlanArmada, NotFound, TransitOut,
-    Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract, PoUnit, BastCreate, Loading
+    Dashboard, Login, FinanceAr, PlanArmada, NotFound, TransitOut, Unloading,
+    Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract, PoUnit, Loading
 } from '../pages';
 
 const Routers = () => {
@@ -21,7 +21,6 @@ const Routers = () => {
                 <Route path='/manifest' element={<Main><Manifest /></Main>} />
                 <Route path='/manifest/create' element={<Main><ManifestCreate /></Main>} />
                 <Route path='/bast' element={<Main><Bast /></Main>} />
-                <Route path='/bast/create' element={<Main><BastCreate /></Main>} />
                 <Route path='/common' element={<Main><Common /></Main>} />
                 <Route path='/branch' element={<Main><Branch /></Main>} />
                 <Route path='/customers' element={<Main><Customers /></Main>} />
@@ -29,6 +28,7 @@ const Routers = () => {
                 <Route path='/pounit' element={<Main><PoUnit /></Main>} />
                 <Route path='/transit-out' element={<Main><TransitOut /></Main>} />
                 <Route path='/loading' element={<Main><Loading /></Main>} />
+                <Route path='/unloading' element={<Main><Unloading /></Main>} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

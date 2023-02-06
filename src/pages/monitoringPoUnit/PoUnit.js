@@ -31,7 +31,7 @@ const displayData = data => {
             <div className="flex gap-x-1 py-1 px-2 items-center bg-gold rounded-sm text-white justify-center">
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
-        ) : data.status.toLowerCase() === 'loading' ? (
+        ) : (data.status.toLowerCase() === 'loading' || data.status.toLowerCase() === 'unloading') ? (
             <div className="flex gap-x-1 py-1 px-2 items-center bg-sky-500 rounded-sm text-white justify-center">
                 <span className="text-sm capitalize">{data.status}</span>
             </div>

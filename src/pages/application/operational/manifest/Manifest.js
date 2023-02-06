@@ -42,15 +42,15 @@ const displayData = data => {
                 {/* <Icon icon="bi:stack" className="text-base" /> */}
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
-        ) : data.status.toLowerCase() === 'loading' ? (
+        ) : (data.status.toLowerCase() === 'loading' || data.status.toLowerCase() === 'unloading') ? (
             <div className="flex gap-x-1 py-1 items-center bg-sky-500 rounded-sm text-white justify-center">
                 {/* <Icon icon="bi:stack" className="text-base" /> */}
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
-        ) : data.status.toLowerCase() === 'closed' ? (
-            <div className="flex gap-x-1 py-1 items-center bg-[#A90101] rounded-sm text-white justify-center">
+        ) : data.status.toLowerCase() === 'bast' ? (
+            <div className="flex gap-x-1 py-1 px-2 items-center bg-slate-300 rounded-sm text-slate-500 justify-center">
                 {/* <Icon icon="eos-icons:init-container" className="text-base" /> */}
-                <span className="text-sm capitalize">{data.status}</span>
+                <span className="text-sm capitalize">B.A.S.T</span>
             </div>
         ) : data.status
     }

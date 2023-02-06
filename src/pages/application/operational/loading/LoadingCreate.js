@@ -6,7 +6,7 @@ import Table from '../../../../components/tables/Table';
 import { api } from '../../../../config';
 import { UserContext } from '../../../../config/User';
 
-const LoadingCreate = ({ optionsTransitout = [], columnTable, setLoadingPage, setAlert, setOpenModalCreate, reFetch }) => {
+const LoadingCreate = ({ optionsManifest = [], columnTable, setLoadingPage, setAlert, setOpenModalCreate, reFetch }) => {
     const [user] = useContext(UserContext);
     const [loadingTable, setloadingTable] = useState(false);
 
@@ -107,7 +107,7 @@ const LoadingCreate = ({ optionsTransitout = [], columnTable, setLoadingPage, se
                 <FormInput type="date" label="Loading Date" tagId="loadingdate" refrence={loadingDateRef} />
                 <div className="col-span-2">
                     <Select label="Manifest Number" keyId="oidmanifest" keyName="manifest" catchSelect={handleSelectManifest}
-                        useSelect={[valueManifest, setvalueManifest]} options={optionsTransitout} />
+                        useSelect={[valueManifest, setvalueManifest]} options={optionsManifest} />
                 </div>
             </div>
             <div className='flex flex-col gap-3'>
@@ -128,8 +128,6 @@ const LoadingCreate = ({ optionsTransitout = [], columnTable, setLoadingPage, se
                     focus:ring focus:ring-green-200 active:ring active:ring-green-200 text-center`}>
                         Save
                     </button>
-                </div>
-                <div>
                 </div>
             </div>
         </div>
