@@ -51,7 +51,7 @@ const UnloadingCreate = ({ optionsBast = [], columnTable, setLoadingPage, setAle
             unloadingdate: unloadingDateRef.current.value,
             vehiclepooid: selectedUnit.map(unit => unit.oidunitpo)
         }
-        console.log(dataPost)
+        // console.log(dataPost)
         api.post("unloading", dataPost).then(res => {
             setAlert({
                 isActived: true,
@@ -59,16 +59,38 @@ const UnloadingCreate = ({ optionsBast = [], columnTable, setLoadingPage, setAle
                 title: "Success",
                 message: "New data Unloading Created"
             })
+            reFetch();
             setTimeout(() => {
                 setAlert(prev => ({ ...prev, isActived: false }));
             }, 3000);
+            setOpenModalCreate(false);
         }).catch(err => {
-            setAlert({
-                isActived: true,
-                code: 0,
-                title: "Error " + err.response.status,
-                message: "Er"
-            })
+            console.log(err.response)
+            if (err.response.status === 422) {
+                setAlert({
+                    isActived: true,
+                    code: 0,
+                    title: "Error " + err.response.status,
+                    message: "There is empty field"
+                })
+            }
+            else if (err.response.status < 500) {
+                setAlert({
+                    isActived: true,
+                    code: 0,
+                    title: "Error " + err.response.status,
+                    message: "Error User Input"
+                })
+            }
+            else {
+                setAlert({
+                    isActived: true,
+                    code: 0,
+                    title: "Error " + err.response.status,
+                    message: "Server Error"
+                })
+            }
+
             setTimeout(() => {
                 setAlert(prev => ({ ...prev, isActived: false }));
             }, 2000);

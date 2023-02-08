@@ -174,7 +174,7 @@ const POCustomer = () => {
                 })
                 setTimeout(() => {
                     setAlert(current => ({ ...current, isActived: false }))
-                }, 2000);
+                }, 3000);
             } else {
                 setOpenModalDelete(true)
             }

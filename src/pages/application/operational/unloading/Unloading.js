@@ -10,6 +10,7 @@ import { AlertContext } from '../../../../layouts/Main';
 import UnloadingCreate from './UnloadingCreate';
 
 const columnTable = [
+    { field: 'unloadingdate', header: 'Unloading Date' },
     { field: 'enginenumber', header: 'Engine Number' },
     { field: 'framenumber', header: 'Frame Number' },
     { field: 'unitbrand', header: 'Brand' },
@@ -63,7 +64,7 @@ const Unloading = () => {
                     {/* Title */}
                     <div className="flex justify-between items-center divider-bottom">
                         <div className="flex px-2 py-4 gap-x-2 items-center ">
-                            <Icon icon="game-icons:box-unpacking" className={`text-2xl text-gold `} />
+                            <Icon icon="eos-icons:init-container" className={`text-2xl text-gold `} />
                             <span className='text-lg text-dark-green font-medium'>Unloading</span>
                         </div>
                         <div>
@@ -86,7 +87,7 @@ const Unloading = () => {
                 </div>
             </div>
 
-            <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title="Create Loading" size={1000}>
+            <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title="Create Unloading" size={1000}>
                 <UnloadingCreate columnTable={columnTable} reFetch={fetchDataBody} setAlert={setAlert}
                     setOpenModalCreate={setOpenModalCreate} setLoadingPage={setLoadingPage} optionsBast={optionsBast} />
             </Modal>

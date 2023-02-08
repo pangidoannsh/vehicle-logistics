@@ -9,9 +9,10 @@ import { useFetch } from '../../../../hooks';
 import { AlertContext } from '../../../../layouts/Main';
 import { moneyFormat } from '../../../../utils';
 import TransitOutCreate from './TransitOutCreate';
+import TransitoutEdit from './TransitoutEdit';
 
 const columnTable = [
-    // { field: 'transitdate', header: 'Transit Date' },
+    { field: 'transitout_date', header: 'Transit Out Date' },
     { field: 'enginenumber', header: 'Engine Number' },
     { field: 'framenumber', header: 'Frame Number' },
     { field: 'unitbrand', header: 'Brand' },
@@ -50,8 +51,10 @@ const TransitOut = () => {
     });
 
     const [dataShow, setDataShow] = useState([]);
+    const [dataEdit, setDataEdit] = useState();
     const [optionsManifest, setOptionsManifest] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [openModalEdit, setOpenModalEdit] = useState(false);
 
     const handleOpenModalCreate = e => {
         setLoadingCreate(true);
@@ -72,6 +75,13 @@ const TransitOut = () => {
         }).finally(() => setLoadingCreate(false));
     }
 
+    const handleOpenModalEdit = oid => {
+        setDataEdit(dataBody.find(unit => unit.oid === oid));
+        setOpenModalEdit(true)
+    }
+    useEffect(() => {
+        console.log(dataEdit)
+    }, [dataEdit]);
     useEffect(() => {
         setDataShow(dataBody.map(data => {
             return displayData(data);
@@ -85,7 +95,7 @@ const TransitOut = () => {
                     {/* Title */}
                     <div className="flex justify-between items-center divider-bottom">
                         <div className="flex px-2 py-4 gap-x-2 items-center ">
-                            <Icon icon="eos-icons:init-container" className={`text-2xl text-gold `} />
+                            <Icon icon="material-symbols:warehouse-rounded" className={`text-2xl text-gold `} />
                             <span className='text-lg text-dark-green font-medium'>Transit Out Unit</span>
                         </div>
                         <div>
@@ -102,7 +112,8 @@ const TransitOut = () => {
                         </div>
                     </div>
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination>
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination
+                        handleActionEdit={handleOpenModalEdit}>
                         {/* Search searchFunct={customSearch} */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
                     </Table>
@@ -112,6 +123,9 @@ const TransitOut = () => {
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title="Create Transit Out" size={1000}>
                 <TransitOutCreate optionsManifest={optionsManifest} columnTable={columnTable} setLoadingPage={setLoadingPage}
                     reFetch={fetchDataBody} setAlert={setAlert} setOpenModalCreate={setOpenModalCreate} />
+            </Modal>
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Transiout" size={500}>
+                <TransitoutEdit currentData={dataEdit} reFetch={fetchDataBody} setAlert={setAlert} />
             </Modal>
             <Loading isLoading={loadingPage} />
         </>

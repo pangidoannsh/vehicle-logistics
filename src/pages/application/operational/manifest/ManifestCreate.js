@@ -108,6 +108,7 @@ const ManifestCreate = () => {
 
             setTimeout(() => {
                 navigate('/manifest');
+                setAlert(prev => ({ ...prev, isActived: false }))
             }, 2000);
         }).catch(err => {
             setLoading(false);

@@ -18,9 +18,9 @@ import PoUnit from "./monitoringPoUnit/PoUnit";
 import TransitOut from "./application/operational/transitOut/TransitOut";
 import Loading from "./application/operational/loading/Loading";
 import Unloading from "./application/operational/unloading/Unloading";
-
+import Invoice from "./application/finance/Invoice";
 export {
     Dashboard, Armada, Login, FinanceAr, PlanArmada, Common, Loading,
     NotFound, Revenue, Manifest, Register, ManifestCreate, Bast,
-    POCustomer, Branch, Customers, Contract, PoUnit, TransitOut, Unloading
+    POCustomer, Branch, Customers, Contract, PoUnit, TransitOut, Unloading, Invoice
 };

@@ -40,7 +40,7 @@ const dataDisplay = data => {
                 {/* <Icon icon="akar-icons:check" className="text-base" /> */}
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
-        ) : data.status.toLowerCase() === 'bast' ? (
+        ) : data.status.toLowerCase() === 'unloading' ? (
             <div className="flex gap-x-1 py-1 items-center bg-[#0092E4] rounded-sm text-white justify-center">
                 {/* <Icon icon="bi:stack" className="text-base" /> */}
                 <span className="text-sm capitalize">{data.status}</span>
@@ -163,7 +163,7 @@ const Bast = () => {
                     {/* Title */}
                     <div className="flex justify-between items-center divider-bottom">
                         <div className="flex px-2 py-4 gap-x-2 items-center">
-                            <Icon icon="fa-solid:truck-loading" className={`text-xl text-gold `} />
+                            <Icon icon="material-symbols:assignment-turned-in-rounded" className={`text-2xl text-gold `} />
                             <span className="text-lg text-dark-green font-medium">B.A.S.T</span>
                         </div>
                         <div>

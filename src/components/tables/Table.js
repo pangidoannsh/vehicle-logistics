@@ -4,7 +4,7 @@ import Action from './Action';
 import LoadingTable from './LoadingTable';
 import PaginationTable from './PaginationTable';
 
-const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleClickField, id,
+const Table = ({ dataBody = [], column, handleActionEdit, handleActionDelete, handleClickField, id,
     clickField, loading, pagination, children, center = [] }) => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
@@ -13,7 +13,7 @@ const Table = ({ dataBody, column, handleActionEdit, handleActionDelete, handleC
             <>
                 <div className={`flex items-center ${children ? 'justify-between' : 'justify-end'}`}>
                     {children}
-                    <PaginationTable lengthData={dataBody.length} limit={limit} setLimit={setLimit} page={page} setPage={setPage} />
+                    {dataBody.length !== 0 ? <PaginationTable lengthData={dataBody.length} limit={limit} setLimit={setLimit} page={page} setPage={setPage} /> : ''}
                 </div>
                 {/* <PaginationTable lengthData={dataBody.length} limit={limit} setLimit={setLimit} page={page} setPage={setPage} noShowing /> */}
                 <table className='table-auto w-full'>

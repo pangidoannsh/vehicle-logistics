@@ -10,6 +10,7 @@ import { AlertContext } from '../../../../layouts/Main';
 import LoadingCreate from './LoadingCreate';
 
 const columnTable = [
+    { field: 'loadingdate', header: 'Loading Date' },
     { field: 'enginenumber', header: 'Engine Number' },
     { field: 'framenumber', header: 'Frame Number' },
     { field: 'unitbrand', header: 'Brand' },
