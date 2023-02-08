@@ -6,7 +6,7 @@ function SubMenu(props) {
     const { menu, open, show, location } = props
     const [actived, setActived] = useState(() => {
         if (menu.sub) {
-            return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1
+            return menu.sub.findIndex(subMenu => subMenu.path === location.pathname) !== -1
         }
         else {
             return false;
@@ -14,16 +14,16 @@ function SubMenu(props) {
     });
     const [drop, setDrop] = useState(() => {
         if (menu.sub) {
-            return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1
+            return menu.sub.findIndex(subMenu => subMenu.path === location.pathname) !== -1
         }
         else {
             return false;
         }
     });
     const handleDropDown = () => {
-        setDrop(!drop)
-        if (menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) === -1) {
-            setActived(!actived)
+        setDrop(prev => !prev)
+        if (menu.sub.findIndex(subMenu => subMenu.path === location.pathname) === -1) {
+            setActived(prev => !prev)
         }
     }
     if (menu.sub) {

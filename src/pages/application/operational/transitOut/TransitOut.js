@@ -12,7 +12,7 @@ import TransitOutCreate from './TransitOutCreate';
 import TransitoutEdit from './TransitoutEdit';
 
 const columnTable = [
-    { field: 'transitout_date', header: 'Transit Out Date' },
+    { field: 'transitout_date', header: 'Date' },
     { field: 'enginenumber', header: 'Engine Number' },
     { field: 'framenumber', header: 'Frame Number' },
     { field: 'unitbrand', header: 'Brand' },
@@ -21,21 +21,9 @@ const columnTable = [
     { field: 'year', header: 'Year' }
 ];
 const displayData = data => {
+    const date = data.transitout_date.split(" ")[0].split("-").reverse();
     return {
-        ...data, amount: data.amount ? moneyFormat(data.amount) : data.amount,
-        status: data.status.toLowerCase() === 'po' ? (
-            <div className="flex gap-x-1 py-1 px-2 items-center bg-light-green rounded-sm text-white justify-center">
-                <span className="text-sm capitalize">{data.status}</span>
-            </div>
-        ) : data.status.toLowerCase() === 'manifest' ? (
-            <div className="flex gap-x-1 py-1 px-2 items-center bg-custom-blue rounded-sm text-white justify-center">
-                <span className="text-sm capitalize">{data.status}</span>
-            </div>
-        ) : data.status.toLowerCase() === 'bast' ? (
-            <div className="flex gap-x-1 py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center">
-                <span className="text-sm capitalize">{data.status}</span>
-            </div>
-        ) : data.status
+        ...data, transitout_date: `${date[0]}/${date[1]}/${date[2]}`
     };
 }
 
@@ -80,9 +68,6 @@ const TransitOut = () => {
         setOpenModalEdit(true)
     }
     useEffect(() => {
-        console.log(dataEdit)
-    }, [dataEdit]);
-    useEffect(() => {
         setDataShow(dataBody.map(data => {
             return displayData(data);
         }))
@@ -113,7 +98,7 @@ const TransitOut = () => {
                     </div>
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination
-                        handleActionEdit={handleOpenModalEdit}>
+                        handleActionEdit={handleOpenModalEdit} center={["transitout_date"]}>
                         {/* Search searchFunct={customSearch} */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
                     </Table>
@@ -124,8 +109,8 @@ const TransitOut = () => {
                 <TransitOutCreate optionsManifest={optionsManifest} columnTable={columnTable} setLoadingPage={setLoadingPage}
                     reFetch={fetchDataBody} setAlert={setAlert} setOpenModalCreate={setOpenModalCreate} />
             </Modal>
-            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Transiout" size={500}>
-                <TransitoutEdit currentData={dataEdit} reFetch={fetchDataBody} setAlert={setAlert} />
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Transit Out" size={500}>
+                <TransitoutEdit currentData={dataEdit} reFetch={fetchDataBody} setAlert={setAlert} setOpenModal={setOpenModalEdit} />
             </Modal>
             <Loading isLoading={loadingPage} />
         </>

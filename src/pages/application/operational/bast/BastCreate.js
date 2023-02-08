@@ -59,7 +59,7 @@ const BastCreate = ({ optionsManifest = [], columnTable, setAlert, fetchBast, se
             receivername: receiverNameRef.current.value,
             vehiclepooid: selectedUnit.map(unit => unit.oidunitpo),
         }
-        console.log(dataPost);
+        // console.log(dataPost);
         setloadingCreate(true);
         api.post("/beritaacara", dataPost).then(res => {
             setAlert({

@@ -3,21 +3,22 @@ import React, { useRef, useState } from 'react';
 import FormInput from '../../../../components/inputs/FormInput';
 import { api } from '../../../../config';
 
-const TransitoutEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
+const UnloadingEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
     const [loadingSubmit, setLoadingSubmit] = useState(false);
-    const toDateRef = useRef(null);
+    const dateRef = useRef(null);
 
     const handleCreate = e => {
+        // console.log(currentData.oidunloading)
         setLoadingSubmit(true);
         setAlert(prev => ({ ...prev, isActived: false }))
-        api.put(`/transitout/${currentData.oidtransitout}`, { transitout_date: toDateRef.current?.value })
+        api.put(`/unloading/${currentData.oidunloading}`, { unloading_date: dateRef.current?.value })
             .then(res => {
                 reFetch();
                 setAlert({
                     isActived: true,
                     code: 1,
                     title: "Success",
-                    message: "Transit Out Updated"
+                    message: "Unloading Updated"
                 })
                 setOpenModal(false);
                 setTimeout(() => {
@@ -28,7 +29,7 @@ const TransitoutEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
                     isActived: true,
                     code: 0,
                     title: "Error " + err.response.status,
-                    message: "Transit Out fail to update"
+                    message: "Unloading fail to update"
                 })
                 setTimeout(() => {
                     setAlert(prev => ({ ...prev, isActived: false }))
@@ -37,8 +38,8 @@ const TransitoutEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
     }
     return (
         <>
-            <FormInput type="date" label="Transit Out Date" tagId="transitdate" refrence={toDateRef}
-                defaultValue={currentData ? currentData.transitout_date : ''} />
+            <FormInput type="date" label="Unloading Date" tagId="unloadingdate" refrence={dateRef}
+                defaultValue={currentData ? currentData.unloading_date : ''} />
             <div className="flex justify-end mt-6">
                 <button type="Submit" onClick={handleCreate}
                     className="bg-light-green hover:bg-green-700 text-white rounded gap-x-1 py-2 px-4 
@@ -50,4 +51,4 @@ const TransitoutEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
     );
 }
 
-export default TransitoutEdit;
+export default UnloadingEdit;

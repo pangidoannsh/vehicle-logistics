@@ -35,7 +35,7 @@ const vehicleArmadaGet = data => {
 const howDataGet = data => {
     const { oid, branch, moda, destination, plandate, payloadcomposition, policenumber, status } = data;
     const date = plandate.split(" ")[0].split("-").reverse();
-    return { oid, branch, moda, destination, plandate: `${date[0]}-${date[1]}-${date[2]}`, payloadcomposition, policenumber, status };
+    return { oid, branch, moda, destination, plandate: `${date[0]}/${date[1]}/${date[2]}`, payloadcomposition, policenumber, status };
 }
 const PlanArmada = () => {
 
@@ -225,7 +225,8 @@ const PlanArmada = () => {
                     </div>
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading} pagination
-                        handleActionEdit={handleOpenModalEdit} handleActionDelete={handleOpenModalDelete}>
+                        handleActionEdit={handleOpenModalEdit} handleActionDelete={handleOpenModalDelete}
+                        center={["payloadcomposition", "plandate"]}>
                         {/* Search */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
                     </Table>

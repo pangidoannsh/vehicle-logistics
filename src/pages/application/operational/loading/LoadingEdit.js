@@ -3,21 +3,21 @@ import React, { useRef, useState } from 'react';
 import FormInput from '../../../../components/inputs/FormInput';
 import { api } from '../../../../config';
 
-const TransitoutEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
+const LoadingEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
     const [loadingSubmit, setLoadingSubmit] = useState(false);
-    const toDateRef = useRef(null);
+    const dateRef = useRef(null);
 
     const handleCreate = e => {
         setLoadingSubmit(true);
         setAlert(prev => ({ ...prev, isActived: false }))
-        api.put(`/transitout/${currentData.oidtransitout}`, { transitout_date: toDateRef.current?.value })
+        api.put(`/loading/${currentData.oidloading}`, { loading_date: dateRef.current?.value })
             .then(res => {
                 reFetch();
                 setAlert({
                     isActived: true,
                     code: 1,
                     title: "Success",
-                    message: "Transit Out Updated"
+                    message: "Loading Updated"
                 })
                 setOpenModal(false);
                 setTimeout(() => {
@@ -28,7 +28,7 @@ const TransitoutEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
                     isActived: true,
                     code: 0,
                     title: "Error " + err.response.status,
-                    message: "Transit Out fail to update"
+                    message: "Loading fail to update"
                 })
                 setTimeout(() => {
                     setAlert(prev => ({ ...prev, isActived: false }))
@@ -37,8 +37,8 @@ const TransitoutEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
     }
     return (
         <>
-            <FormInput type="date" label="Transit Out Date" tagId="transitdate" refrence={toDateRef}
-                defaultValue={currentData ? currentData.transitout_date : ''} />
+            <FormInput type="date" label="Loading Date" tagId="loadingdate" refrence={dateRef}
+                defaultValue={currentData ? currentData.loading_date : ''} />
             <div className="flex justify-end mt-6">
                 <button type="Submit" onClick={handleCreate}
                     className="bg-light-green hover:bg-green-700 text-white rounded gap-x-1 py-2 px-4 
@@ -50,4 +50,4 @@ const TransitoutEdit = ({ currentData, reFetch, setAlert, setOpenModal }) => {
     );
 }
 
-export default TransitoutEdit;
+export default LoadingEdit;

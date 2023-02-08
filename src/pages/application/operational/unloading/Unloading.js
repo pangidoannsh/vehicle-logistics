@@ -8,9 +8,10 @@ import { api } from '../../../../config';
 import { useFetch } from '../../../../hooks';
 import { AlertContext } from '../../../../layouts/Main';
 import UnloadingCreate from './UnloadingCreate';
+import UnloadingEdit from './UnloadingEdit';
 
 const columnTable = [
-    { field: 'unloadingdate', header: 'Unloading Date' },
+    { field: 'unloading_date', header: 'Unloading Date' },
     { field: 'enginenumber', header: 'Engine Number' },
     { field: 'framenumber', header: 'Frame Number' },
     { field: 'unitbrand', header: 'Brand' },
@@ -18,7 +19,12 @@ const columnTable = [
     { field: 'color', header: 'Color' },
     { field: 'year', header: 'Year' }
 ];
-
+const displayData = data => {
+    const date = data.unloading_date.split(" ")[0].split("-").reverse();
+    return {
+        ...data, unloading_date: `${date[0]}/${date[1]}/${date[2]}`
+    };
+}
 const Unloading = () => {
     const [loadingTable, setLoadingTable] = useState(false);
     const [loadingPage, setLoadingPage] = useState(false);
@@ -28,11 +34,13 @@ const Unloading = () => {
 
     const [optionsBast, setoptionsBast] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [openModalEdit, setOpenModalEdit] = useState(false);
 
     const [dataBody, setDataBody, fetchDataBody] = useFetch({
         url: "/unloadingdetail", setLoading: setLoadingTable
     })
     const [dataShow, setDataShow] = useState([]);
+    const [dataEdit, setDataEdit] = useState();
 
     const handleOpenModalCreate = e => {
         e.preventDefault();
@@ -53,8 +61,16 @@ const Unloading = () => {
             console.log(err.response);
         }).finally(() => setLoadingCreate(false));
     }
+
+    const handleOpenModalEdit = oid => {
+        setDataEdit(dataBody.find(unit => unit.oid === oid));
+        setOpenModalEdit(true)
+    }
+
     useEffect(() => {
-        setDataShow(dataBody)
+        setDataShow(dataBody.map(data => {
+            return displayData(data);
+        }))
     }, [dataBody]);
     return (
         <>
@@ -81,15 +97,20 @@ const Unloading = () => {
                         </div>
                     </div>
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination>
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination
+                        center={["unloading_date"]} handleActionEdit={handleOpenModalEdit}>
                         <SearchTable setData={setDataShow} dataBody={dataBody} />
                     </Table>
                 </div>
             </div>
-
+            {/* Create */}
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title="Create Unloading" size={1000}>
                 <UnloadingCreate columnTable={columnTable} reFetch={fetchDataBody} setAlert={setAlert}
                     setOpenModalCreate={setOpenModalCreate} setLoadingPage={setLoadingPage} optionsBast={optionsBast} />
+            </Modal>
+            {/* Edit */}
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Unloading" size={500}>
+                <UnloadingEdit currentData={dataEdit} reFetch={fetchDataBody} setAlert={setAlert} setOpenModal={setOpenModalEdit} />
             </Modal>
             <Loading isLoading={loadingPage} />
         </>

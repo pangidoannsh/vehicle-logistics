@@ -11,6 +11,7 @@ import { useFetch } from '../../../../hooks'
 import { AlertContext } from '../../../../layouts/Main'
 import BastCreate from './BastCreate'
 import BastDetail from './BastDetail'
+import BastEdit from './BastEdit'
 
 const columnTable = [
     { field: 'oid', header: 'BAST Number' },
@@ -33,8 +34,9 @@ const howDataGet = data => {
     return { ...data, bastdate: data.bastdate.split(" ")[0] };
 }
 const dataDisplay = data => {
+    const date = data.bastdate.split(" ")[0].split("-").reverse();
     return {
-        ...data,
+        ...data, bastdate: `${date[0]}/${date[1]}/${date[2]}`,
         status: data.status.toLowerCase() === 'create' ? (
             <div className="flex gap-x-1 py-1 items-center bg-light-green rounded-sm text-white justify-center">
                 {/* <Icon icon="akar-icons:check" className="text-base" /> */}
@@ -53,6 +55,7 @@ const dataDisplay = data => {
         ) : data.status
     }
 }
+
 const Bast = () => {
     const [alert, setAlert] = useContext(AlertContext);
 
@@ -64,6 +67,7 @@ const Bast = () => {
         url: "/beritaacara", setLoading, howDataGet
     })
     const [dataShow, setDataShow] = useState([]);
+    const [dataEdit, setDataEdit] = useState([]);
     const [dataDetail, setDataDetail] = useState([]);
     const [dataUnitBast, setDataUnitBast] = useState([]);
 
@@ -71,6 +75,7 @@ const Bast = () => {
 
     const [openModalDetail, setOpenModalDetail] = useState(false);
     const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [openModalEdit, setOpenModalEdit] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [optionsManifest, setOptionsManifest] = useState([]);
 
@@ -112,7 +117,10 @@ const Bast = () => {
         }).finally(() => setLoadingCreate(false))
 
     }
-
+    const handleOpenModalEdit = oid => {
+        setDataEdit(dataBody.find(unit => unit.oid === oid));
+        setOpenModalEdit(true)
+    }
     const handleOpenModalDelete = oid => {
         if (oid) {
             idWillDelete.current = oid
@@ -126,21 +134,39 @@ const Bast = () => {
         e.preventDefault();
         console.log(idWillDelete.current);
         setLoadingDelete(true);
-        api.delete(`/bast/${idWillDelete.current}`).then(res => {
+        setAlert(prev => ({ ...prev, isActived: false }));
+        api.delete(`/beritaacara/${idWillDelete.current}`).then(res => {
             setAlert({
                 isActived: true,
                 code: 1,
                 title: "Success",
                 message: "Data B.A.S.T Deleted"
             })
+            console.log(res.data);
         }).catch(err => {
-            console.log(err);
+            // console.log(err);
+            let code = 0;
+            let message = "";
+            switch (err.response.status) {
+                case 503:
+                    message = err.response.data;
+                    break;
+                case 403:
+                    code = 2;
+                    message = err.response.data.message;
+                    break;
+                default:
+                    message = "Failed Deleted Data B.A.S.T"
+            }
             setAlert({
                 isActived: true,
-                code: 0,
-                title: "Error",
-                message: "Failed Deleted Data B.A.S.T"
+                code,
+                title: `Error ${err.response.status}`,
+                message
             })
+            setTimeout(() => {
+                setAlert(prev => ({ ...prev, isActived: false }));
+            }, 3000)
         }).finally(() => setLoadingDelete(false))
 
     }
@@ -172,7 +198,8 @@ const Bast = () => {
                     </div>
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading} clickField="oid"
-                        handleClickField={handleOpenModalDetail} pagination handleActionDelete={handleOpenModalDelete}>
+                        handleClickField={handleOpenModalDetail} pagination handleActionDelete={handleOpenModalDelete}
+                        handleActionEdit={handleOpenModalEdit}>
                         {/* Search */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} />
                     </Table>
@@ -184,8 +211,12 @@ const Bast = () => {
                     fetchBast={fetchDataBody} setOpenModal={setOpenModalCreate} />
             </Modal>
             {/* Modal Detail */}
-            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail}>
+            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Detail B.A.S.T" iconTitle="ooui:view-details-ltr">
                 <BastDetail dataDetail={dataDetail} dataUnitBast={dataUnitBast} />
+            </Modal>
+            {/* Modal Edit */}
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit B.A.S.T" size={500}>
+                <BastEdit currentData={dataEdit} reFetch={fetchDataBody} setAlert={setAlert} setOpenModal={setOpenModalEdit} />
             </Modal>
             {/* Modal Delete */}
             <Modal isOpen={openModalDelete} setIsOpen={setOpenModalDelete} size={500} >

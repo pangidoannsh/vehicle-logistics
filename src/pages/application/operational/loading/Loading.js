@@ -8,9 +8,10 @@ import { api } from '../../../../config';
 import { useFetch } from '../../../../hooks';
 import { AlertContext } from '../../../../layouts/Main';
 import LoadingCreate from './LoadingCreate';
+import LoadingEdit from './LoadingEdit';
 
 const columnTable = [
-    { field: 'loadingdate', header: 'Loading Date' },
+    { field: 'loading_date', header: 'Date' },
     { field: 'enginenumber', header: 'Engine Number' },
     { field: 'framenumber', header: 'Frame Number' },
     { field: 'unitbrand', header: 'Brand' },
@@ -18,6 +19,12 @@ const columnTable = [
     { field: 'color', header: 'Color' },
     { field: 'year', header: 'Year' }
 ];
+const displayData = data => {
+    const date = data.loading_date.split(" ")[0].split("-").reverse();
+    return {
+        ...data, loading_date: `${date[0]}/${date[1]}/${date[2]}`
+    };
+}
 
 const Loading = () => {
     const [loadingTable, setLoadingTable] = useState(false);
@@ -30,9 +37,10 @@ const Loading = () => {
         url: "/loadingdetail", setLoading: setLoadingTable
     })
     const [dataShow, setDataShow] = useState([]);
-
+    const [dataEdit, setDataEdit] = useState();
     const [optionsManifest, setoptionsManifest] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [openModalEdit, setOpenModalEdit] = useState(false);
 
     const handleOpenModalCreate = () => {
         setLoadingCreate(true);
@@ -53,8 +61,15 @@ const Loading = () => {
         }).finally(() => setLoadingCreate(false));
     }
 
+    const handleOpenModalEdit = oid => {
+        setDataEdit(dataBody.find(unit => unit.oid === oid));
+        setOpenModalEdit(true)
+    }
+
     useEffect(() => {
-        setDataShow(dataBody)
+        setDataShow(dataBody.map(data => {
+            return displayData(data);
+        }))
     }, [dataBody]);
     return (
         <>
@@ -81,15 +96,22 @@ const Loading = () => {
                         </div>
                     </div>
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination>
+                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination
+                        center={["loading_date"]} handleActionEdit={handleOpenModalEdit}>
                         <SearchTable setData={setDataShow} dataBody={dataBody} />
                     </Table>
                 </div>
             </div>
 
+            {/* Create */}
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title="Create Loading" size={1000}>
                 <LoadingCreate columnTable={columnTable} setLoadingPage={setLoadingPage} reFetch={fetchDataBody}
                     setAlert={setAlert} setOpenModalCreate={setOpenModalCreate} optionsManifest={optionsManifest} />
+            </Modal>
+
+            {/* Edit */}
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Loading" size={500}>
+                <LoadingEdit currentData={dataEdit} reFetch={fetchDataBody} setAlert={setAlert} setOpenModal={setOpenModalEdit} />
             </Modal>
             <LoadingPage isLoading={loadingPage} />
         </>
