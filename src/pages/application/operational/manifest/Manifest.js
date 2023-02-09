@@ -48,7 +48,7 @@ const displayData = data => {
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
         ) : data.status.toLowerCase() === 'bast' ? (
-            <div className="flex gap-x-1 py-1 px-2 items-center bg-slate-300 rounded-sm text-slate-500 justify-center">
+            <div className="flex gap-x-1 py-1 px-2 items-center bg-emerald-600 rounded-sm text-white justify-center">
                 {/* <Icon icon="eos-icons:init-container" className="text-base" /> */}
                 <span className="text-sm capitalize">B.A.S.T</span>
             </div>
@@ -145,13 +145,28 @@ const Manifest = () => {
                 setActivedAlert(false);
             }, 3000);
         }).catch(err => {
+            let code = 0;
+            let message = "";
+            switch (err.response.status) {
+                case 503:
+                    message = err.response.data;
+                    break;
+                case 403:
+                    code = 2;
+                    message = err.response.data.message;
+                    break;
+                default:
+                    message = "Failed Deleted Data B.A.S.T"
+            }
             setAlert({
                 isActived: true,
-                code: 0,
-                title: "Error " + err.response.status,
-                message: "Delete data failed"
+                code,
+                title: `Error ${err.response.status}`,
+                message
             })
-            console.log(err.response);
+            setTimeout(() => {
+                setAlert(prev => ({ ...prev, isActived: false }));
+            }, 3000)
         }).finally(() => setLoadingPage(false))
     }
     // memberikan nilai ke datashow dari data bodi(api)

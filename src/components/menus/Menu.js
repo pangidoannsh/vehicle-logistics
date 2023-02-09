@@ -1,29 +1,12 @@
 import { Icon } from "@iconify/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { NavLink } from "react-router-dom"
 import SubMenu from "./SubMenu";
-
-export const MenuContext = React.createContext()
 
 function Menu(props) {
     const { menu, open, show, handleMenu, location } = props
     // state untuk mengaktifkan efek Menu ACTIVED
-    const [actived, setActived] = useState(() => {
-        if (menu.sub) {
-            if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
-                return menu.sub.findIndex(subMenu => {
-                    if (subMenu.sub) {
-                        return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
-                    }
-                    return subMenu.path === location.pathname
-                }) !== -1;
-            }
-            return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1;
-        }
-        else {
-            return false;
-        }
-    });
+    const [actived, setActived] = useState(false);
 
     // state untuk button dropdown pada menu yang memiliki sub menu
     const [drop, setDrop] = useState(() => {
@@ -64,6 +47,40 @@ function Menu(props) {
         }
     }
 
+    useEffect(() => {
+        setActived(() => {
+            if (menu.sub) {
+                if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
+                    return menu.sub.findIndex(subMenu => {
+                        if (subMenu.sub) {
+                            return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                        }
+                        return subMenu.path === location.pathname
+                    }) !== -1;
+                }
+                return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1;
+            }
+            else {
+                return false;
+            }
+        });
+        setDrop(() => {
+            if (menu.sub) {
+                if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
+                    return menu.sub.findIndex(subMenu => {
+                        if (subMenu.sub) {
+                            return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                        }
+                        return subMenu.path === location.pathname
+                    }) !== -1;
+                }
+                return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1;
+            }
+            else {
+                return false;
+            }
+        })
+    }, [location]);
     // VIEW yang akan di-RENDER
     if (menu.sub) {
         return (

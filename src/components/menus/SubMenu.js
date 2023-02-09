@@ -1,31 +1,51 @@
 import { Icon } from '@iconify/react';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
 
 function SubMenu(props) {
     const { menu, open, show, location } = props
-    const [actived, setActived] = useState(() => {
-        if (menu.sub) {
-            return menu.sub.findIndex(subMenu => subMenu.path === location.pathname) !== -1
-        }
-        else {
-            return false;
-        }
-    });
-    const [drop, setDrop] = useState(() => {
-        if (menu.sub) {
-            return menu.sub.findIndex(subMenu => subMenu.path === location.pathname) !== -1
-        }
-        else {
-            return false;
-        }
-    });
+    const [actived, setActived] = useState(false);
+    const [drop, setDrop] = useState(false);
     const handleDropDown = () => {
         setDrop(prev => !prev)
         if (menu.sub.findIndex(subMenu => subMenu.path === location.pathname) === -1) {
             setActived(prev => !prev)
         }
     }
+    useEffect(() => {
+        setActived(() => {
+            if (menu.sub) {
+                if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
+                    return menu.sub.findIndex(subMenu => {
+                        if (subMenu.sub) {
+                            return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                        }
+                        return subMenu.path === location.pathname
+                    }) !== -1;
+                }
+                return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1;
+            }
+            else {
+                return false;
+            }
+        });
+        setDrop(() => {
+            if (menu.sub) {
+                if (menu.sub.findIndex(subMenu => { return subMenu.sub }) !== -1) {
+                    return menu.sub.findIndex(subMenu => {
+                        if (subMenu.sub) {
+                            return subMenu.sub.findIndex(subSubMenu => { return subSubMenu.path === location.pathname }) !== -1
+                        }
+                        return subMenu.path === location.pathname
+                    }) !== -1;
+                }
+                return menu.sub.findIndex(subMenu => { return subMenu.path === location.pathname }) !== -1;
+            }
+            else {
+                return false;
+            }
+        })
+    }, [location]);
     if (menu.sub) {
         return (
             <div className='grid grid-cols-1 px-2'>

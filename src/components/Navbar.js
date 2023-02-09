@@ -1,5 +1,5 @@
 import { VehicleLogo } from "../assets"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SlideButton from "./SlideButton";
 import Menu from "./menus/Menu";
@@ -60,6 +60,7 @@ function Navbar() {
             setShow(true)
         }, 300);
     }
+
     return (
         <div className={`${open ? 'w-60' : 'w-16'} bg-dark-green h-screen duration-500`}>
             {/* Head */}
