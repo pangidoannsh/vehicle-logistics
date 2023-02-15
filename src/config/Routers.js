@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Main from '../layouts/Main'
 import {
     Dashboard, Login, FinanceAr, PlanArmada, NotFound, TransitOut, Unloading, Invoice,
-    Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract, PoUnit, Loading
+    Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract, PoUnit, Loading, ChangePassword
 } from '../pages';
 
 const Routers = () => {
@@ -12,6 +12,7 @@ const Routers = () => {
             <Routes>
                 <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />} />
+                <Route path='/settings' element={<Main><ChangePassword /></Main>} />
                 <Route path='/' element={<Main><Dashboard /></Main>} />
                 <Route path='/armada' element={<Main><Armada /></Main>} />
                 <Route path='/pocustomer' element={<Main><POCustomer /></Main>} />

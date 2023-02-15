@@ -2,6 +2,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Icon } from '@iconify/react'
 import React from 'react'
 import { useContext } from 'react';
+import { NavLink } from 'react-router-dom';
 import { UserContext } from '../config/User';
 import Logout from '../pages/Logout';
 
@@ -25,12 +26,18 @@ function Header({ setIsLogged }) {
                         leaveFrom="transform scale-100 opacity-100"
                         leaveTo="transform scale-95 opacity-0"
                     >
-                        <Menu.Items as='div' className={`absolute z-30 left-0 bg-white rounded shadow-md`}>
+                        <Menu.Items as='div' className="fixed z-30 right-0 bg-white rounded shadow-md w-32">
                             <Menu.Item as='div' className='flex flex-col gap-y-3'>
 
                             </Menu.Item>
+                            <Menu.Item as='div'>
+                                <NavLink to="/settings" className="px-3 py-2 mt-1 flex gap-2 text-slate-500 hover:text-slate-700">
+                                    <Icon icon="ci:settings-filled" className='text-xl' />
+                                    <span className='text-sm'>Settings</span>
+                                </NavLink>
+                            </Menu.Item>
                             <div className='divider-bottom my-1'></div>
-                            <Menu.Item as='div' s>
+                            <Menu.Item as='div'>
                                 <Logout setIsLogged={setIsLogged} />
                             </Menu.Item>
                         </Menu.Items>

@@ -75,8 +75,8 @@ export default function Register() {
                     <label htmlFor="email" className="floating-label font-medium">Email</label>
                 </div>
                 {/* Input Password */}
-                <PasswordInput id="password" className="mb-8" refrence={refPass}>Password</PasswordInput>
-                <PasswordInput id="confirmpassword" className="mb-8" refrence={refPassConfirmed}>Confirm Password</PasswordInput>
+                <PasswordInput id="password" className="mb-8" refrence={refPass} login>Password</PasswordInput>
+                <PasswordInput id="confirmpassword" className="mb-8" refrence={refPassConfirmed} login>Confirm Password</PasswordInput>
                 {/* Login Button */}
                 <button className='bg-light-green hover:bg-green-600 active:ring-4 active:ring-green-300 focus:ring-4 focus:ring-green-300
                 rounded py-2 px-4 text-white font-medium tracking-[.25em] relative'>

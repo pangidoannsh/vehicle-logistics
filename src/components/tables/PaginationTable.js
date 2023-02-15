@@ -18,7 +18,6 @@ const PaginationTable = ({ lengthData, limit, setLimit, page, setPage }) => {
                         <option className='ring ring-green-500' value={10}>10</option>
                         <option className='ring ring-green-500' value={20}>20</option>
                         <option className='ring ring-green-500' value={30}>30</option>
-                        <option className='ring ring-green-500' value={lengthData}>All</option>
                     </select>
                 </div>
                 <div className="flex gap-x-2">

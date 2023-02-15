@@ -21,6 +21,7 @@ const User = (props) => {
             api.get("/cektoken").then(res => {
                 setUser(res.data);
                 setIsLogged(true);
+                document.title = `Vehicle Logistics - ${res.data.name}`
             }).catch(err => {
                 setIsLogged(false);
                 if (err.response.status === 401) {

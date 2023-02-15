@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { api, AuthContext } from "../config"
+import { api, AuthContext } from "../config";
 
 const useFetch = ({ url, setLoading, howDataGet }) => {
     const [isLogged, setIsLogged] = useContext(AuthContext);

@@ -2,14 +2,6 @@ import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Icon } from '@iconify/react'
 
-const people = [
-    { name: 'Wade Cooper' },
-    { name: 'Arlene Mccoy' },
-    { name: 'Devon Webb' },
-    { name: 'Tom Cook' },
-    { name: 'Tanya Fox' },
-    { name: 'Hellen Schmidt' },
-]
 
 export default function InputBranch({ options, setValue }) {
     const [selected, setSelected] = useState({ oid: null, branch: "Branch" })

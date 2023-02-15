@@ -43,7 +43,7 @@ const Login = () => {
                     <label htmlFor="email" className="floating-label font-medium">Email</label>
                 </div>
                 {/* Input Password */}
-                <PasswordInput id="password" className="mb-3" refrence={passwordInput}>Password</PasswordInput>
+                <PasswordInput id="password" className="mb-3" refrence={passwordInput} login>Password</PasswordInput>
                 {/* Forgot Password */}
                 <span className='cursor-pointer text-sm font-medium text-slate-400 block mb-8 hover:text-light-green'>
                     forgot password?

@@ -1,3 +1,4 @@
+import { Icon } from '@iconify/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../config';
@@ -15,8 +16,10 @@ const Logout = ({ setIsLogged }) => {
         })
     }
     return (
-        <button className='w-full hover:bg-red-400 px-3 py-2 hover:text-white' onClick={handleLogout}>
-            Logout
+        <button className='flex w-full px-3 py-2 hover:text-red-400 gap-2 rounded-b text-slate-500'
+            onClick={handleLogout}>
+            <Icon icon="ic:round-logout" className='text-xl' />
+            <span className='text-sm'>Logout</span>
         </button>
     );
 }

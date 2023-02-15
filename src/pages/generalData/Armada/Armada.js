@@ -24,8 +24,6 @@ const howDataGet = data => {
     return { branch, modelname, unittype, hullnumber, framenumber, policenumber, status };
 }
 export default function Armada() {
-
-
     const displayData = useCallback(data => {
         const { branch, modelname, unittype, hullnumber, framenumber, policenumber, status } = data;
         return {
@@ -51,7 +49,7 @@ export default function Armada() {
 
     const [loadingPage, setLoadingPage] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({ url: "/vehiclearmada", setLoading })
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({ url: "/vehiclearmada?limit=50", setLoading })
     const [dataShow, setDataShow] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [optionsBranch, setOptionsBranch] = useState([]);
