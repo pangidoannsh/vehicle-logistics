@@ -18,7 +18,7 @@ import PoUnit from "./monitoringPoUnit/PoUnit";
 import TransitOut from "./application/operational/transitOut/TransitOut";
 import Loading from "./application/operational/loading/Loading";
 import Unloading from "./application/operational/unloading/Unloading";
-import Invoice from "./application/finance/Invoice";
+import Invoice from "./application/finance/invoice/Invoice";
 import ChangePassword from "./ChangePassword";
 
 export {

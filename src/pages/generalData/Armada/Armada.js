@@ -118,9 +118,9 @@ export default function Armada() {
         <>
             {/* Content */}
             <div className="p-4">
-                <div className="card drop-shadow-lg bg-white px-4 pb-4 pt-2">
+                <div className="card p-6">
                     {/* Title */}
-                    <div className="flex justify-between  divider-bottom">
+                    <div className="flex justify-between divider-bottom">
                         <div className="flex px-2 py-4 gap-x-2 items-center">
                             <Icon icon="fa-solid:truck" className={`text-xl text-gold `} />
                             <span className="text-lg text-dark-green font-medium">Armada</span>

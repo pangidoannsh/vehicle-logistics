@@ -1,18 +1,23 @@
 import { Icon } from '@iconify/react';
 import React, { useEffect, useState } from 'react';
-import ButtonCreate from '../../../components/ButtonCreate';
-import SearchTable from '../../../components/tables/SearchTable';
-import Table from '../../../components/tables/Table';
-import { useFetch } from '../../../hooks';
+import ButtonCreate from '../../../../components/ButtonCreate';
+import Modal from '../../../../components/Modal';
+import SearchTable from '../../../../components/tables/SearchTable';
+import Table from '../../../../components/tables/Table';
+import { useFetch } from '../../../../hooks';
+import InvoiceCreate from './InvoiceCreate';
 
 const columnTable = [
     { field: 'oid', header: 'Invoice Number' },
-    { field: 'bastdate', header: 'Invoice Date' },
-    { field: 'origin', header: 'Origin' },
-    { field: 'destination', header: 'Destination' },
-    { field: 'oidmanifest', header: 'Manifest Number' },
-    { field: 'moda', header: 'Moda' },
-    { field: 'status', header: 'Status' },
+    { field: 'invoicedate', header: 'Invoice Date' },
+    { field: 'ponumber', header: 'PO Number' },
+    { field: 'shippeddate', header: 'Shipped Date' },
+    { field: 'top', header: 'TOP' },
+    { field: 'duedate', header: 'Due Date' },
+    { field: 'quantity', header: 'QTY' },
+    // { field: 'price', header: 'Price' },
+    { field: 'linetotal', header: 'Line Total' },
+    { field: 'total', header: 'Total' },
 ]
 
 const Invoice = () => {
@@ -21,10 +26,13 @@ const Invoice = () => {
     const [dataBody, setDataBody, fetchDataBody] = useFetch({
         url: "/invoice", setLoading
     });
+    const [optionsPO, setOptionsPO] = useState([]);
+
+    const [openModalCreate, setOpenModalCreate] = useState(false);
     const [dataShow, setDataShow] = useState([]);
 
     const handleOpenModalCreate = e => {
-
+        setOpenModalCreate(true)
     }
     useEffect(() => {
         setDataShow(dataBody)
@@ -51,6 +59,10 @@ const Invoice = () => {
                     </Table>
                 </div>
             </div>
+            {/* Modal Create */}
+            <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title="Create Inovice">
+                <InvoiceCreate optionsPO={optionsPO} />
+            </Modal>
         </>
     );
 }

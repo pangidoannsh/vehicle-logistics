@@ -26,7 +26,7 @@ function Header({ setIsLogged }) {
                         leaveFrom="transform scale-100 opacity-100"
                         leaveTo="transform scale-95 opacity-0"
                     >
-                        <Menu.Items as='div' className="fixed z-30 right-0 bg-white rounded shadow-md w-32">
+                        <Menu.Items as='div' className="fixed z-50 right-0 bg-white rounded shadow-md w-32">
                             <Menu.Item as='div' className='flex flex-col gap-y-3'>
 
                             </Menu.Item>

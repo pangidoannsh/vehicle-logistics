@@ -8,7 +8,7 @@ import { moneyFormat } from "../../../../utils";
 import UnitPO from "./UnitPO";
 
 const POCustomerDetail = (props) => {
-    const { dataUnitPo, setDataUnitPo, setAlert, setLoadingPage, optionsBrand, fetchPoCustomer } = props
+    const { dataUnitPo, setDataUnitPo, setAlert, setLoadingPage, optionsBrand, fetchPoCustomer, oidpocustomer } = props;
     const [totalPrice, setTotalPrice] = useState(props.data.value);
     const [valueBrand, setValueBrand] = useState({ oid: null, name: "nothing selected" });
     const [valueAmount, setValueAmount] = useState("");
@@ -254,7 +254,7 @@ const POCustomerDetail = (props) => {
                 </div>
             </div>
             {/* Title */}
-            <UnitPO data={dataUnitPo} setData={setDataUnitPo} setTotalPrice={setTotalPrice} setForm={setIsCreate}
+            <UnitPO data={dataUnitPo} setData={setDataUnitPo} setTotalPrice={setTotalPrice} setForm={setIsCreate} oidpocustomer={oidpocustomer}
                 fetchPoCustomer={fetchPoCustomer} setLoadingPage={setLoadingPage} setFieldInput={setFieldInput} setAlert={setAlert} />
         </>
     )

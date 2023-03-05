@@ -1,8 +1,10 @@
 import { Icon } from '@iconify/react';
-import React from 'react';
+import React, { useState } from 'react';
+import Modal from '../../../../components/Modal';
 import Table from '../../../../components/tables/Table';
 import { api } from '../../../../config';
 import { moneyFormat } from '../../../../utils';
+import UploadDataUnit from './UploadDataUnit';
 
 const columnTable = [
     { field: 'enginenumber', header: 'Engine Number' },
@@ -14,13 +16,17 @@ const columnTable = [
     { field: 'amount', header: 'Amount (Rp)' },
 ]
 
-const UnitPO = ({ data, setData, setTotalPrice, fetchPoCustomer, setLoadingPage, setFieldInput, setForm, setAlert }) => {
+const UnitPO = ({ data, setData, setTotalPrice, fetchPoCustomer, setLoadingPage, setFieldInput, setForm, setAlert, oidpocustomer }) => {
+    const [openImportUnit, setOpenImportUnit] = useState(false);
+
     const handleEditUnit = oid => {
         document.getElementById("modal").scrollTo({ top: 0, left: 0, behavior: 'smooth' });
         setForm(false);// untuk mengubah form menjadi form edit
         setFieldInput(data.filter(unit => unit.oid === oid).map(filter => filter)[0], oid);
     }
-
+    const handleOpenUploadModal = () => {
+        setOpenImportUnit(true);
+    }
     const handleDeleteUnit = oid => {
         setLoadingPage(true);
         api.delete(`/vehiclepo/${oid}`).then(res => {
@@ -75,7 +81,8 @@ const UnitPO = ({ data, setData, setTotalPrice, fetchPoCustomer, setLoadingPage,
                     <span className='text-lg text-dark-green font-medium'>Data Unit</span>
                 </div>
                 <button className={`bg-custom-blue hover:bg-blue-900 text-white rounded flex
-                                items-center gap-x-1 py-1 px-4 `}>
+                                items-center gap-x-1 py-1 px-4 `}
+                    onClick={handleOpenUploadModal}>
                     <Icon icon="file-icons:microsoft-excel" className="text-base" />
                     <span className='text-base'>Upload</span>
                 </button>
@@ -83,6 +90,9 @@ const UnitPO = ({ data, setData, setTotalPrice, fetchPoCustomer, setLoadingPage,
             <Table dataBody={data.map(data => { return { ...data, amount: moneyFormat(data.amount) } })}
                 column={columnTable} id="oid" loading={false} handleActionEdit={handleEditUnit}
                 handleActionDelete={handleDeleteUnit} />
+            <Modal title="Import File Unit" isOpen={openImportUnit} setIsOpen={setOpenImportUnit} size={500}>
+                <UploadDataUnit oidpocustomer={oidpocustomer} setAlert={setAlert} setData={setData} setIsOpen={setOpenImportUnit} />
+            </Modal>
         </>
     );
 }
