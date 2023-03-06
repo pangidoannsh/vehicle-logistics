@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import React, { useRef, useState } from 'react';
 import { api } from '../../../../config';
 
-const UploadDataUnit = ({ oidpocustomer, setAlert, setData, setIsOpen }) => {
+const UploadDataUnit = ({ oidpocustomer, setAlert, setData, setIsOpen, setTotalAmount, fetchPoCustomer }) => {
 
     const [loadingCreate, setloadingCreate] = useState(false);
     const fileInputRef = useRef(null);
@@ -22,7 +22,9 @@ const UploadDataUnit = ({ oidpocustomer, setAlert, setData, setIsOpen }) => {
                 "Content-Type": "multipart/form-data"
             }
         }).then(res => {
-            setData(res.data);
+            fetchPoCustomer();
+            setData(res.data.unit);
+            setTotalAmount(res.data.totalamount)
             setAlert({
                 isActived: true,
                 code: 1,

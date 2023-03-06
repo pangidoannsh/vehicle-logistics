@@ -56,8 +56,6 @@ const POCustomer = () => {
     // data yang akan ditampilkan pada table DATA UNIT
     const [dataUnitPo, setDataUnitPo] = useState([]);
 
-    const [oidPoOpenedDetail, setoidPoOpenedDetail] = useState(null);
-
     // ======================= STATE MODAL ===========================
     // untuk membuka dan menutup modal detail
     const [openModalDetail, setOpenModalDetail] = useState(false);
@@ -103,7 +101,6 @@ const POCustomer = () => {
                 console.log(err.message)
             })
         }
-        setoidPoOpenedDetail(id);
         if (dataModalDetail === null) {
             setDataModalDetail(dataBody.filter(data => data.oid === id).map(filter => filter)[0]);
             setLoadingPage(true);
@@ -261,7 +258,7 @@ const POCustomer = () => {
 
             {/* Modal Detail */}
             <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="PO Customer Detail" iconTitle="ooui:view-details-ltr">
-                <POCustomerDetail data={dataModalDetail} dataUnitPo={dataUnitPo} setDataUnitPo={setDataUnitPo} oidpocustomer={oidPoOpenedDetail}
+                <POCustomerDetail data={dataModalDetail} dataUnitPo={dataUnitPo} setDataUnitPo={setDataUnitPo}
                     setAlert={setAlert} setLoadingPage={setLoadingPage} optionsBrand={optionsBrand} fetchPoCustomer={fetchDataBody} />
             </Modal>
 

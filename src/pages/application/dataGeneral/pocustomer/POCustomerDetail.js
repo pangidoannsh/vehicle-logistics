@@ -254,8 +254,9 @@ const POCustomerDetail = (props) => {
                 </div>
             </div>
             {/* Title */}
-            <UnitPO data={dataUnitPo} setData={setDataUnitPo} setTotalPrice={setTotalPrice} setForm={setIsCreate} oidpocustomer={oidpocustomer}
-                fetchPoCustomer={fetchPoCustomer} setLoadingPage={setLoadingPage} setFieldInput={setFieldInput} setAlert={setAlert} />
+            <UnitPO data={dataUnitPo} setData={setDataUnitPo} setTotalPrice={setTotalPrice} setForm={setIsCreate}
+                oidpocustomer={oid} fetchPoCustomer={fetchPoCustomer} setLoadingPage={setLoadingPage}
+                setFieldInput={setFieldInput} setAlert={setAlert} />
         </>
     )
 }

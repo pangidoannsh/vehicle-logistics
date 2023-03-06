@@ -91,7 +91,8 @@ const UnitPO = ({ data, setData, setTotalPrice, fetchPoCustomer, setLoadingPage,
                 column={columnTable} id="oid" loading={false} handleActionEdit={handleEditUnit}
                 handleActionDelete={handleDeleteUnit} />
             <Modal title="Import File Unit" isOpen={openImportUnit} setIsOpen={setOpenImportUnit} size={500}>
-                <UploadDataUnit oidpocustomer={oidpocustomer} setAlert={setAlert} setData={setData} setIsOpen={setOpenImportUnit} />
+                <UploadDataUnit oidpocustomer={oidpocustomer} setAlert={setAlert} setData={setData} setIsOpen={setOpenImportUnit}
+                    setTotalAmount={setTotalPrice} fetchPoCustomer={fetchPoCustomer} />
             </Modal>
         </>
     );
