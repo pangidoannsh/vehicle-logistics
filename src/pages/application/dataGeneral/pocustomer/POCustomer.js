@@ -101,19 +101,9 @@ const POCustomer = () => {
                 console.log(err.message)
             })
         }
-        if (dataModalDetail === null) {
-            setDataModalDetail(dataBody.filter(data => data.oid === id).map(filter => filter)[0]);
-            setLoadingPage(true);
-            fetchDataUnit();
-        } else {
-            if (id !== dataModalDetail.oid) {
-                setDataModalDetail(dataBody.filter(data => data.oid === id).map(filter => filter)[0]);
-                setLoadingPage(true);
-                fetchDataUnit();
-            } else {
-                setOpenModalDetail(true)
-            }
-        }
+        setDataModalDetail(dataBody.filter(data => data.oid === id).map(filter => filter)[0]);
+        setLoadingPage(true);
+        fetchDataUnit();
     }, [dataBody, dataModalDetail])
 
     // TO OPEN MODAL CREATE

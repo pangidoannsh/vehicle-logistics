@@ -10,6 +10,10 @@ import { useCallback } from 'react';
 import Loading from '../../../components/Loading';
 import { useFetch } from '../../../hooks';
 import { AlertContext } from '../../../layouts/Main';
+import Search from '../../../components/Search';
+
+const PATH_URL = "/vehiclearmada";
+
 const columnTable = [
     { field: "branch", header: "Branch" },
     { field: "hullnumber", header: "Hull Number" },
@@ -46,10 +50,11 @@ export default function Armada() {
             ) : status
         };
     })
+    const [search, setSearch] = useState("");
 
     const [loadingPage, setLoadingPage] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({ url: "/vehiclearmada?limit=50", setLoading })
+    const [dataBody, setDataBody, fetchDataBody, isErrorNetwork, setIsErrorNetwork] = useFetch({ url: PATH_URL, setLoading })
     const [dataShow, setDataShow] = useState([]);
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [optionsBranch, setOptionsBranch] = useState([]);
@@ -112,7 +117,6 @@ export default function Armada() {
                 }
             }
         }
-
     }, [openModalCreate]);
     return (
         <>
@@ -137,7 +141,8 @@ export default function Armada() {
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="hullnumber" loading={loading} pagination >
                         {/* Search */}
-                        <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} />
+                        {/* <SearchTable setData={setDataShow} dataBody={dataBody} customDisplay={displayData} /> */}
+                        <Search pathUrl={PATH_URL} setDataBody={setDataBody} setLoading={setLoading} refetch={fetchDataBody} />
                     </Table>
                 </div>
             </div>

@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Main from '../layouts/Main'
 import {
     Dashboard, Login, FinanceAr, PlanArmada, NotFound, TransitOut, Unloading, Invoice,
-    Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract, PoUnit, Loading, ChangePassword
+    Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract, PoUnit, Loading,
+    ChangePassword
 } from '../pages';
 
 const Routers = () => {

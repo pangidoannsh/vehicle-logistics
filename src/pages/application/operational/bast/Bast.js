@@ -52,6 +52,10 @@ const dataDisplay = data => {
                 {/* <Icon icon="eos-icons:init-container" className="text-base" /> */}
                 <span className="text-sm capitalize">{data.status}</span>
             </div>
+        ) : data.status.toLowerCase() === 'invoice' ? (
+            <div className="flex gap-x-1 py-1 px-2 items-center bg-slate-300 rounded-sm text-slate-500 justify-center">
+                <span className="text-sm capitalize">{data.status}</span>
+            </div>
         ) : data.status
     }
 }

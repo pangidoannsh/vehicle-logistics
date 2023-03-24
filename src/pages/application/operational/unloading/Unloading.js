@@ -11,7 +11,6 @@ import UnloadingCreate from './UnloadingCreate';
 import UnloadingEdit from './UnloadingEdit';
 
 const columnTable = [
-    { field: 'unloading_date', header: 'Unloading Date' },
     { field: 'enginenumber', header: 'Engine Number' },
     { field: 'framenumber', header: 'Frame Number' },
     { field: 'unitbrand', header: 'Brand' },
@@ -45,7 +44,7 @@ const Unloading = () => {
     const handleOpenModalCreate = e => {
         e.preventDefault();
         setLoadingCreate(true);
-        api.get("/bastlist").then(res => {
+        api.get("/bastlist?filter=create").then(res => {
             setoptionsBast(res.data.map(data => {
                 return {
                     oid: data.oid,
@@ -97,7 +96,9 @@ const Unloading = () => {
                         </div>
                     </div>
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loadingTable} pagination
+                    <Table dataBody={dataShow} column={[
+                        { field: 'unloading_date', header: 'Unloading Date' }, ...columnTable
+                    ]} id="oid" loading={loadingTable} pagination
                         center={["unloading_date"]} handleActionEdit={handleOpenModalEdit}>
                         <SearchTable setData={setDataShow} dataBody={dataBody} />
                     </Table>
