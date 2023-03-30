@@ -1,24 +1,27 @@
 import { Icon } from '@iconify/react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ButtonCreate from '../../../../components/ButtonCreate';
 import Modal from '../../../../components/Modal';
 import SearchTable from '../../../../components/tables/SearchTable';
 import Table from '../../../../components/tables/Table';
 import { api } from '../../../../config';
 import { useFetch } from '../../../../hooks';
+import { AlertContext } from '../../../../layouts/Main';
 import { moneyFormat } from '../../../../utils';
 import InvoiceCreate from './InvoiceCreate';
+import InvoiceDetail from './InvoiceDetail';
+import Loading from '../../../../components/Loading';
+import InvoiceEdit from './InvoiceEdit';
 
 const columnTable = [
     { field: 'invoicenumber', header: 'Invoice Number' },
     { field: 'invoicedate', header: 'Invoice Date' },
     { field: 'ponumber', header: 'PO Number' },
     { field: 'shipmentdate', header: 'Shipped Date' },
-    { field: 'salestax', header: 'Sales Tax(Rp)' },
+    // { field: 'salestax', header: 'Sales Tax(Rp)' },
     { field: 'duedate', header: 'Due Date' },
     { field: 'quantity', header: 'QTY' },
-    // { field: 'price', header: 'Price' },
-    { field: 'linetotal', header: 'Line Total(Rp)' },
+    // { field: 'linetotal', header: 'Line Total(Rp)' },
     { field: 'total', header: 'Total(Rp)' },
 ]
 const displayInvoice = data => {
@@ -41,7 +44,11 @@ const displayInvoice = data => {
         invoicedate
     }
 }
+
 const Invoice = () => {
+    const [alert, setAlert] = useContext(AlertContext);
+
+    const [loadingPage, setLoadingPage] = useState(false);
     const [loading, setLoading] = useState(true);
     const [loadingCreate, setLoadingCreate] = useState(false);
     const [dataBody, setDataBody, fetchDataBody] = useFetch({
@@ -49,8 +56,14 @@ const Invoice = () => {
     });
     const [optionsPO, setOptionsPO] = useState([]);
 
+
+    const [openModalDetail, setOpenModalDetail] = useState(false);
     const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [openModalEdit, setOpenModalEdit] = useState(false);
     const [dataShow, setDataShow] = useState([]);
+    const [dataDetail, setDataDetail] = useState({});
+    const [dataEdit, setDataEdit] = useState({});
+    const [dataUnitInvoice, setDataUnitInvoice] = useState([]);
 
     const handleOpenModalCreate = e => {
         setLoadingCreate(true);
@@ -68,6 +81,21 @@ const Invoice = () => {
         }).catch(err => {
 
         }).finally(() => setLoadingCreate(false))
+    }
+    function handleOpenDetail(invoicenumber) {
+        setLoadingPage(true)
+        setDataDetail(dataBody.find(data => data.invoicenumber === invoicenumber));
+        api.get(`/invoicedetail/${invoicenumber}`).then(res => {
+            setDataUnitInvoice(res.data)
+            setOpenModalDetail(true);
+        }).catch(err => {
+            console.log(err.response);
+        }).finally(() => setLoadingPage(false))
+    }
+
+    function handleOpenModalEdit(invoicenumber) {
+        setDataEdit(dataBody.find(data => data.invoicenumber === invoicenumber));
+        setOpenModalEdit(true);
     }
     useEffect(() => {
         setDataShow(dataBody.map(data => {
@@ -90,17 +118,27 @@ const Invoice = () => {
                         </div>
                     </div>
                     {/* Table */}
-                    <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading} clickField="oid" pagination
-                        center={["quantity"]}>
+                    <Table dataBody={dataShow} column={columnTable} id="invoicenumber" loading={loading} clickField="invoicenumber"
+                        pagination center={["quantity"]} handleClickField={handleOpenDetail} handleActionEdit={handleOpenModalEdit}>
                         {/* Search */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} />
                     </Table>
                 </div>
             </div>
+            <Modal isOpen={openModalDetail} setIsOpen={setOpenModalDetail} title="Invoice Detail">
+                <InvoiceDetail dataDetail={dataDetail} dataUnitInvoice={dataUnitInvoice} />
+            </Modal>
             {/* Modal Create */}
             <Modal isOpen={openModalCreate} setIsOpen={setOpenModalCreate} title="Create Inovice" >
                 <InvoiceCreate optionsPO={optionsPO} setIsOpen={setOpenModalCreate} reFetch={fetchDataBody} />
             </Modal>
+            {/* Modal Edit */}
+            <Modal isOpen={openModalEdit} setIsOpen={setOpenModalEdit} title="Edit Inovice" size={1200}>
+                <InvoiceEdit setIsOpen={setOpenModalEdit} dataCurent={dataEdit} setAlert={setAlert} setDataInvoice={setDataBody} />
+            </Modal>
+
+            <Loading isLoading={loadingPage} />
+
         </>
     );
 }

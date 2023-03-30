@@ -196,9 +196,7 @@ const PlanArmada = () => {
     }
     // memberikan nilai ke datashow dari data bodi(api)
     useEffect(() => {
-        setDataShow(dataBody.map(data => {
-            return displayData(data);
-        }));
+        if (dataBody.length !== 0) setDataShow(dataBody.map(data => displayData(data)));
     }, [dataBody])
 
     useEffect(() => {

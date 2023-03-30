@@ -3,7 +3,7 @@ import Main from '../layouts/Main'
 import {
     Dashboard, Login, FinanceAr, PlanArmada, NotFound, TransitOut, Unloading, Invoice,
     Armada, Revenue, Manifest, Register, ManifestCreate, Bast, POCustomer, Common, Branch, Customers, Contract, PoUnit, Loading,
-    ChangePassword
+    ChangePassword, PlanDriver
 } from '../pages';
 
 const Routers = () => {
@@ -32,6 +32,7 @@ const Routers = () => {
                 <Route path='/loading' element={<Main><Loading /></Main>} />
                 <Route path='/unloading' element={<Main><Unloading /></Main>} />
                 <Route path='/invoice' element={<Main><Invoice /></Main>} />
+                <Route path='/plan-driver' element={<Main><PlanDriver /></Main>} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

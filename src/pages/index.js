@@ -20,9 +20,10 @@ import Loading from "./application/operational/loading/Loading";
 import Unloading from "./application/operational/unloading/Unloading";
 import Invoice from "./application/finance/invoice/Invoice";
 import ChangePassword from "./ChangePassword";
+import PlanDriver from "./application/operational/planDriver/PlanDriver";
 
 export {
     Dashboard, Armada, Login, FinanceAr, PlanArmada, Common, Loading,
     NotFound, Revenue, Manifest, Register, ManifestCreate, Bast, ChangePassword,
-    POCustomer, Branch, Customers, Contract, PoUnit, TransitOut, Unloading, Invoice
+    POCustomer, Branch, Customers, Contract, PoUnit, TransitOut, Unloading, Invoice, PlanDriver
 };

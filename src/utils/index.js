@@ -23,4 +23,13 @@ const unformat = x => {
     });
     return result
 }
-export { moneyFormat, fetchOption, unformat };
+
+const dateDisplay = rawDate => {
+    try {
+        const date = rawDate.split(" ")[0].split("-").reverse();
+        return `${date[0]}/${date[1]}/${date[2]}`;
+    } catch (e) {
+        return rawDate;
+    }
+}
+export { moneyFormat, fetchOption, unformat, dateDisplay };

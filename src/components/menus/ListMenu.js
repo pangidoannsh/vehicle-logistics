@@ -76,6 +76,10 @@ const application = [
                 "icon": "ep:operation",
                 "sub": [
                     {
+                        "title": "Plan Driver",
+                        "path": "/plan-driver"
+                    },
+                    {
                         "title": "Plan Armada",
                         "path": "/plan-armada"
                     },
