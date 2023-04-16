@@ -35,8 +35,8 @@ const displayData = data => {
                 {data.status}
             </div>
         ) : data.status.toLowerCase() === 'closed' ? (
-            <div className="text-center mx-auto w-max py-1 px-2 items-center bg-[#A90101] rounded-sm
-             text-white justify-center text-sm capitalize"
+            <div className="text-center mx-auto w-max py-1 px-2 items-center bg-slate-300 rounded-sm text-slate-600
+                     justify-center text-sm capitalize"
             >
                 {data.status}
             </div>
@@ -67,7 +67,7 @@ export default function PlanDriver() {
     function handleOpenModalCreate(e) {
         setloadingCreate(true);
         setAlert(prev => ({ ...prev, isActived: false }))
-        api.get('driver').then(res => {
+        api.get('/driver/list').then(res => {
             setOpenModalCreate(true);
             setdriverOptions(res.data)
         }).catch(err => {

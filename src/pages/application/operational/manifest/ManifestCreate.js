@@ -54,7 +54,7 @@ const ManifestCreate = () => {
 
     // =================== value input variables ========================
     const [value, setValue] = useState({
-        driver: { oid: null, drivername: "nothing selected" },
+        plandriver: { oid: null, plandriver: "nothing selected" },
         pocustomer: { oid: null, ponumber: "nothing selected" },
         origin: { key: null, name: "nothing selected" },
         destination: { key: null, name: "nothing selected" },
@@ -62,7 +62,7 @@ const ManifestCreate = () => {
         planarmada: { oid: null, planarmada: "nothing selected" }
     })
     const setValuePlanArmada = newValue => setValue({ ...value, planarmada: newValue });
-    const setValueDriver = newValue => setValue({ ...value, driver: newValue });
+    const setValueDriver = newValue => setValue({ ...value, plandriver: newValue });
     const setValuePoCustomer = newValue => setValue({ ...value, pocustomer: newValue });
     const setValueOrigin = newValue => setValue({ ...value, origin: newValue });
     const setValueDestinantion = newValue => setValue({ ...value, destination: newValue });
@@ -79,7 +79,7 @@ const ManifestCreate = () => {
             origin: value.origin.key,
             destination: value.destination.key,
             deliverydate: value.deliverydate,
-            driveroid: value.driver.oid,
+            plandriveroid: value.plandriver.oid,
             planoid: value.planarmada.oid,
             pocustomeroid: value.pocustomer.oid,
             vehiclepooid: idUnitSelected.current
@@ -115,7 +115,7 @@ const ManifestCreate = () => {
             setAlert({
                 isActived: true,
                 code: 0,
-                title: "Error",
+                title: "Error " + err.response.status,
                 message: "Failed Create Manifest"
             })
             console.log(err.response);
@@ -147,7 +147,18 @@ const ManifestCreate = () => {
         }).catch(error => {
             console.log(error.response);
         });
-        fetchOption('/driver', setOptionsDriver);
+        await api.get('/plandriver').then(res => {
+            setOptionsDriver(res.data.map(data => ({
+                oid: data.oid, plandriver: (
+                    <div className="grid grid-cols-2">
+                        <span>{data.drivername}</span>
+                        <span>{data.plandate.split(" ")[0] ?? data.plandate}</span>
+                    </div>
+                )
+            })))
+        }).catch(err => {
+            console.log('error plandriver fetch', err.response);
+        })
         fetchOption('/pocustomerlist', setOptionsPoCustomer);
         await api.get('/origin').then(res => {
             setOptionsOrigin(res.data.map(data => {
@@ -204,7 +215,7 @@ const ManifestCreate = () => {
                         <Select label="Destination" useSelect={[value.destination, setValueDestinantion]} keyId="key" keyName="name"
                             options={optionsDestination} />
                         <FormInput label="Delivery Date" setValue={setValueDeliveryDate} tagId={"deliverydate"} type="date" />
-                        <Select label="Driver" useSelect={[value.driver, setValueDriver]} keyId="oid" keyName="drivername"
+                        <Select label="Plan Driver" useSelect={[value.plandriver, setValueDriver]} keyId="oid" keyName="plandriver"
                             options={optionsDriver} className="capitalize" />
                         <Select label="Plan Armada" useSelect={[value.planarmada, setValuePlanArmada]} keyId="oid" keyName="planarmada"
                             options={optionsPlanArmada} className="capitalize" />

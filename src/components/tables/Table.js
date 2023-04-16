@@ -4,7 +4,7 @@ import Action from './Action';
 import LoadingTable from './LoadingTable';
 import PaginationTable from './PaginationTable';
 
-const Table = ({ dataBody = [], column, handleActionEdit, handleActionDelete, handleClickField, id,
+const Table = ({ dataBody = [], column, handleActionEdit, handleActionDelete, handleClickField, id, handleActionDownload,
     clickField, loading, pagination, children, center = [] }) => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
@@ -19,7 +19,8 @@ const Table = ({ dataBody = [], column, handleActionEdit, handleActionDelete, ha
                 <table className='table-auto w-full'>
                     <thead>
                         <tr>
-                            {(handleActionDelete || handleActionEdit) ? <th className={`p-4 bg-dark-green text-white font-semibold 
+                            {(handleActionDelete || handleActionEdit || handleActionDownload) ?
+                                <th className={`p-4 bg-dark-green text-white font-semibold 
                             text-sm text-center border border-l-[1px] border-white w-16`}>#</th> : ''
                             }
                             <th className={`p-4 bg-dark-green text-white font-semibold 
@@ -55,6 +56,15 @@ const Table = ({ dataBody = [], column, handleActionEdit, handleActionDelete, ha
                                                             <div className='flex gap-x-3 items-center'>
                                                                 <Icon icon={`bxs:trash-alt`} className='text-xl' />
                                                                 <span className='text-base'>Delete</span>
+                                                            </div>
+                                                        </button>
+                                                    ) : ''}
+                                                    {handleActionDownload ? (
+                                                        <button className={`text-custom-blue hover:text-blue-800`}
+                                                            onClick={() => handleActionDownload(dataRow[id])}>
+                                                            <div className='flex gap-x-3 items-center'>
+                                                                <Icon icon="fa6-solid:file-pdf" className='text-xl' />
+                                                                <span className='text-base'>Download</span>
                                                             </div>
                                                         </button>
                                                     ) : ''}
@@ -96,7 +106,8 @@ const Table = ({ dataBody = [], column, handleActionEdit, handleActionDelete, ha
         <table className='table-auto w-full'>
             <thead>
                 <tr>
-                    {(handleActionDelete || handleActionEdit) ? <th className={`p-4 bg-dark-green text-white font-semibold 
+                    {(handleActionDelete || handleActionEdit || handleActionDownload) ?
+                        <th className={`p-4 bg-dark-green text-white font-semibold 
                             text-sm text-center border border-l-[1px] border-white w-16`}>#</th> : ''
                     }
                     <th className={`p-4 bg-dark-green text-white font-semibold 
@@ -132,6 +143,15 @@ const Table = ({ dataBody = [], column, handleActionEdit, handleActionDelete, ha
                                                     <div className='flex gap-x-3 items-center'>
                                                         <Icon icon={`bxs:trash-alt`} className='text-xl' />
                                                         <span className='text-base'>Delete</span>
+                                                    </div>
+                                                </button>
+                                            ) : ''}
+                                            {handleActionDownload ? (
+                                                <button className={`text-custom-blue hover:text-blue-800`}
+                                                    onClick={() => handleActionDownload(dataRow[id])}>
+                                                    <div className='flex gap-x-3 items-center'>
+                                                        <Icon icon="fa6-solid:file-pdf" className='text-xl' />
+                                                        <span className='text-base'>Download</span>
                                                     </div>
                                                 </button>
                                             ) : ''}

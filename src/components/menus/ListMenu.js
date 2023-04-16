@@ -36,6 +36,11 @@ const generalData = [
         "icon": "bi:grid-3x2-gap-fill"
     },
     {
+        "title": "Driver",
+        "path": "/driver",
+        "icon": "mingcute:steering-wheel-fill"
+    },
+    {
         "title": "Armada",
         "path": "/armada",
         "icon": "fa-solid:truck"

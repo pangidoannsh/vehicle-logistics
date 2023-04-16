@@ -51,7 +51,7 @@ const PlanArmada = () => {
                     {data.status}
                 </div>
             ) : data.status.toLowerCase() === 'closed' ? (
-                <div className="text-center py-1 px-2 items-center bg-[#A90101] rounded-sm text-white justify-center text-sm capitalize">
+                <div className="text-center py-1 px-2 items-center bg-slate-300 rounded-sm text-slate-600 justify-center text-sm capitalize">
                     {data.status}
                 </div>
             ) : data.status

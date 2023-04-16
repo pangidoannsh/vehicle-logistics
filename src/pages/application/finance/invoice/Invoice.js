@@ -12,6 +12,7 @@ import InvoiceCreate from './InvoiceCreate';
 import InvoiceDetail from './InvoiceDetail';
 import Loading from '../../../../components/Loading';
 import InvoiceEdit from './InvoiceEdit';
+import { BASE_URL } from '../../../../config/Api';
 
 const columnTable = [
     { field: 'invoicenumber', header: 'Invoice Number' },
@@ -97,6 +98,34 @@ const Invoice = () => {
         setDataEdit(dataBody.find(data => data.invoicenumber === invoicenumber));
         setOpenModalEdit(true);
     }
+
+    const handleDownload = (oid) => {
+        console.log(oid);
+        api.get('/invoice/download/' + oid, { responseType: 'blob' }).then(response => {
+            console.log(response);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `Invoice_${oid}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setAlert({
+                isActived: true,
+                code: 1,
+                title: `Success`,
+                message: 'Download Invoice done'
+            })
+        }).catch(err => {
+            setAlert({
+                isActived: true,
+                code: 0,
+                title: `Error`,
+                message: 'Failed to download Invoice'
+            })
+            console.log(err);
+        }).finally(() => setTimeout(() => setAlert(prev => ({ ...prev, isActived: false })), 2000))
+    }
     useEffect(() => {
         setDataShow(dataBody.map(data => {
             return displayInvoice(data);
@@ -119,7 +148,8 @@ const Invoice = () => {
                     </div>
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="invoicenumber" loading={loading} clickField="invoicenumber"
-                        pagination center={["quantity"]} handleClickField={handleOpenDetail} handleActionEdit={handleOpenModalEdit}>
+                        pagination center={["quantity"]} handleClickField={handleOpenDetail} handleActionEdit={handleOpenModalEdit}
+                        handleActionDownload={handleDownload}>
                         {/* Search */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} />
                     </Table>

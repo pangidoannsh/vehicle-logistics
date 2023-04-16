@@ -5,7 +5,8 @@ import UnitManifest from './UnitManifest';
 const headerDisplay = [
     { field: "ponumber", header: "PO Number" },
     { field: "customer", header: "Customer" },
-    { field: "totalamount", header: "Total Amount" }
+    { field: "totalamount", header: "Total Amount" },
+    { field: "plandriver", header: "Plan Driver" }
 ]
 const amountDisplay = data => {
     return `Rp ${moneyFormat(data)}`;

@@ -125,6 +125,7 @@ const Bast = () => {
         setDataEdit(dataBody.find(unit => unit.oid === oid));
         setOpenModalEdit(true)
     }
+
     const handleOpenModalDelete = oid => {
         if (oid) {
             idWillDelete.current = oid
@@ -174,6 +175,33 @@ const Bast = () => {
         }).finally(() => setLoadingDelete(false))
 
     }
+    const handleDownload = (oid) => {
+        console.log(oid);
+        api.get('/beritaacara/download/' + oid, { responseType: 'blob' }).then(response => {
+            console.log(response);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `BAST_${oid}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setAlert({
+                isActived: true,
+                code: 1,
+                title: `Success`,
+                message: 'Download BAST done'
+            })
+        }).catch(err => {
+            setAlert({
+                isActived: true,
+                code: 0,
+                title: `Error`,
+                message: 'Failed to download BAST'
+            })
+            console.log(err);
+        }).finally(() => setTimeout(() => setAlert(prev => ({ ...prev, isActived: false })), 2000))
+    }
     useEffect(() => {
         setDataShow(dataBody.map(data => {
             return dataDisplay(data);
@@ -203,7 +231,7 @@ const Bast = () => {
                     {/* Table */}
                     <Table dataBody={dataShow} column={columnTable} id="oid" loading={loading} clickField="oid"
                         handleClickField={handleOpenModalDetail} pagination handleActionDelete={handleOpenModalDelete}
-                        handleActionEdit={handleOpenModalEdit}>
+                        handleActionEdit={handleOpenModalEdit} handleActionDownload={handleDownload}>
                         {/* Search */}
                         <SearchTable setData={setDataShow} dataBody={dataBody} />
                     </Table>
